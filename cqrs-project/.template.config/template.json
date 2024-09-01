@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Mauricio Redmerski André",
+  "classifications": [ "Common", "Solution" ],
+  "identity": "ExampleTemplate.CqrsProject",
+  "name": "Example templates: cqrs project",
+  "shortName": "cqrs-project",
+  "sourceName":"CqrsProject",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  }
+}

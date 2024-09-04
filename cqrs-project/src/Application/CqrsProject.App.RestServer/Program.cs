@@ -42,7 +42,7 @@ builder.Services
         .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime())
-    .AddSingleton<ITenantConnectionProvider, TenantConnectionProvider>()
+    .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<IIdentitySyncService, IdentitySyncService>()
     .AddScoped<ICurrentTenant, CurrentTenant>();
 
@@ -113,8 +113,6 @@ builder.Services
     .AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AdministrationDbContext>();
 
-builder.Services.AddIdentityApiEndpoints<User>();
-
 // configuration authentication
 builder.Services
     .AddAuthentication(schemes =>
@@ -161,8 +159,15 @@ app.UseSwaggerUI(options =>
     }
 
     var clientId = builder.Configuration.GetValue<string>("PlatformSwagger:ClientId");
+    var clientSecret = builder.Configuration.GetValue<string>("PlatformSwagger:ClientSecret");
+    var audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience")!;
     options.OAuthClientId(clientId);
+    options.OAuthClientSecret(clientSecret);
     options.OAuthUsePkce();
+    options.OAuthAdditionalQueryStringParams(new Dictionary<string, string>()
+    {
+        {"audience", audience}
+    });
 });
 
 // configuration app

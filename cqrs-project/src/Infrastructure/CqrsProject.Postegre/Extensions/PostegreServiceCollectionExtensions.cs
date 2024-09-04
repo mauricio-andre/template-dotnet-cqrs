@@ -13,7 +13,7 @@ public static class PostegreServiceCollectionExtensions
     {
         return services
             .AddScoped<CoreDbContext, PostegresCoreDbContext>()
-            .AddDbContext<CoreDbContext>(optionsAction);
+            .AddDbContext<CoreDbContext>(optionsAction, ServiceLifetime.Scoped);
     }
 
     public static IServiceCollection AddPostegreAdministrationDbContext(
@@ -21,7 +21,7 @@ public static class PostegreServiceCollectionExtensions
         Action<DbContextOptionsBuilder> optionsAction)
     {
         return services
-            .AddScoped<CoreDbContext, PostegresCoreDbContext>()
-            .AddDbContext<CoreDbContext>(optionsAction);
+            .AddScoped<AdministrationDbContext, PostegresAdministrationDbContext>()
+            .AddDbContext<AdministrationDbContext>(optionsAction, ServiceLifetime.Scoped);
     }
 }

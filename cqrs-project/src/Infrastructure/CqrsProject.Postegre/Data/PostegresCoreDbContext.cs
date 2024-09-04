@@ -1,5 +1,6 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants;
+using CqrsProject.Postegre.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Postegre.Data;
@@ -21,5 +22,12 @@ public class PostegresCoreDbContext : CoreDbContext
 
         var connectionString = _tenantConnectionProvider.GetConnectionStringToCurrentTenant();
         if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseNpgsql(connectionString);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new ExampleEfConfiguration());
     }
 }

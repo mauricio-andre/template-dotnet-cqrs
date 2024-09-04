@@ -72,6 +72,7 @@ public class IdentitySyncService : IIdentitySyncService
 
     private async Task CreateLocalUserAsync(ClaimsIdentity claimsIdentity, CancellationToken cancellationToken)
     {
+        // TODO: Consumir rotas de UserInfo para sincronizar os dados do usuário
         cancellationToken.ThrowIfCancellationRequested();
         var nameIdentifier = claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)!.Value;
         var localUser = new User()
@@ -79,8 +80,7 @@ public class IdentitySyncService : IIdentitySyncService
             EmailConfirmed = false,
             TwoFactorEnabled = false,
             Email = claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value,
-            UserName = claimsIdentity.FindFirst(claim => claim.Type == "preferred_username")?.Value
-                ?? claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value,
+            UserName = claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value,
             CreationTime = DateTimeOffset.Now,
             IsDeleted = false
         };
@@ -98,12 +98,12 @@ public class IdentitySyncService : IIdentitySyncService
 
     private async Task UpdateLocalUserAsync(User localUser, ClaimsIdentity claimsIdentity, CancellationToken cancellationToken)
     {
+        // TODO: Consumir rotas de UserInfo para sincronizar os dados do usuário
         cancellationToken.ThrowIfCancellationRequested();
 
         localUser.LastModificationTime = DateTimeOffset.Now;
         localUser.Email = claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value;
-        localUser.UserName = claimsIdentity.FindFirst(claim => claim.Type == "preferred_username")?.Value
-            ?? claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value;
+        localUser.UserName = claimsIdentity.FindFirst(claim => claim.Type == ClaimTypes.Email)!.Value;
 
         await _userManager.UpdateAsync(localUser);
     }

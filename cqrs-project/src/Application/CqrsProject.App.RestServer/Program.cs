@@ -47,7 +47,7 @@ builder.Services
     .AddScoped<ICurrentTenant, CurrentTenant>();
 
 // Configuration string location
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportCultures = builder
@@ -177,8 +177,8 @@ app.UseAuthorization();
 app.UseCors();
 app.MapControllers();
 app.UseStaticFiles();
+app.UseRequestLocalization();
 
-app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<TenantMiddleware>();
 
 await app.RunAsync();

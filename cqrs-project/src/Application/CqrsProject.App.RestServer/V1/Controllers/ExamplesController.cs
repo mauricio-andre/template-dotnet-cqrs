@@ -18,7 +18,10 @@ public class ExamplesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public ExamplesController(IMediator mediator) => _mediator = mediator;
+    public ExamplesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     [HttpGet]
     [ProducesResponseType(typeof(IList<ExampleResponse>), 200)]

@@ -6,7 +6,7 @@ namespace CqrsProject.CustomResourceWriter;
 
 public static class JsonToResourcesConverter
 {
-    public static void Main(string destinationPath)
+    public static void Handler(string destinationPath)
     {
         var jsonDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Jsons");
         var jsonFiles = Directory.GetFiles(jsonDirectory, "*.json");

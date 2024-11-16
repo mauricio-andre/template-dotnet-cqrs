@@ -5,8 +5,6 @@ using CqrsProject.App.RestService.Swagger;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
-using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Identity.Services;
 using CqrsProject.Core.Tenants;
 using CqrsProject.Postegre.Extensions;
 using FluentValidation;
@@ -43,7 +41,6 @@ builder.Services
             .AsImplementedInterfaces()
             .WithScopedLifetime())
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
-    .AddScoped<IIdentitySyncService, IdentitySyncService>()
     .AddScoped<ICurrentTenant, CurrentTenant>();
 
 // Configuration string location
@@ -62,6 +59,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         .AddSupportedCultures(supportCultures)
         .AddSupportedUICultures(supportCultures);
 });
+
+builder.Services.AddAuth0Provider(builder.Configuration);
 
 // configuration controllers
 builder.Services.AddControllers();
@@ -141,7 +140,7 @@ builder.Services
     })
     .AddScheme<AuthenticationOptions, AuthenticationHandler>(
         AuthenticationDefaults.AuthenticationScheme,
-        "CqrsProject login",
+        AuthenticationDefaults.DisplayName,
         null);
 
 var app = builder.Build();
@@ -168,6 +167,8 @@ app.UseSwaggerUI(options =>
     {
         {"audience", audience}
     });
+
+    options.InjectStylesheet("/SwaggerUi/SwaggerDark.css");
 });
 
 // configuration app

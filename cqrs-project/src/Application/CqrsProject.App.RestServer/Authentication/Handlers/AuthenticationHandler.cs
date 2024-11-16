@@ -1,10 +1,11 @@
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity;
-using CqrsProject.Core.Identity.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -12,18 +13,18 @@ namespace CqrsProject.App.RestService.Authentication;
 
 public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions>
 {
-    private readonly IIdentitySyncService _identitySyncService;
+    private readonly UserManager<User> _userManager;
     private readonly IUserClaimsPrincipalFactory<User> _userClaimsPrincipalFactory;
 
     public AuthenticationHandler(
         IOptionsMonitor<AuthenticationOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        IIdentitySyncService identitySyncService,
-        IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory) : base(options, logger, encoder)
+        IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory,
+        UserManager<User> userManager) : base(options, logger, encoder)
     {
-        _identitySyncService = identitySyncService;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+        _userManager = userManager;
     }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -60,17 +61,35 @@ public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions
 
     private async Task SetLocalUserClaimAsync(ClaimsPrincipal principal)
     {
-        var (localUser, claimsIdentity) = await _identitySyncService.GetIdentitiesAsync(principal);
+        var nameIdentifier = principal.Identities
+            .First()
+            .FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        if (localUser == null)
-            localUser = await _identitySyncService.TryBindUserLoginAsync(claimsIdentity);
-
+        var localUser = await GetLocalUser(nameIdentifier);
         if (localUser == null)
         {
-            Logger.LogWarning("user not registered in the local database: {0}", claimsIdentity.Name);
+            Logger.LogWarning("User not registered in the local database: {0}", nameIdentifier);
             return;
         }
 
+        var identity = await CreateLocalIdentity(localUser);
+        principal.AddIdentity(identity);
+    }
+
+    private async Task<User?> GetLocalUser(string? nameIdentifier)
+    {
+        if (nameIdentifier == null)
+            throw new AuthenticationException("No unique identifier provided in access token");
+
+        var localUser = await _userManager.FindByLoginAsync(
+            AuthenticationDefaults.AuthenticationScheme,
+            nameIdentifier);
+
+        return localUser;
+    }
+
+    private async Task<ClaimsIdentity> CreateLocalIdentity(User localUser)
+    {
         var localIdentity = await _userClaimsPrincipalFactory.CreateAsync(localUser);
 
         localIdentity.Identities.First().AddClaims(new List<Claim>()
@@ -79,12 +98,11 @@ public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions
             new Claim("last_modification_time", localUser.LastModificationTime?.ToUnixTimeSeconds().ToString() ?? string.Empty)
         });
 
-        principal.AddIdentity(
-            new ClaimsIdentity(
-                localIdentity.Claims,
-                AuthenticationDefaults.IdentityType,
-                ClaimTypes.NameIdentifier,
-                ClaimTypes.Role
-            ));
+        return new ClaimsIdentity(
+            localIdentity.Claims,
+            AuthenticationDefaults.IdentityType,
+            ClaimTypes.NameIdentifier,
+            ClaimTypes.Role
+        );
     }
 }

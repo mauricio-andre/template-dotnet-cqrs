@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CqrsProject.CustomResourceW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomResourceWriter", "src\Infrastructure\CqrsProject.CustomResourceWriter\CqrsProject.CustomResourceWriter.csproj", "{118B086B-977C-4F6E-AFEE-DD15EDA78F28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Auth0", "src\Infrastructure\CqrsProject.Auth0\CqrsProject.Auth0.csproj", "{412F48FF-8BE7-4290-B2C2-D0A8C21720D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{118B086B-977C-4F6E-AFEE-DD15EDA78F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{118B086B-977C-4F6E-AFEE-DD15EDA78F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{118B086B-977C-4F6E-AFEE-DD15EDA78F28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{412F48FF-8BE7-4290-B2C2-D0A8C21720D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{412F48FF-8BE7-4290-B2C2-D0A8C21720D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{412F48FF-8BE7-4290-B2C2-D0A8C21720D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{412F48FF-8BE7-4290-B2C2-D0A8C21720D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{410D1DC9-1D2C-4F10-BFC6-8936ABE015F6} = {0115D210-9520-462E-B47C-111C1C9A75DF}
@@ -70,5 +76,6 @@ Global
 		{0BE41AA5-4868-417E-83FC-8D863391BCD7} = {78FEA480-88FB-412A-977A-E0648E1351FD}
 		{A6381C6B-0B92-4528-AE94-0FE82492DAA9} = {4B9FE393-8B1D-4DE1-9826-20D2128EAE57}
 		{118B086B-977C-4F6E-AFEE-DD15EDA78F28} = {A6381C6B-0B92-4528-AE94-0FE82492DAA9}
+		{412F48FF-8BE7-4290-B2C2-D0A8C21720D2} = {4B9FE393-8B1D-4DE1-9826-20D2128EAE57}
 	EndGlobalSection
 EndGlobal

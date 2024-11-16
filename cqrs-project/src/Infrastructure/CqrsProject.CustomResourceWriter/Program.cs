@@ -9,6 +9,6 @@ public static class Program
             ? args[indexOutput + 1]
             : Path.Combine(Environment.CurrentDirectory, "Localization", "Resources");
 
-        JsonToResourcesConverter.Main(destinationPath);
+        JsonToResourcesConverter.Handler(destinationPath);
     }
 }

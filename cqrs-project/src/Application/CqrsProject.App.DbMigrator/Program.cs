@@ -1,8 +1,6 @@
 using CqrsProject.App.DbMigrator;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
-using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Identity.Services;
 using CqrsProject.Core.Tenants;
 using CqrsProject.Postegre.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +20,6 @@ builder.Services
         options.UseNpgsql(builder.Configuration.GetConnectionString("CoreDbContext"));
     })
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
-    .AddScoped<IIdentitySyncService, IdentitySyncService>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<IDbMigratorService, DbMigratorService>();
 

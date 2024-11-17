@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <Target Name="RunCustomResourceWriter" BeforeTargets="BeforeBuild">
-    <Exec Command="dotnet run --project ../../Infrastructure/CqrsProject.CustomResourceWriter/CqrsProject.CustomResourceWriter.csproj --output ../../Domain/CqrsProject.Common/Localization/Resources" />
-    <Exec Command="dotnet build ../../Domain/CqrsProject.Common/CqrsProject.Common.csproj" />
+    <Exec Command="dotnet run --project ../../Providers/CqrsProject.CustomResourceWriter/CqrsProject.CustomResourceWriter.csproj --output ../../Core/CqrsProject.Common/Localization/Resources" />
+    <Exec Command="dotnet build ../../Core/CqrsProject.Common/CqrsProject.Common.csproj" />
   </Target>
 
   <ItemGroup>
@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\CqrsProject.Core\CqrsProject.Core.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\CqrsProject.Auth0\CqrsProject.Auth0.csproj" />
+    <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.Auth0\CqrsProject.Auth0.csproj" />
   </ItemGroup>
 
   <ItemGroup>

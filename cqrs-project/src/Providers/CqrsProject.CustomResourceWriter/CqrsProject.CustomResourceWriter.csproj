@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\CqrsProject.Common\CqrsProject.Common.csproj" />
+    <ProjectReference Include="..\..\Core\CqrsProject.Common\CqrsProject.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

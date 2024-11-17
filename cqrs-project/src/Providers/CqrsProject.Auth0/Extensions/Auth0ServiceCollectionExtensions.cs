@@ -4,7 +4,7 @@ using CqrsProject.Common.Providers.OAuth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CqrsProject.Postegre.Extensions;
+namespace CqrsProject.Auth0.Extensions;
 
 public static class Auth0ServiceCollectionExtensions
 {

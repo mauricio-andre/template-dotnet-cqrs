@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomResourceW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Postegre", "src\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj", "{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomConsoleFormatter", "src\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj", "{CFC00D1B-16BA-440F-A90D-7A1294B54C73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC00D1B-16BA-440F-A90D-7A1294B54C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC00D1B-16BA-440F-A90D-7A1294B54C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC00D1B-16BA-440F-A90D-7A1294B54C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC00D1B-16BA-440F-A90D-7A1294B54C73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E22356A9-B723-46AB-8AA9-AC711A370013} = {7331E8B1-4586-4D3B-976B-08DA05DAF145}
@@ -74,5 +80,6 @@ Global
 		{B5491F30-EE1B-49FD-BCAE-0DD2BB644813} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 		{1E1393FD-1A38-45DD-8198-646E1BB433C4} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 		{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
+		{CFC00D1B-16BA-440F-A90D-7A1294B54C73} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 	EndGlobalSection
 EndGlobal

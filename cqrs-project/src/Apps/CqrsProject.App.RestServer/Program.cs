@@ -17,6 +17,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using CqrsProject.Auth0.Extensions;
+using CqrsProject.CustomConsoleFormatter.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 });
 
 builder.Services.AddAuth0Provider(builder.Configuration);
+builder.Services.AddCustomConsoleFormatterProvider();
 
 // configuration controllers
 builder.Services.AddControllers();

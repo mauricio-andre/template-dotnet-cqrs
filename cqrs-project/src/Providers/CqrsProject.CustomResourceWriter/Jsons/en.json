@@ -1,3 +1,5 @@
 {
-  "message:validation:emptyApiResponse": "The API responded successfully but did not send any content"
+  "message:validation:emptyApiResponse": "The API responded successfully but did not send any content",
+  "message:validation:exampleNotFound": "Unable to find an Example with the data provided",
+  "message:validation:duplicatedExample": "There is already an Example registered with the same data provided"
 }

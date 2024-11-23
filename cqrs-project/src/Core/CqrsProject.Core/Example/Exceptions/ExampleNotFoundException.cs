@@ -1,14 +1,11 @@
 using CqrsProject.Common.Exceptions;
+using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Exceptions;
 
 public class ExampleNotFoundException : BusinessException
 {
-    public ExampleNotFoundException(string message) : base(message)
-    {
-    }
-
-    public ExampleNotFoundException(string? message, Exception? innerException) : base(message, innerException)
+    public ExampleNotFoundException(IStringLocalizer localizer) : base(localizer["message:validation:exampleNotFound"])
     {
     }
 }

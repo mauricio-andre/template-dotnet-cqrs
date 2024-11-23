@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.Auth0.Extensions;
 using CqrsProject.CustomConsoleFormatter.Extensions;
+using CqrsProject.App.RestServer.Loggers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,8 @@ builder.Services
             .AsImplementedInterfaces()
             .WithScopedLifetime())
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
-    .AddScoped<ICurrentTenant, CurrentTenant>();
+    .AddScoped<ICurrentTenant, CurrentTenant>()
+    .AddScoped<ICurrentIdentity, CurrentIdentity>();
 
 // Configuration string location
 builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));
@@ -62,8 +64,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         .AddSupportedUICultures(supportCultures);
 });
 
+// Configure providers
 builder.Services.AddAuth0Provider(builder.Configuration);
-builder.Services.AddCustomConsoleFormatterProvider();
+builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
 // configuration controllers
 builder.Services.AddControllers();
@@ -183,6 +186,7 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseRequestLocalization();
 
+app.UseMiddleware<IdentityMiddleware>();
 app.UseMiddleware<TenantMiddleware>();
 
 await app.RunAsync();

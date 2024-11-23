@@ -1,7 +1,9 @@
 using CqrsProject.App.DbMigrator;
+using CqrsProject.App.DbMigrator.Loggers;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
 using CqrsProject.Core.Tenants;
+using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.Postegre.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,8 +26,12 @@ builder.Services
     .AddScoped<IDbMigratorService, DbMigratorService>();
 
 // configuration identity
-builder.Services.AddIdentityCore<User>()
-.AddEntityFrameworkStores<AdministrationDbContext>();
+builder.Services
+    .AddIdentityCore<User>()
+    .AddEntityFrameworkStores<AdministrationDbContext>();
+
+// Configure providers
+builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
 var app = builder.Build();
 

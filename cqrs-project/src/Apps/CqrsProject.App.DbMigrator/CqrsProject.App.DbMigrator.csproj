@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
     <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

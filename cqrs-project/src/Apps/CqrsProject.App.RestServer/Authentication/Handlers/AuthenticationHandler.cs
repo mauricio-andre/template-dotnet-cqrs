@@ -100,7 +100,7 @@ public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions
 
         return new ClaimsIdentity(
             localIdentity.Claims,
-            AuthenticationDefaults.IdentityType,
+            AuthenticationDefaults.LocalIdentityType,
             ClaimTypes.NameIdentifier,
             ClaimTypes.Role
         );

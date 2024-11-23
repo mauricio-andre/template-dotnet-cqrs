@@ -1,9 +1,6 @@
 using System.Security.Claims;
 using Asp.Versioning;
-using CqrsProject.App.RestService.Extensions;
 using CqrsProject.Core.Commands;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

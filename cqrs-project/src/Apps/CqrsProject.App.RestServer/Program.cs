@@ -71,6 +71,8 @@ builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 // configuration controllers
 builder.Services.AddControllers();
 
+builder.Services.AddMemoryCache();
+
 // configuration API Explorer
 builder.Services
     .AddEndpointsApiExplorer()

@@ -14,4 +14,5 @@ public abstract class AdministrationDbContext : IdentityDbContext<User, Identity
 
     public DbSet<UserTenant> UserTenants => Set<UserTenant>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
+    public DbSet<TenantConnectionString> TenantConnectionStrings => Set<TenantConnectionString>();
 }

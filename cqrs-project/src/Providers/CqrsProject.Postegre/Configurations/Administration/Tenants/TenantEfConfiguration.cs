@@ -20,6 +20,9 @@ public class TenantEfConfiguration : IEntityTypeConfiguration<Tenant>
             .IsRequired()
             .HasMaxLength(TenantConstrains.NameMaxLength);
 
+        builder.Property(tenant => tenant.IsDeleted)
+            .IsRequired();
+
         builder
             .HasMany(tenant => tenant.UserList)
             .WithMany(user => user.TenantList)

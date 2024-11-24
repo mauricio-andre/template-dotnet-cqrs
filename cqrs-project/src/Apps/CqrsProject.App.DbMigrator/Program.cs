@@ -38,6 +38,8 @@ builder.Configuration
     .AddJsonFile("appsettings.Development.json", true)
     .AddEnvironmentVariables();
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 await app.Services

@@ -1,5 +1,8 @@
 using CqrsProject.Common.Loggers;
+using CqrsProject.Core.Events;
+using CqrsProject.Core.Identity;
 using CqrsProject.Core.Tenants;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -10,13 +13,19 @@ public class TenantMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<TenantMiddleware> _logger;
 
-    public TenantMiddleware(RequestDelegate next, ILogger<TenantMiddleware> logger)
+    public TenantMiddleware(
+        RequestDelegate next,
+        ILogger<TenantMiddleware> logger)
     {
         _next = next;
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context, ICurrentTenant currentTenant)
+    public async Task InvokeAsync(
+        HttpContext context,
+        ICurrentTenant currentTenant,
+        ICurrentIdentity currentIdentity,
+        IMediator mediator)
     {
         if (!context.Request.Headers.TryGetValue("x-tenant-id", out var tenantIdHeader)
             || string.IsNullOrEmpty(tenantIdHeader))
@@ -31,7 +40,10 @@ public class TenantMiddleware
             return;
         }
 
-        // TODO: implementar validação de permissão do usuário para o tenant
+        await mediator.Publish(new TenantAccessedByUserEvent(
+            UserId: currentIdentity.GetLocalIdentityId(),
+            TenantId: tenantId
+        ));
 
         currentTenant.SetCurrentTenantId(tenantId);
 

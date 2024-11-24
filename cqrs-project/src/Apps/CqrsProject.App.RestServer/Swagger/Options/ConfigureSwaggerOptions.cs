@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Text;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Npgsql.Replication;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CqrsProject.App.RestService.Swagger;
@@ -47,7 +45,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         });
 
         options.OperationFilter<AuthorizeOperationFilter>();
-        options.OperationFilter<HeadersOperationFilter>();
+        options.OperationFilter<AttributeHeaderOperationFilter>();
     }
 
     private OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
@@ -68,13 +66,13 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         return info;
     }
 
-    private void AddInfoDeprecated(StringBuilder text, ApiVersionDescription description)
+    private static void AddInfoDeprecated(StringBuilder text, ApiVersionDescription description)
     {
         if (description.IsDeprecated)
             text.Append("This API version has been deprecated");
     }
 
-    private void AddInfoSunsetPolicy(StringBuilder text, ApiVersionDescription description)
+    private static void AddInfoSunsetPolicy(StringBuilder text, ApiVersionDescription description)
     {
         if (description.SunsetPolicy is SunsetPolicy policy)
         {
@@ -83,14 +81,14 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         }
     }
 
-    private void AddInfoSunsetDate(StringBuilder text, SunsetPolicy policy)
+    private static void AddInfoSunsetDate(StringBuilder text, SunsetPolicy policy)
     {
         if (policy.Date is DateTimeOffset when)
             text.Append("The API, will be sunset on")
                 .Append(when.Date.ToShortDateString())
                 .Append(".");
     }
-    private void AddInfoSunsetLinks(StringBuilder text, SunsetPolicy policy)
+    private static void AddInfoSunsetLinks(StringBuilder text, SunsetPolicy policy)
     {
         if (!policy.HasLinks)
             return;

@@ -176,7 +176,7 @@ app.UseSwaggerUI(options =>
         {"audience", audience}
     });
 
-    options.InjectStylesheet("/SwaggerUi/SwaggerDark.css");
+    options.InjectStylesheet("/swagger-ui/SwaggerDark.css");
 });
 
 // configuration app

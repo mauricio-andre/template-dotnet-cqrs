@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using CqrsProject.App.RestServer.Attributes;
 using CqrsProject.App.RestService.Extensions;
 using CqrsProject.Core.Commands;
 using CqrsProject.Core.Queries;
@@ -14,6 +15,7 @@ namespace CqrsProject.App.RestService.V1.Controllers;
 [Authorize]
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
+[SwaggerHeaderTenantId]
 public class ExamplesController : ControllerBase
 {
     private readonly IMediator _mediator;

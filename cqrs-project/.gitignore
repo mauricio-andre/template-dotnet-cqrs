@@ -5,6 +5,8 @@
 # .NET Core build folders
 bin/
 obj/
+# Dev settings
+appsettings.Development.json
 
 # Resources file
 *.resources

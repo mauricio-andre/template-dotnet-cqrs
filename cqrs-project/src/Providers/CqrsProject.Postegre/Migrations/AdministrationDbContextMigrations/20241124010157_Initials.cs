@@ -27,6 +27,18 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tenants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -141,6 +153,30 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserTenants",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTenants", x => new { x.UserId, x.TenantId });
+                    table.ForeignKey(
+                        name: "FK_UserTenants_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTenants_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserTokens",
                 columns: table => new
                 {
@@ -196,6 +232,11 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 table: "Users",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTenants_TenantId",
+                table: "UserTenants",
+                column: "TenantId");
         }
 
         /// <inheritdoc />
@@ -214,10 +255,16 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
+                name: "UserTenants");
+
+            migrationBuilder.DropTable(
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
 
             migrationBuilder.DropTable(
                 name: "Users");

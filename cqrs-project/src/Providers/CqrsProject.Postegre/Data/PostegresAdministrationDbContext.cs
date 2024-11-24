@@ -1,5 +1,6 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
+using CqrsProject.Postegre.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,5 +24,8 @@ public class PostegresAdministrationDbContext : AdministrationDbContext
         builder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
         builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
         builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
+
+        builder.ApplyConfiguration(new TenantEfConfiguration());
+        builder.ApplyConfiguration(new UserTenantEfConfiguration());
     }
 }

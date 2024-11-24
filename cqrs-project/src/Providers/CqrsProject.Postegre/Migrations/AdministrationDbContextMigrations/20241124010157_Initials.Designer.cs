@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 {
     [DbContext(typeof(PostegresAdministrationDbContext))]
-    [Migration("20240902135640_Initials")]
+    [Migration("20241124010157_Initials")]
     partial class Initials
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -97,6 +97,37 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.Identity.UserTenant", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "TenantId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("UserTenants", (string)null);
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -229,6 +260,25 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CqrsProject.Core.Identity.UserTenant", b =>
+                {
+                    b.HasOne("CqrsProject.Core.Tenants.Tenant", "Tenant")
+                        .WithMany("UserTenantList")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CqrsProject.Core.Identity.User", "User")
+                        .WithMany("UserTenantList")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -278,6 +328,16 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.Identity.User", b =>
+                {
+                    b.Navigation("UserTenantList");
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Tenant", b =>
+                {
+                    b.Navigation("UserTenantList");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CqrsProject.Postegre.Migrations.CoreDbContextMigrations
 {
     [DbContext(typeof(PostegresCoreDbContext))]
-    [Migration("20240902135547_Initials")]
+    [Migration("20241124010224_Initials")]
     partial class Initials
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace CqrsProject.Postegre.Migrations.CoreDbContextMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

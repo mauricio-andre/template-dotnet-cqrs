@@ -2,5 +2,5 @@ namespace CqrsProject.App.DbMigrator;
 
 public interface IDbMigratorService
 {
-    Task RunMigrateAsync();
+    Task RunMigrateAsync(CancellationToken cancellationToken = default);
 }

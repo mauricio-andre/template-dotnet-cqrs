@@ -33,6 +33,11 @@ builder.Services
 // Configure providers
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
+// Configure additional appsettings
+builder.Configuration
+    .AddJsonFile("appsettings.Development.json", true)
+    .AddEnvironmentVariables();
+
 var app = builder.Build();
 
 await app.Services

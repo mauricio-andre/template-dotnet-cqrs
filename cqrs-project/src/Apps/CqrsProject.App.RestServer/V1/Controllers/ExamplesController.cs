@@ -1,20 +1,23 @@
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Attributes;
-using CqrsProject.App.RestService.Extensions;
+using CqrsProject.App.RestServer.Authorization;
+using CqrsProject.App.RestServer.Extensions;
+using CqrsProject.Common.Consts;
 using CqrsProject.Core.Commands;
+using CqrsProject.Core.Identity.Consts;
 using CqrsProject.Core.Queries;
 using CqrsProject.Core.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CqrsProject.App.RestService.V1.Controllers;
+namespace CqrsProject.App.RestServer.V1.Controllers;
 
 [ApiController]
 [ApiVersion(1)]
-[Authorize]
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
+[Authorize(Policy = AuthorizationPolicyNames.HasRoleClient)]
 [SwaggerHeaderTenantId]
 public class ExamplesController : ControllerBase
 {

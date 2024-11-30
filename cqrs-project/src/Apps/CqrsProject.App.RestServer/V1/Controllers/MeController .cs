@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CqrsProject.App.RestService.V1.Controllers;
+namespace CqrsProject.App.RestServer.V1.Controllers;
 
 [ApiController]
 [ApiVersion(1)]

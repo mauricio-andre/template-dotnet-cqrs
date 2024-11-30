@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace CqrsProject.App.RestService.Middlewares;
+namespace CqrsProject.App.RestServer.Middlewares;
 
 public class TenantMiddleware
 {

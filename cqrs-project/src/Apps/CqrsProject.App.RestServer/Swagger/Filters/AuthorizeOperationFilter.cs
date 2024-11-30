@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CqrsProject.App.RestService.Swagger;
+namespace CqrsProject.App.RestServer.Swagger;
 
 public class AuthorizeOperationFilter : IOperationFilter
 {

@@ -5,11 +5,10 @@ using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CqrsProject.App.RestService.Authentication;
+namespace CqrsProject.App.RestServer.Authentication;
 
 public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions>
 {

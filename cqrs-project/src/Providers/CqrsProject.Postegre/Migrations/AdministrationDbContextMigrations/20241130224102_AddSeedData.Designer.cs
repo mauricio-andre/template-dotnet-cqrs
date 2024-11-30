@@ -3,6 +3,7 @@ using System;
 using CqrsProject.Postegre.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 {
     [DbContext(typeof(PostegresAdministrationDbContext))]
-    partial class PostegresAdministrationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241130224102_AddSeedData")]
+    partial class AddSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +154,7 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantConnectionStrings", (string)null);
+                    b.ToTable("TenantConnectionStrings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

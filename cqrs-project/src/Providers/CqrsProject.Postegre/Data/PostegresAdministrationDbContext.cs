@@ -27,5 +27,7 @@ public class PostegresAdministrationDbContext : AdministrationDbContext
 
         builder.ApplyConfiguration(new TenantEfConfiguration());
         builder.ApplyConfiguration(new UserTenantEfConfiguration());
+
+        AdministrationSeedDataConfiguration.Configure(builder);
     }
 }

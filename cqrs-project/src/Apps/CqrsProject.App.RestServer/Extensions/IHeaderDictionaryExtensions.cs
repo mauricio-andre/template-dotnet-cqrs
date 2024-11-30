@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace CqrsProject.App.RestService.Extensions;
+namespace CqrsProject.App.RestServer.Extensions;
 
 public static class IHeaderDictionaryExtensions
 {

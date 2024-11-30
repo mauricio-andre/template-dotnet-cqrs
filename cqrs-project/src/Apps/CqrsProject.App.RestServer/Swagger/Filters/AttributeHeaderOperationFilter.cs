@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.App.RestServer.Attributes;
 
-namespace CqrsProject.App.RestService.Swagger;
+namespace CqrsProject.App.RestServer.Swagger;
 
 public class AttributeHeaderOperationFilter : IOperationFilter
 {

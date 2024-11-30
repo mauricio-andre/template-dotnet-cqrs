@@ -1,7 +1,7 @@
 using CqrsProject.Core.Identity;
 using Microsoft.AspNetCore.Http;
 
-namespace CqrsProject.App.RestService.Middlewares;
+namespace CqrsProject.App.RestServer.Middlewares;
 
 public class IdentityMiddleware
 {

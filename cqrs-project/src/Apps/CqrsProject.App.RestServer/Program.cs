@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
-using CqrsProject.App.RestService.Authentication;
-using CqrsProject.App.RestService.Middlewares;
-using CqrsProject.App.RestService.Swagger;
+using CqrsProject.App.RestServer.Authentication;
+using CqrsProject.App.RestServer.Middlewares;
+using CqrsProject.App.RestServer.Swagger;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
@@ -21,6 +21,8 @@ using CqrsProject.Auth0.Extensions;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.Core.Tenants.Extensions;
+using CqrsProject.App.RestServer.Authorization;
+using CqrsProject.Core.Identity.Consts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,8 +70,6 @@ builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
 // configuration controllers
 builder.Services.AddControllers();
-
-builder.Services.AddMemoryCache();
 
 // configuration API Explorer
 builder.Services
@@ -148,6 +148,9 @@ builder.Services
         AuthenticationDefaults.AuthenticationScheme,
         AuthenticationDefaults.DisplayName,
         null);
+
+// configure authorization policies
+builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
 
 var app = builder.Build();
 

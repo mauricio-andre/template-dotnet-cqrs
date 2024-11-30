@@ -20,7 +20,7 @@ public class PostegresCoreDbContext : CoreDbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        var connectionString = _tenantConnectionProvider.GetConnectionStringToCurrentTenant();
+        var connectionString = _tenantConnectionProvider.GetConnectionStringToCurrentTenant("CoreDbContext");
         if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseNpgsql(connectionString);
     }
 

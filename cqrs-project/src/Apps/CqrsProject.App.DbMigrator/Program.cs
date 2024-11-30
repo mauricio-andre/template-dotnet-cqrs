@@ -17,10 +17,7 @@ builder.Services
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
     })
-    .AddPostegreCoreDbContext(options =>
-    {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("CoreDbContext"));
-    })
+    .AddPostegreCoreDbContext()
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<IDbMigratorService, DbMigratorService>();

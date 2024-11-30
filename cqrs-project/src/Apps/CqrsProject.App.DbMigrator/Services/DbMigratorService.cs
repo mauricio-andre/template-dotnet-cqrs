@@ -7,30 +7,36 @@ namespace CqrsProject.App.DbMigrator;
 
 public class DbMigratorService : IDbMigratorService
 {
-    private readonly AdministrationDbContext _administrationDbContext;
-    private readonly CoreDbContext _coreDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _administrationDbContextFactory;
+    private readonly IDbContextFactory<CoreDbContext> _coreDbContextFactory;
     private readonly ICurrentTenant _currentTenant;
+    private readonly ITenantConnectionProvider _tenantConnectionProvider;
 
     public DbMigratorService(
-        AdministrationDbContext administrationDbContext,
-        CoreDbContext coreDbContext,
-        ICurrentTenant currentTenant)
+        IDbContextFactory<AdministrationDbContext> administrationDbContextFactory,
+        IDbContextFactory<CoreDbContext> coreDbContextFactory,
+        ICurrentTenant currentTenant,
+        ITenantConnectionProvider tenantConnectionProvider)
     {
-        _administrationDbContext = administrationDbContext;
-        _coreDbContext = coreDbContext;
+        _administrationDbContextFactory = administrationDbContextFactory;
+        _coreDbContextFactory = coreDbContextFactory;
         _currentTenant = currentTenant;
+        _tenantConnectionProvider = tenantConnectionProvider;
     }
 
     public async Task RunMigrateAsync(CancellationToken cancellationToken = default)
     {
         await RunMigrateAdministration(cancellationToken);
 
+        await _tenantConnectionProvider.LoadAllConnectionString();
+
         await RunMigrateCore(cancellationToken);
     }
 
-    private Task RunMigrateAdministration(CancellationToken cancellationToken)
+    private async Task RunMigrateAdministration(CancellationToken cancellationToken)
     {
-        return _administrationDbContext.Database.MigrateAsync(cancellationToken);
+        var dbContext = await _administrationDbContextFactory.CreateDbContextAsync();
+        await dbContext.Database.MigrateAsync(cancellationToken);
     }
 
     private async Task RunMigrateCore(CancellationToken cancellationToken)
@@ -39,19 +45,25 @@ public class DbMigratorService : IDbMigratorService
         await RunMigrateCoreTenants(cancellationToken);
     }
 
-    private Task RunMigrateCoreHost(CancellationToken cancellationToken)
+    private async Task RunMigrateCoreHost(CancellationToken cancellationToken)
     {
-        return _coreDbContext.Database.MigrateAsync(cancellationToken);
+        var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
+        await dbContext.Database.MigrateAsync(cancellationToken);
     }
 
     private async Task RunMigrateCoreTenants(CancellationToken cancellationToken)
     {
-        var tenantList = await _administrationDbContext.Tenants.ToListAsync(cancellationToken);
+        var administrationDbContext = await _administrationDbContextFactory.CreateDbContextAsync();
+        var tenants = administrationDbContext.Tenants
+            .Where(tenant => !tenant.IsDeleted)
+            .Select(tenant => tenant.Id)
+            .AsAsyncEnumerable();
 
-        foreach (var tenant in tenantList)
+        await foreach (var tenantId in tenants)
         {
-            _currentTenant.SetCurrentTenantId(tenant.Id);
-            await _coreDbContext.Database.MigrateAsync(cancellationToken);
+            _currentTenant.SetCurrentTenantId(tenantId);
+            var coreDbContext = await _coreDbContextFactory.CreateDbContextAsync();
+            await coreDbContext.Database.MigrateAsync(cancellationToken);
         }
     }
 }

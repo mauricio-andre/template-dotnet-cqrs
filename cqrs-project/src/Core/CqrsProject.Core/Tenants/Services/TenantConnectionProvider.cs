@@ -1,4 +1,7 @@
 using CqrsProject.Common.Providers.KeyVaults;
+using CqrsProject.Core.Data;
+using CqrsProject.Core.Tenants.Cache;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,47 +12,52 @@ public class TenantConnectionProvider : ITenantConnectionProvider
     private readonly IConfiguration _configuration;
     private readonly ICurrentTenant _currentTenant;
     private readonly IServiceProvider _serviceProvider;
-    private const string ConnectionName = "CoreDbContext";
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
 
     public TenantConnectionProvider(
         IConfiguration configuration,
         ICurrentTenant currentTenant,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IDbContextFactory<AdministrationDbContext> dbContextFactory)
     {
         _configuration = configuration;
         _currentTenant = currentTenant;
         _serviceProvider = serviceProvider;
+        _dbContextFactory = dbContextFactory;
     }
 
-    public string? GetConnectionStringToCurrentTenant()
+    public string? GetConnectionStringToCurrentTenant(string connectionName)
     {
         if (_currentTenant.IsHost())
-            return _configuration.GetConnectionString(ConnectionName);
+            return _configuration.GetConnectionString(connectionName);
 
-        // TODO: gera thread lock, pensar em alternativas
-        /*
-            Uma opção é criar um singleton com a lista de conexões disponíveis
-            que é carregado no start da aplicação, e que tem disparo de reload
-            sob demanda baseado no tempo da conexão armazenada, algo parecido
-            com que o nextjs faz para páginas pré renderizadas, dessa foma
-            aqui seria usado sempre a função sincrona que retorna dados já
-            consultados em outro processo
-        */
-        return GetConnectionStringFromVault().GetAwaiter().GetResult();
+        var connection = ConnectionStringCache.Instance.GetConnectionString(
+            _currentTenant.GetCurrentTenantId()!.Value,
+            connectionName
+        );
+
+        return connection ?? _configuration.GetConnectionString(connectionName);
     }
 
-    private async ValueTask<string?> GetConnectionStringFromVault()
+    public async Task LoadAllConnectionString()
     {
         var keyVaultService = _serviceProvider.GetService<IKeyVaultService>();
-
         if (keyVaultService == null)
-            return _configuration.GetConnectionString(ConnectionName);
+            return;
 
-        var keyName = await _currentTenant.GetConnectionKeyNameAsync(ConnectionName);
-        var connectionString = !string.IsNullOrEmpty(keyName)
-            ? await keyVaultService.GetKeyValueAsync<string?>(keyName)
-            : null;
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync();
+        var tenantConnectionStrings = administrationDbContext.TenantConnectionStrings
+            .Where(tenantConnectionString => !tenantConnectionString.Tenant!.IsDeleted)
+            .AsAsyncEnumerable();
 
-        return connectionString ?? _configuration.GetConnectionString(ConnectionName);
+        await foreach (var tenantConnectionString in tenantConnectionStrings)
+        {
+            var connectionString = await keyVaultService.GetKeyValueAsync(tenantConnectionString.KeyName);
+            ConnectionStringCache.Instance.SetConnectionString(
+                tenantConnectionString.TenantId,
+                tenantConnectionString.ConnectionName,
+                connectionString
+            );
+        }
     }
 }

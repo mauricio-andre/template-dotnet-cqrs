@@ -20,6 +20,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.Auth0.Extensions;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.App.RestServer.Loggers;
+using CqrsProject.Core.Tenants.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,7 @@ builder.Services
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
     })
-    .AddPostegreCoreDbContext(options =>
-    {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("CoreDbContext"));
-    })
+    .AddPostegreCoreDbContext()
     .AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CoreDbContext>())
     .Scan(scan => scan.FromAssembliesOf(typeof(CoreDbContext))
         .AddClasses(classes => classes.AssignableTo(typeof(AbstractValidator<>)))
@@ -187,6 +185,7 @@ app.UseCors();
 app.MapControllers();
 app.UseStaticFiles();
 app.UseRequestLocalization();
+app.LoadMultiTenantConnections();
 
 app.UseMiddleware<IdentityMiddleware>();
 app.UseMiddleware<TenantMiddleware>();

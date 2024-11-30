@@ -9,7 +9,7 @@ public static class PostegreServiceCollectionExtensions
 {
     public static IServiceCollection AddPostegreCoreDbContext(
         this IServiceCollection services,
-        Action<DbContextOptionsBuilder> optionsAction)
+        Action<DbContextOptionsBuilder>? optionsAction = default)
     {
         return services
             .AddScoped<CoreDbContext, PostegresCoreDbContext>()

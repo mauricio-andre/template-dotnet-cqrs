@@ -13,6 +13,8 @@ public class TenantEfConfiguration : IEntityTypeConfiguration<Tenant>
 
         builder.HasKey(tenant => tenant.Id);
 
+        builder.HasIndex(tenant => tenant.Name).IsUnique();
+
         builder.Property(tenant => tenant.Id)
             .ValueGeneratedOnAdd();
 

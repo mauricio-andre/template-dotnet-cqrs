@@ -15,20 +15,19 @@ namespace CqrsProject.App.RestServer.V1.Controllers;
 [ApiVersion(1)]
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
-[Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
-[HeaderFilterTenantId]
-public class ExamplesController : ControllerBase
+[Authorize(Policy = AuthorizationPolicyNames.CanManageAdministration)]
+public class TenantsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public ExamplesController(IMediator mediator)
+    public TenantsController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<ExampleResponse>), 200)]
-    public async Task<IActionResult> Search([FromQuery] SearchExampleQuery request)
+    [ProducesResponseType(typeof(IList<TenantResponse>), 200)]
+    public async Task<IActionResult> Search([FromQuery] SearchTenantQuery request)
     {
         var result = await _mediator.Send(request);
         Response.Headers.AddCollectionHeaders(result.TotalCount);
@@ -36,17 +35,16 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ExampleResponse), 200)]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    [ProducesResponseType(typeof(TenantResponse), 200)]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new GetExampleByKeyQuery(id));
+        var result = await _mediator.Send(new GetTenantByKeyQuery(id));
         return Ok(result);
     }
 
     [HttpPost()]
-    [ProducesResponseType(typeof(ExampleResponse), 201)]
-    [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
-    public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)
+    [ProducesResponseType(typeof(TenantResponse), 201)]
+    public async Task<IActionResult> Create([FromBody] CreateTenantCommand request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
@@ -54,10 +52,9 @@ public class ExamplesController : ControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(204)]
-    [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
-    public async Task<IActionResult> Remove([FromRoute] int id)
+    public async Task<IActionResult> Remove([FromRoute] Guid id)
     {
-        await _mediator.Send(new RemoveExampleCommand(id));
+        await _mediator.Send(new RemoveTenantCommand(id));
         return NoContent();
     }
 }

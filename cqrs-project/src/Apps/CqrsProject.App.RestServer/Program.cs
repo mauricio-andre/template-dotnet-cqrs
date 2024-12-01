@@ -1,11 +1,16 @@
 ﻿using Asp.Versioning;
 using CqrsProject.App.RestServer.Authentication;
+using CqrsProject.App.RestServer.Authorization;
+using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
 using CqrsProject.App.RestServer.Swagger;
+using CqrsProject.Auth0.Extensions;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity;
 using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Extensions;
+using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.Postegre.Extensions;
 using FluentValidation;
 using MediatR;
@@ -17,11 +22,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using CqrsProject.Auth0.Extensions;
-using CqrsProject.CustomConsoleFormatter.Extensions;
-using CqrsProject.App.RestServer.Loggers;
-using CqrsProject.Core.Tenants.Extensions;
-using CqrsProject.App.RestServer.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 

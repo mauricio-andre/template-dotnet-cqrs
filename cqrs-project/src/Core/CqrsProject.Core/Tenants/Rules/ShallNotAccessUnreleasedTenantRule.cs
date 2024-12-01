@@ -25,7 +25,8 @@ public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAcc
     {
         var hasAccess = await _administrationDbContext.UserTenants
             .AnyAsync(userTenant => userTenant.TenantId == notification.TenantId &&
-                userTenant.UserId == notification.TenantId);
+                userTenant.UserId == notification.TenantId &&
+                !userTenant.Tenant!.IsDeleted);
 
         if (!hasAccess)
             throw new TenantUnreleasedException(_stringLocalizer);

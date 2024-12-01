@@ -10,16 +10,28 @@ public static class AuthorizationPolicyFactory
         return options =>
         {
             options.AddPolicy(
-                AuthorizationPolicyNames.CanReadExamples,
-                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ReadExamples));
-
-            options.AddPolicy(
-                AuthorizationPolicyNames.CanManageExamples,
-                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ManageExamples));
+                AuthorizationPolicyNames.CanManageAdministration,
+                policy => policy.RequireClaim(
+                    AuthorizationPermissionClaims.ClaimType,
+                    AuthorizationPermissionClaims.ManageAdministration));
 
             options.AddPolicy(
                 AuthorizationPolicyNames.CanManageSelf,
-                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ManageSelf));
+                policy => policy.RequireClaim(
+                    AuthorizationPermissionClaims.ClaimType,
+                    AuthorizationPermissionClaims.ManageSelf));
+
+            options.AddPolicy(
+                AuthorizationPolicyNames.CanReadExamples,
+                policy => policy.RequireClaim(
+                    AuthorizationPermissionClaims.ClaimType,
+                    AuthorizationPermissionClaims.ReadExamples));
+
+            options.AddPolicy(
+                AuthorizationPolicyNames.CanManageExamples,
+                policy => policy.RequireClaim(
+                    AuthorizationPermissionClaims.ClaimType,
+                    AuthorizationPermissionClaims.ManageExamples));
         };
     }
 }

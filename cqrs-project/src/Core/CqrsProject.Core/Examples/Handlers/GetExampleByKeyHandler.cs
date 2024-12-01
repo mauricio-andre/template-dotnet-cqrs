@@ -1,7 +1,7 @@
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Examples;
-using CqrsProject.Core.Exceptions;
 using CqrsProject.Core.Queries;
 using CqrsProject.Core.Responses;
 using FluentValidation;
@@ -37,7 +37,7 @@ public class GetExampleByKeyHandler : IRequestHandler<GetExampleByKeyQuery, Exam
             cancellationToken);
 
         if (entity == null)
-            throw new ExampleNotFoundException(_stringLocalizer);
+            throw new EntityNotFoundException(_stringLocalizer, nameof(Example), request.Id.ToString());
 
         return MapToResponse(entity);
     }

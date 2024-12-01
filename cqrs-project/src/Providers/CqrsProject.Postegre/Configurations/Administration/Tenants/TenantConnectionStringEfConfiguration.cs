@@ -12,6 +12,14 @@ public class TenantConnectionStringEfConfiguration : IEntityTypeConfiguration<Te
 
         builder.HasKey(tenantConnectionString => tenantConnectionString.Id);
 
+        builder
+            .HasIndex(tenantConnectionString => new
+            {
+                tenantConnectionString.TenantId,
+                tenantConnectionString.KeyName
+            })
+            .IsUnique();
+
         builder.Property(tenantConnectionString => tenantConnectionString.Id)
             .ValueGeneratedOnAdd();
 

@@ -17,7 +17,8 @@ public class CurrentIdentity : ICurrentIdentity
             ?? false;
     }
 
-    public Guid GetLocalIdentityId(){
+    public Guid GetLocalIdentityId()
+    {
         var id = _principal?.Identities
             .FirstOrDefault(identity => identity.AuthenticationType == AuthenticationDefaults.LocalIdentityType)
             ?.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)

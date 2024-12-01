@@ -1,7 +1,7 @@
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Events;
-using CqrsProject.Core.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -24,9 +24,9 @@ public class ShallNotAllowDuplicateExampleRule : INotificationHandler<CreateExam
         CancellationToken cancellationToken)
     {
         var hasDuplicate = await _coreDbContext.Examples
-            .AnyAsync(example => example.Name.Equals(notification.name));
+            .AnyAsync(example => example.Name.Equals(notification.Name));
 
         if (hasDuplicate)
-            throw new DuplicatedExampleException(_stringLocalizer);
+            throw new DuplicatedEntityException(_stringLocalizer, nameof(Examples));
     }
 }

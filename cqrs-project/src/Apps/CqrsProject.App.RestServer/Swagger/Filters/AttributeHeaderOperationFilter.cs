@@ -1,7 +1,7 @@
 using System.Reflection;
+using CqrsProject.App.RestServer.Attributes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using CqrsProject.App.RestServer.Attributes;
 
 namespace CqrsProject.App.RestServer.Swagger;
 

@@ -26,5 +26,14 @@ public static class AdministrationSeedDataConfiguration
                 ClaimType = AuthorizationPermissionClaims.ClaimType,
                 ClaimValue = AuthorizationPermissionClaims.ManageSelf
             });
+
+        builder.Entity<IdentityRoleClaim<Guid>>().HasData(
+            new IdentityRoleClaim<Guid>()
+            {
+                Id = -2,
+                RoleId = roleHostAdminId,
+                ClaimType = AuthorizationPermissionClaims.ClaimType,
+                ClaimValue = AuthorizationPermissionClaims.ManageAdministration
+            });
     }
 }

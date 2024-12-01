@@ -1,7 +1,8 @@
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Exceptions;
+using CqrsProject.Core.Examples;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,7 @@ public class RemoveExampleHandler : IRequestHandler<RemoveExampleCommand>
             cancellationToken);
 
         if (entity == null)
-            throw new ExampleNotFoundException(_stringLocalizer);
+            throw new EntityNotFoundException(_stringLocalizer, nameof(Example), request.Id.ToString());
 
         _coreDbContext.Remove(entity);
         await _coreDbContext.SaveChangesAsync(cancellationToken);

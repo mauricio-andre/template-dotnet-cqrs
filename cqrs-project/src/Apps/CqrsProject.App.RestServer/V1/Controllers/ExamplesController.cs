@@ -2,9 +2,7 @@ using Asp.Versioning;
 using CqrsProject.App.RestServer.Attributes;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.Common.Consts;
 using CqrsProject.Core.Commands;
-using CqrsProject.Core.Identity.Consts;
 using CqrsProject.Core.Queries;
 using CqrsProject.Core.Responses;
 using MediatR;
@@ -18,7 +16,7 @@ namespace CqrsProject.App.RestServer.V1.Controllers;
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
-[SwaggerHeaderTenantId]
+[HeaderFilterTenantId]
 public class ExamplesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -30,7 +28,6 @@ public class ExamplesController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IList<ExampleResponse>), 200)]
-    [ProducesResponseType(400)]
     public async Task<IActionResult> Search([FromQuery] SearchExampleQuery request)
     {
         var result = await _mediator.Send(request);
@@ -40,7 +37,6 @@ public class ExamplesController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(ExampleResponse), 200)]
-    [ProducesResponseType(400)]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var result = await _mediator.Send(new GetExampleByKeyQuery(id));
@@ -49,7 +45,6 @@ public class ExamplesController : ControllerBase
 
     [HttpPost()]
     [ProducesResponseType(typeof(ExampleResponse), 201)]
-    [ProducesResponseType(400)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)
     {
@@ -59,7 +54,6 @@ public class ExamplesController : ControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ExampleResponse), 204)]
-    [ProducesResponseType(400)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Remove([FromRoute] int id)
     {

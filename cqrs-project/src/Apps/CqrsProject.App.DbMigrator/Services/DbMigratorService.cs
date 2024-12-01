@@ -1,7 +1,9 @@
 
+using System.Runtime.Serialization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CqrsProject.App.DbMigrator;
 
@@ -48,7 +50,9 @@ public class DbMigratorService : IDbMigratorService
     private async Task RunMigrateCoreHost(CancellationToken cancellationToken)
     {
         var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
-        await dbContext.Database.MigrateAsync(cancellationToken);
+
+        if (IsHostDatabaseConfigured(dbContext.Database))
+            await dbContext.Database.MigrateAsync(cancellationToken);
     }
 
     private async Task RunMigrateCoreTenants(CancellationToken cancellationToken)
@@ -66,4 +70,7 @@ public class DbMigratorService : IDbMigratorService
             await coreDbContext.Database.MigrateAsync(cancellationToken);
         }
     }
+
+    private static bool IsHostDatabaseConfigured(DatabaseFacade database)
+        => !string.IsNullOrEmpty(database.GetConnectionString());
 }

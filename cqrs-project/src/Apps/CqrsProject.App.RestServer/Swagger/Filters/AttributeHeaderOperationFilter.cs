@@ -11,10 +11,10 @@ public class AttributeHeaderOperationFilter : IOperationFilter
     {
         operation.Parameters ??= new List<OpenApiParameter>();
 
-        var attributeList = context.MethodInfo.GetCustomAttributes<SwaggerHeaderAttribute>();
+        var attributeList = context.MethodInfo.GetCustomAttributes<HeaderFilterAttribute>();
 
         if (attributeList == null || !attributeList.Any())
-            attributeList = context.MethodInfo.DeclaringType?.GetCustomAttributes<SwaggerHeaderAttribute>();
+            attributeList = context.MethodInfo.DeclaringType?.GetCustomAttributes<HeaderFilterAttribute>();
 
         if (attributeList != null)
         {
@@ -38,7 +38,8 @@ public class AttributeHeaderOperationFilter : IOperationFilter
                         ? null
                         : new OpenApiSchema
                         {
-                            Type = attribute.SchemaType
+                            Type = attribute.SchemaType,
+                            Format = attribute.SchemaFormat ?? string.Empty
                         }
                 });
             }

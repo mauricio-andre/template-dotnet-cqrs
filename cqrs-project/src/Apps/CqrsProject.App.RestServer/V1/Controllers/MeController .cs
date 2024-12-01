@@ -23,7 +23,6 @@ public class MeController : ControllerBase
 
     [HttpPost("sync")]
     [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
     public async Task<IActionResult> Create()
     {
         await _mediator.Send(new IdentitySyncCommand(

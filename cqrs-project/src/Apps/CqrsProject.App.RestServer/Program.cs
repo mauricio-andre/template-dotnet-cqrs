@@ -22,7 +22,6 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.Core.Tenants.Extensions;
 using CqrsProject.App.RestServer.Authorization;
-using CqrsProject.Core.Identity.Consts;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -17,7 +17,7 @@ namespace CqrsProject.App.RestServer.V1.Controllers;
 [ApiVersion(1)]
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
-[Authorize(Policy = AuthorizationPolicyNames.HasRoleClient)]
+[Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
 [SwaggerHeaderTenantId]
 public class ExamplesController : ControllerBase
 {
@@ -50,6 +50,7 @@ public class ExamplesController : ControllerBase
     [HttpPost()]
     [ProducesResponseType(typeof(ExampleResponse), 201)]
     [ProducesResponseType(400)]
+    [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)
     {
         var result = await _mediator.Send(request);
@@ -59,6 +60,7 @@ public class ExamplesController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ExampleResponse), 204)]
     [ProducesResponseType(400)]
+    [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Remove([FromRoute] int id)
     {
         await _mediator.Send(new RemoveExampleCommand(id));

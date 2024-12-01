@@ -183,21 +183,9 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d7d7a721-5c7c-474b-adfb-89b54cb3e3b0"),
+                            Id = new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51"),
                             Name = "host_admin",
                             NormalizedName = "HOST_ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("19d7fbe6-f687-4219-8fbd-92bfa2903ffe"),
-                            Name = "tenant_admin",
-                            NormalizedName = "TENANT_ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("65e4f5a3-b56b-4a5a-9a0f-8483a875fc62"),
-                            Name = "client",
-                            NormalizedName = "CLIENT"
                         });
                 });
 
@@ -223,6 +211,15 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RoleClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            ClaimType = "permissions",
+                            ClaimValue = "manage_self",
+                            RoleId = new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>

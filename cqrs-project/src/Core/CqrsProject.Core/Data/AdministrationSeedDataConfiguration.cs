@@ -1,3 +1,4 @@
+using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Consts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,26 +9,22 @@ public static class AdministrationSeedDataConfiguration
 {
     public static void Configure(ModelBuilder builder)
     {
+        var roleHostAdminId = Guid.Parse("E83BFC7D-61AF-EF11-B120-A830F9D53C51");
+
         builder.Entity<IdentityRole<Guid>>().HasData(
             new IdentityRole<Guid>(IdentityRoleDefaults.HostAdmin)
             {
-                Id = Guid.NewGuid(),
-                NormalizedName = IdentityRoleDefaults.HostAdmin.ToUpperInvariant()
+                Id = roleHostAdminId,
+                NormalizedName = IdentityRoleDefaults.HostAdmin.ToUpperInvariant(),
             });
 
-        builder.Entity<IdentityRole<Guid>>().HasData(
-            new IdentityRole<Guid>(IdentityRoleDefaults.TenantAdmin)
+        builder.Entity<IdentityRoleClaim<Guid>>().HasData(
+            new IdentityRoleClaim<Guid>()
             {
-                Id = Guid.NewGuid(),
-                NormalizedName = IdentityRoleDefaults.TenantAdmin.ToUpperInvariant()
+                Id = -1,
+                RoleId = roleHostAdminId,
+                ClaimType = AuthorizationPermissionClaims.ClaimType,
+                ClaimValue = AuthorizationPermissionClaims.ManageSelf
             });
-
-        builder.Entity<IdentityRole<Guid>>().HasData(
-            new IdentityRole<Guid>(IdentityRoleDefaults.Client)
-            {
-                Id = Guid.NewGuid(),
-                NormalizedName = IdentityRoleDefaults.Client.ToUpperInvariant()
-            });
-
     }
 }

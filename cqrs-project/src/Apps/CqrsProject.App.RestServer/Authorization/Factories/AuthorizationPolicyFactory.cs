@@ -1,4 +1,4 @@
-using CqrsProject.Core.Identity.Consts;
+using CqrsProject.Common.Consts;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CqrsProject.App.RestServer.Authorization;
@@ -10,16 +10,16 @@ public static class AuthorizationPolicyFactory
         return options =>
         {
             options.AddPolicy(
-                AuthorizationPolicyNames.HasRoleHostAdmin,
-                policy => policy.RequireRole(IdentityRoleDefaults.HostAdmin));
+                AuthorizationPolicyNames.CanReadExamples,
+                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ReadExamples));
 
             options.AddPolicy(
-                AuthorizationPolicyNames.HasRoleTenantAdmin,
-                policy => policy.RequireRole(IdentityRoleDefaults.TenantAdmin));
+                AuthorizationPolicyNames.CanManageExamples,
+                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ManageExamples));
 
             options.AddPolicy(
-                AuthorizationPolicyNames.HasRoleClient,
-                policy => policy.RequireRole(IdentityRoleDefaults.Client));
+                AuthorizationPolicyNames.CanManageSelf,
+                policy => policy.RequireClaim(AuthorizationPermissionClaims.ClaimType, AuthorizationPermissionClaims.ManageSelf));
         };
     }
 }

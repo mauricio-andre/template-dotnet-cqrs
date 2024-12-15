@@ -9,7 +9,9 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Rules;
 
-public class ShallNotAllowDuplicateTenantRule : INotificationHandler<CreateTenantEvent>
+public class ShallNotAllowDuplicateTenantRule
+    : INotificationHandler<CreateTenantEvent>,
+    INotificationHandler<UpdateTenantEvent>
 {
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
@@ -22,12 +24,18 @@ public class ShallNotAllowDuplicateTenantRule : INotificationHandler<CreateTenan
         _stringLocalizer = stringLocalizer;
     }
 
-    public async Task Handle(
-        CreateTenantEvent notification,
-        CancellationToken cancellationToken)
+    public Task Handle(CreateTenantEvent notification, CancellationToken cancellationToken)
+        => HandleRule(null, notification.Name, cancellationToken);
+
+    public Task Handle(UpdateTenantEvent notification, CancellationToken cancellationToken)
+        => HandleRule(notification.Id, notification.Name, cancellationToken);
+
+    private async Task HandleRule(Guid? id, string name, CancellationToken cancellationToken)
     {
         var hasDuplicate = await _administrationDbContext.Tenants
-            .AnyAsync(tenant => tenant.Name.Equals(notification.Name));
+            .AnyAsync(
+                tenant => tenant.Id != id && tenant.Name.Equals(name),
+                cancellationToken);
 
         if (hasDuplicate)
             throw new DuplicatedEntityException(_stringLocalizer, nameof(Tenant));

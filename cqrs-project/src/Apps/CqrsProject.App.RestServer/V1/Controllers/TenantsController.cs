@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using CqrsProject.App.RestServer.Attributes;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.Core.Commands;
@@ -47,6 +46,16 @@ public class TenantsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateTenantCommand request)
     {
         var result = await _mediator.Send(request);
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(TenantResponse), 200)]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid id,
+        [FromBody] string name)
+    {
+        var result = await _mediator.Send(new UpdateTenantCommand(id, name));
         return Ok(result);
     }
 

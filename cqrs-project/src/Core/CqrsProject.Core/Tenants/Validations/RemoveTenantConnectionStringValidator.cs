@@ -1,21 +1,20 @@
 using CqrsProject.Core.Commands;
-using CqrsProject.Core.Tenants;
 using FluentValidation;
 
 namespace CqrsProject.Core.Validators;
 
-public class UpdateTenantValidator : AbstractValidator<UpdateTenantCommand>
+public class RemoveTenantConnectionStringValidator : AbstractValidator<RemoveTenantConnectionStringCommand>
 {
-    public UpdateTenantValidator()
+    public RemoveTenantConnectionStringValidator()
     {
         RuleFor(prop => prop.Id)
             .NotEmpty()
             .NotNull()
             .NotEqual(Guid.Empty);
 
-        RuleFor(prop => prop.Name)
+        RuleFor(prop => prop.TenantId)
             .NotEmpty()
             .NotNull()
-            .MaximumLength(TenantConstrains.NameMaxLength);
+            .NotEqual(Guid.Empty);
     }
 }

@@ -9,14 +9,13 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Rules;
 
-public class ShallNotAllowDuplicateTenantRule
-    : INotificationHandler<CreateTenantEvent>,
-    INotificationHandler<UpdateTenantEvent>
+public class ShallNotAllowDuplicateTenantConnectionStringRule
+    : INotificationHandler<CreateTenantConnectionStringEvent>
 {
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
-    public ShallNotAllowDuplicateTenantRule(
+    public ShallNotAllowDuplicateTenantConnectionStringRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
@@ -24,17 +23,12 @@ public class ShallNotAllowDuplicateTenantRule
         _stringLocalizer = stringLocalizer;
     }
 
-    public Task Handle(CreateTenantEvent notification, CancellationToken cancellationToken)
-        => HandleRule(null, notification.Name, cancellationToken);
-
-    public Task Handle(UpdateTenantEvent notification, CancellationToken cancellationToken)
-        => HandleRule(notification.Id, notification.Name, cancellationToken);
-
-    private async Task HandleRule(Guid? id, string name, CancellationToken cancellationToken)
+    public async Task Handle(CreateTenantConnectionStringEvent notification, CancellationToken cancellationToken)
     {
-        var hasDuplicate = await _administrationDbContext.Tenants
+        var hasDuplicate = await _administrationDbContext.TenantConnectionStrings
             .AnyAsync(
-                tenant => tenant.Id != id && tenant.Name.ToLower() == name.ToLower(),
+                entity => entity.TenantId != notification.TenantId
+                    && entity.ConnectionName.ToLower() == notification.ConnectionName.ToLower(),
                 cancellationToken);
 
         if (hasDuplicate)

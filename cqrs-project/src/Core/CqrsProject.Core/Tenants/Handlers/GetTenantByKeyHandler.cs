@@ -32,9 +32,12 @@ public class GetTenantByKeyHandler : IRequestHandler<GetTenantByKeyQuery, Tenant
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.Tenants.FirstOrDefaultAsync(
-            tenant => tenant.Id == request.Id,
-            cancellationToken);
+        var entity = await _administrationDbContext.Tenants
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                tenant => tenant.Id == request.Id
+                    && !tenant.IsDeleted,
+                cancellationToken);
 
         if (entity == null)
             throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.Id.ToString());

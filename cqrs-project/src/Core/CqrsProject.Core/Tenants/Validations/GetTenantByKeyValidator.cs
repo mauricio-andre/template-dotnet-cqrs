@@ -9,6 +9,7 @@ public class GetTenantByKeyValidator : AbstractValidator<GetTenantByKeyQuery>
     {
         RuleFor(prop => prop.Id)
             .NotEmpty()
-            .NotNull();
+            .NotNull()
+            .NotEqual(Guid.Empty);
     }
 }

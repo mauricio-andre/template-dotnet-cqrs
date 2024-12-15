@@ -10,15 +10,15 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Handlers;
 
-public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
+public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantConnectionStringCommand>
 {
     private readonly AdministrationDbContext _administrationDbContext;
-    private readonly IValidator<RemoveTenantCommand> _validator;
+    private readonly IValidator<RemoveTenantConnectionStringCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
-    public RemoveTenantHandler(
+    public RemoveTenantConnectionStringHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
-        IValidator<RemoveTenantCommand> validator,
+        IValidator<RemoveTenantConnectionStringCommand> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
         _administrationDbContext = dbContextFactory.CreateDbContext();
@@ -27,21 +27,19 @@ public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
     }
 
     public async Task Handle(
-        RemoveTenantCommand request,
+        RemoveTenantConnectionStringCommand request,
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.Tenants.FirstOrDefaultAsync(
-            tenant => tenant.Id == request.Id
-                && !tenant.IsDeleted,
+        var entity = await _administrationDbContext.TenantConnectionStrings.FirstOrDefaultAsync(
+            entity => entity.Id == request.Id
+                && entity.TenantId == request.TenantId,
             cancellationToken);
 
         if (entity == null)
-            throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.Id.ToString());
+            throw new EntityNotFoundException(_stringLocalizer, nameof(TenantConnectionString), request.Id.ToString());
 
-        entity.IsDeleted = true;
-
-        _administrationDbContext.Update(entity);
+        _administrationDbContext.Remove(entity);
         await _administrationDbContext.SaveChangesAsync(cancellationToken);
     }
 }

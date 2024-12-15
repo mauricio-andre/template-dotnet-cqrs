@@ -50,7 +50,8 @@ public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantRe
     private async Task<Tenant> GetEntity(UpdateTenantCommand request, CancellationToken cancellationToken)
     {
         var entity = await _administrationDbContext.Tenants.FirstOrDefaultAsync(
-            tenant => tenant.Id == request.Id,
+            tenant => tenant.Id == request.Id
+                && !tenant.IsDeleted,
             cancellationToken);
 
         if (entity == null)

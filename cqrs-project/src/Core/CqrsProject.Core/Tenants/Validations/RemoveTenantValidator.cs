@@ -9,6 +9,7 @@ public class RemoveTenantValidator : AbstractValidator<RemoveTenantCommand>
     {
         RuleFor(prop => prop.Id)
             .NotEmpty()
-            .NotNull();
+            .NotNull()
+            .NotEqual(Guid.Empty);
     }
 }

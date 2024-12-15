@@ -7,8 +7,8 @@ namespace CqrsProject.Core.Queries;
 
 public record SearchTenantQuery(
     string? Name,
-    bool? IsDeleted,
     int? Take,
     int? Skip,
-    string? SortBy
+    string? SortBy,
+    bool? IsDeleted = false
 ) : IPageableQuery, ISortableQuery, IRequest<CollectionResponse<TenantResponse>>;

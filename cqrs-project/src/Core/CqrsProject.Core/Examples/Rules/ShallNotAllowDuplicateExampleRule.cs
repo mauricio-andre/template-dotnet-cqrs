@@ -24,7 +24,7 @@ public class ShallNotAllowDuplicateExampleRule : INotificationHandler<CreateExam
         CancellationToken cancellationToken)
     {
         var hasDuplicate = await _coreDbContext.Examples
-            .AnyAsync(example => example.Name.Equals(notification.Name));
+            .AnyAsync(example => example.Name.ToLower() == notification.Name.ToLower());
 
         if (hasDuplicate)
             throw new DuplicatedEntityException(_stringLocalizer, nameof(Examples));

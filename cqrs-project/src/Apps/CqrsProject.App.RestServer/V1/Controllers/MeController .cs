@@ -21,9 +21,9 @@ public class MeController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("sync")]
+    [HttpPost("[action]")]
     [ProducesResponseType(204)]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Sync()
     {
         await _mediator.Send(new IdentitySyncCommand(
             NameIdentifier: HttpContext.User.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier)!.Value,

@@ -4,6 +4,7 @@ using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
 using CqrsProject.App.RestServer.Swagger;
+using CqrsProject.App.RestServer.Transformers;
 using CqrsProject.Auth0.Extensions;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Data;
@@ -17,6 +18,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,7 +70,12 @@ builder.Services.AddAuth0Provider(builder.Configuration);
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
 // configuration controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(
+        new RouteTokenTransformerConvention(
+            new KebabCaseParameterTransformer()));
+});
 
 // configuration API Explorer
 builder.Services

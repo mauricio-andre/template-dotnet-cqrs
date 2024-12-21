@@ -2,7 +2,7 @@
 using System.Text.Json;
 using CqrsProject.Common.Localization;
 
-namespace CqrsProject.CustomResourceWriter;
+namespace CqrsProject.CustomResourceWriter.Services;
 
 public static class JsonToResourcesConverter
 {

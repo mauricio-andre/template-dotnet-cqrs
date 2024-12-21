@@ -2,7 +2,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using CqrsProject.Common.Consts;
-using CqrsProject.Core.Identity;
+using CqrsProject.Core.Identity.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;

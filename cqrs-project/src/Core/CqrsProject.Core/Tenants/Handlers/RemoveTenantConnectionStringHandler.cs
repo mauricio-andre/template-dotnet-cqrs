@@ -1,14 +1,14 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
-using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Tenants.Handlers;
 
 public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantConnectionStringCommand>
 {

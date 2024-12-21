@@ -1,7 +1,7 @@
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Examples.Responses;
 using MediatR;
 
-namespace CqrsProject.Core.Commands;
+namespace CqrsProject.Core.Examples.Commands;
 
 public record CreateExampleCommand(
     string Name

@@ -1,8 +1,8 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;

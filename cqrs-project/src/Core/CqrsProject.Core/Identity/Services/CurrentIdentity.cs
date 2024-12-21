@@ -1,8 +1,9 @@
 using System.Security.Authentication;
 using System.Security.Claims;
 using CqrsProject.Common.Consts;
+using CqrsProject.Core.Identity.Interfaces;
 
-namespace CqrsProject.Core.Identity;
+namespace CqrsProject.Core.Identity.Services;
 
 public class CurrentIdentity : ICurrentIdentity
 {

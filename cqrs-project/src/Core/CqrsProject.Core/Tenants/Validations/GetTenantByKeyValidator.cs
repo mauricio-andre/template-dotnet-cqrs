@@ -1,7 +1,7 @@
-using CqrsProject.Core.Queries;
+using CqrsProject.Core.Tenants.Queries;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validators;
+namespace CqrsProject.Core.Tenants.Validators;
 
 public class GetTenantByKeyValidator : AbstractValidator<GetTenantByKeyQuery>
 {

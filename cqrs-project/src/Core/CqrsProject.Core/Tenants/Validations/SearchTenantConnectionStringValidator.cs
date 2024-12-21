@@ -1,7 +1,7 @@
-using CqrsProject.Core.Queries;
+using CqrsProject.Core.Tenants.Queries;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validations;
+namespace CqrsProject.Core.Tenants.Validations;
 
 public class SearchTenantConnectionStringValidator : AbstractValidator<SearchTenantConnectionStringQuery>
 {

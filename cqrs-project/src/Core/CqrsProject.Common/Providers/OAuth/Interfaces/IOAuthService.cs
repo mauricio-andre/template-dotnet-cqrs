@@ -1,4 +1,6 @@
-namespace CqrsProject.Common.Providers.OAuth;
+using CqrsProject.Common.Providers.OAuth.Dtos;
+
+namespace CqrsProject.Common.Providers.OAuth.Interfaces;
 
 public interface IOAuthService
 {

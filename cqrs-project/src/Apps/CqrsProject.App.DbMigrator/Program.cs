@@ -1,8 +1,10 @@
-using CqrsProject.App.DbMigrator;
+using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.App.DbMigrator.Loggers;
+using CqrsProject.App.DbMigrator.Services;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Tenants.Interfaces;
+using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.Postegre.Extensions;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,6 @@
-namespace CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Interfaces;
+
+namespace CqrsProject.Core.Tenants.Services;
 
 public class CurrentTenant : ICurrentTenant
 {

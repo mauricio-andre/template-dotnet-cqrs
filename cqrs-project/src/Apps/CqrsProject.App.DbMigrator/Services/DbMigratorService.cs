@@ -1,11 +1,10 @@
-
-using System.Runtime.Serialization;
+using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace CqrsProject.App.DbMigrator;
+namespace CqrsProject.App.DbMigrator.Services;
 
 public class DbMigratorService : IDbMigratorService
 {

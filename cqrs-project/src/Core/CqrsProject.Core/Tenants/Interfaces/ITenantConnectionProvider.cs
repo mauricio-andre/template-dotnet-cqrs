@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Tenants;
+namespace CqrsProject.Core.Tenants.Interfaces;
 
 public interface ITenantConnectionProvider
 {

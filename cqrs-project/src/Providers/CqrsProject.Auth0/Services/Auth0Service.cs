@@ -4,7 +4,8 @@ using CqrsProject.Auth0.Dtos;
 using CqrsProject.Auth0.Options;
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
-using CqrsProject.Common.Providers.OAuth;
+using CqrsProject.Common.Providers.OAuth.Dtos;
+using CqrsProject.Common.Providers.OAuth.Interfaces;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 

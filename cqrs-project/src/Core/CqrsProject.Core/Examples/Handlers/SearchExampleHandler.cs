@@ -1,15 +1,14 @@
-using System.Linq;
 using CqrsProject.Common.Extensions;
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Examples;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Examples.Entities;
+using CqrsProject.Core.Examples.Queries;
+using CqrsProject.Core.Examples.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Examples.Handlers;
 
 public class SearchExampleHandler : IRequestHandler<SearchExampleQuery, CollectionResponse<ExampleResponse>>
 {

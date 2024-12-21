@@ -1,7 +1,7 @@
-using CqrsProject.Core.Commands;
+using CqrsProject.Core.Examples.Commands;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validators;
+namespace CqrsProject.Core.Examples.Validators;
 
 public class RemoveExampleValidator : AbstractValidator<RemoveExampleCommand>
 {

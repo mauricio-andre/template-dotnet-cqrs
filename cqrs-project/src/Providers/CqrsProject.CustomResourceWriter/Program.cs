@@ -1,4 +1,6 @@
-﻿namespace CqrsProject.CustomResourceWriter;
+﻿using CqrsProject.CustomResourceWriter.Services;
+
+namespace CqrsProject.CustomResourceWriter;
 
 public static class Program
 {

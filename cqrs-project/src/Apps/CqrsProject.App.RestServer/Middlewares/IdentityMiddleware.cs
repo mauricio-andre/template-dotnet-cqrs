@@ -1,4 +1,4 @@
-using CqrsProject.Core.Identity;
+using CqrsProject.Core.Identity.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace CqrsProject.App.RestServer.Middlewares;

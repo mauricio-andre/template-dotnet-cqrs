@@ -1,9 +1,9 @@
-using CqrsProject.Core.Identity;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Tenants.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CqrsProject.Postegre.Configurations;
+namespace CqrsProject.Postegre.Configurations.Administration;
 
 public class TenantEfConfiguration : IEntityTypeConfiguration<Tenant>
 {

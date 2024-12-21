@@ -1,12 +1,12 @@
-using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Examples;
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Examples.Commands;
+using CqrsProject.Core.Examples.Entities;
+using CqrsProject.Core.Examples.Events;
+using CqrsProject.Core.Examples.Responses;
 using FluentValidation;
 using MediatR;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Examples.Handlers;
 
 public class CreateExampleHandler : IRequestHandler<CreateExampleCommand, ExampleResponse>
 {

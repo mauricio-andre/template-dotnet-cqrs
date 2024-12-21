@@ -1,11 +1,12 @@
 using CqrsProject.Common.Consts;
-using CqrsProject.Common.Providers.OAuth;
-using CqrsProject.Core.Commands;
-using CqrsProject.Core.Identity;
+using CqrsProject.Common.Providers.OAuth.Dtos;
+using CqrsProject.Common.Providers.OAuth.Interfaces;
+using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Identity.Handlers;
 
 public class IdentitySyncHandler : IRequestHandler<IdentitySyncCommand>
 {

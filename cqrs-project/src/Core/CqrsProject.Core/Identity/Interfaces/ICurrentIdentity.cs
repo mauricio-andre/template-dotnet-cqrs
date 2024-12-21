@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace CqrsProject.Core.Identity;
+namespace CqrsProject.Core.Identity.Interfaces;
 
 public interface ICurrentIdentity
 {

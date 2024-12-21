@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Tenants.Cache;
+namespace CqrsProject.Core.Tenants.Caches;
 
 public class ConnectionStringCache
 {

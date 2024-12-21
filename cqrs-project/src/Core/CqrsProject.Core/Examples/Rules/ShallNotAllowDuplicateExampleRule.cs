@@ -1,12 +1,12 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
+using CqrsProject.Core.Examples.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Rules;
+namespace CqrsProject.Core.Examples.Rules;
 
 public class ShallNotAllowDuplicateExampleRule : INotificationHandler<CreateExampleEvent>
 {

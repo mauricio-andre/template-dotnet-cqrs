@@ -1,4 +1,4 @@
-using CqrsProject.Core.Examples;
+using CqrsProject.Core.Examples.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Data;

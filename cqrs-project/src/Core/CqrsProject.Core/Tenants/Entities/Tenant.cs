@@ -1,6 +1,6 @@
-using CqrsProject.Core.Identity;
+using CqrsProject.Core.Identity.Entities;
 
-namespace CqrsProject.Core.Tenants;
+namespace CqrsProject.Core.Tenants.Entities;
 
 public static class TenantConstrains
 {

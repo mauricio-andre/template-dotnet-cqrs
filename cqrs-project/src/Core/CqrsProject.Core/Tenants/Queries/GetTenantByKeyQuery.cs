@@ -1,7 +1,7 @@
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 
-namespace CqrsProject.Core.Queries;
+namespace CqrsProject.Core.Tenants.Queries;
 
 public record GetTenantByKeyQuery(
     Guid Id

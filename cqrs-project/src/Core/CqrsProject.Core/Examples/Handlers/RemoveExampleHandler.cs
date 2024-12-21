@@ -1,14 +1,14 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
-using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Examples;
+using CqrsProject.Core.Examples.Commands;
+using CqrsProject.Core.Examples.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Examples.Handlers;
 
 public class RemoveExampleHandler : IRequestHandler<RemoveExampleCommand>
 {

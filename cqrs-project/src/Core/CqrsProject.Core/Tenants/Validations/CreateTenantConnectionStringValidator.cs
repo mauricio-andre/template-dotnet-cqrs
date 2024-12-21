@@ -1,8 +1,8 @@
-using CqrsProject.Core.Commands;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Entities;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validators;
+namespace CqrsProject.Core.Tenants.Validators;
 
 public class CreateTenantConnectionStringValidator : AbstractValidator<CreateTenantConnectionStringCommand>
 {

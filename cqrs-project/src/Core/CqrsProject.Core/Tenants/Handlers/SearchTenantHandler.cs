@@ -1,14 +1,14 @@
 using CqrsProject.Common.Extensions;
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Queries;
+using CqrsProject.Core.Tenants.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Tenants.Handlers;
 
 public class SearchTenantHandler : IRequestHandler<SearchTenantQuery, CollectionResponse<TenantResponse>>
 {

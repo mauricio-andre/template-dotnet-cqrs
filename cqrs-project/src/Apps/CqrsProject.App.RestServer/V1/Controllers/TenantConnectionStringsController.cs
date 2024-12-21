@@ -2,9 +2,9 @@ using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.V1.Dtos;
-using CqrsProject.Core.Commands;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Queries;
+using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ public class TenantConnectionStringsController : ControllerBase
     [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), 200)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid tenantId,
-        [FromQuery] SearchTenantConnectionStringDto request)
+        [FromQuery] SearchTenantConnectionStringRequestDto request)
     {
         var result = await _mediator.Send(new SearchTenantConnectionStringQuery(
             TenantId: tenantId,
@@ -44,7 +44,7 @@ public class TenantConnectionStringsController : ControllerBase
     [ProducesResponseType(typeof(TenantConnectionStringResponse), 201)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid tenantId,
-        [FromBody] CreateTenantConnectionStringDto request)
+        [FromBody] CreateTenantConnectionStringRequestDto request)
     {
         var result = await _mediator.Send(new CreateTenantConnectionStringCommand(
             ConnectionName: request.ConnectionName,

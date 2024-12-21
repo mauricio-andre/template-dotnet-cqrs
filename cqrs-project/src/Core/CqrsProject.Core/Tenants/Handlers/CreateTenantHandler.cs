@@ -1,13 +1,13 @@
-using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Responses;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Tenants.Handlers;
 
 public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, TenantResponse>
 {

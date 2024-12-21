@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CqrsProject.Core.Commands;
+namespace CqrsProject.Core.Identity.Commands;
 
 public record IdentitySyncCommand(
     string NameIdentifier,

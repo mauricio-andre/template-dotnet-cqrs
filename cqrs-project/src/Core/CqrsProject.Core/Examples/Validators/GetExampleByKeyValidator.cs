@@ -1,7 +1,7 @@
-using CqrsProject.Core.Queries;
+using CqrsProject.Core.Examples.Queries;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validators;
+namespace CqrsProject.Core.Examples.Validators;
 
 public class GetExampleByKeyValidator : AbstractValidator<GetExampleByKeyQuery>
 {

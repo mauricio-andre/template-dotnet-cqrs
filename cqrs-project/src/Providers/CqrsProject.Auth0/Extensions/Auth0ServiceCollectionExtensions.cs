@@ -1,6 +1,6 @@
 using CqrsProject.Auth0.Options;
 using CqrsProject.Auth0.Services;
-using CqrsProject.Common.Providers.OAuth;
+using CqrsProject.Common.Providers.OAuth.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

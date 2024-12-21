@@ -1,6 +1,6 @@
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity;
-using CqrsProject.Postegre.Configurations;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Postegre.Configurations.Administration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

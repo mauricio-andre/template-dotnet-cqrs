@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Responses;
+namespace CqrsProject.Core.Tenants.Responses;
 
 public record TenantConnectionStringResponse(
     Guid Id,

@@ -1,11 +1,12 @@
-using CqrsProject.Common.Providers.KeyVaults;
+using CqrsProject.Common.Providers.KeyVaults.Interfaces;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants.Cache;
+using CqrsProject.Core.Tenants.Caches;
+using CqrsProject.Core.Tenants.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CqrsProject.Core.Tenants;
+namespace CqrsProject.Core.Tenants.Services;
 
 public class TenantConnectionProvider : ITenantConnectionProvider
 {

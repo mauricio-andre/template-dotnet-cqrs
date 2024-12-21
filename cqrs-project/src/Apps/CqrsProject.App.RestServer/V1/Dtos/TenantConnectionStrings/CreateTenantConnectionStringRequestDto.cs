@@ -1,6 +1,6 @@
 namespace CqrsProject.App.RestServer.V1.Dtos;
 
-public record CreateTenantConnectionStringDto(
+public record CreateTenantConnectionStringRequestDto(
     string ConnectionName,
     string KeyName
 );

@@ -1,7 +1,7 @@
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace CqrsProject.Core.Identity;
+namespace CqrsProject.Core.Identity.Entities;
 
 public class User : IdentityUser<Guid>
 {

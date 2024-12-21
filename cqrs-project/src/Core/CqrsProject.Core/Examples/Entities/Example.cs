@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Examples;
+namespace CqrsProject.Core.Examples.Entities;
 
 public static class ExampleConstrains
 {

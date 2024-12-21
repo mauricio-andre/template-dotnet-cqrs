@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CqrsProject.Core.Events;
+namespace CqrsProject.Core.Tenants.Events;
 
 public record TenantAccessedByUserEvent(
     Guid UserId,

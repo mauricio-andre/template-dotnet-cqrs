@@ -1,7 +1,7 @@
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 
-namespace CqrsProject.Core.Commands;
+namespace CqrsProject.Core.Tenants.Commands;
 
 public record UpdateTenantCommand(
     Guid Id,

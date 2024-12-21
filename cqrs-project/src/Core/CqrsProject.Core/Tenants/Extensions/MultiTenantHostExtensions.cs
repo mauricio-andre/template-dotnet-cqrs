@@ -1,3 +1,4 @@
+using CqrsProject.Core.Tenants.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

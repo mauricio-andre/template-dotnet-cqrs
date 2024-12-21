@@ -1,4 +1,4 @@
-namespace CqrsProject.App.DbMigrator;
+namespace CqrsProject.App.DbMigrator.Interfaces;
 
 public interface IDbMigratorService
 {

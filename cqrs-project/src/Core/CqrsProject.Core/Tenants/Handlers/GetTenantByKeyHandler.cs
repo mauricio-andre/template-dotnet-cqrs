@@ -1,15 +1,15 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Queries;
+using CqrsProject.Core.Tenants.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Tenants.Handlers;
 
 public class GetTenantByKeyHandler : IRequestHandler<GetTenantByKeyQuery, TenantResponse>
 {

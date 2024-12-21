@@ -1,16 +1,16 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
-using CqrsProject.Core.Commands;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Responses;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Handlers;
+namespace CqrsProject.Core.Tenants.Handlers;
 
 public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantResponse>
 {
@@ -57,7 +57,7 @@ public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantRe
         if (entity == null)
             throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.Id.ToString());
 
-        return entity;
+        return entity!;
     }
 
     private static TenantResponse MapToResponse(Tenant entity)

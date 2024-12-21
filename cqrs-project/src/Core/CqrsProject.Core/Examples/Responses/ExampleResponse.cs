@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Responses;
+namespace CqrsProject.Core.Examples.Responses;
 
 public record ExampleResponse(
     int Id,

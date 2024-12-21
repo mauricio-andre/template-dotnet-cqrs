@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CqrsProject.Core.Commands;
+namespace CqrsProject.Core.Examples.Commands;
 
 public record RemoveExampleCommand(
     int Id

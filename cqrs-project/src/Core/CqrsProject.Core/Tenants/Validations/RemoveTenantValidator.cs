@@ -1,7 +1,7 @@
-using CqrsProject.Core.Commands;
+using CqrsProject.Core.Tenants.Commands;
 using FluentValidation;
 
-namespace CqrsProject.Core.Validators;
+namespace CqrsProject.Core.Tenants.Validators;
 
 public class RemoveTenantValidator : AbstractValidator<RemoveTenantCommand>
 {

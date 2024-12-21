@@ -1,7 +1,7 @@
 using CqrsProject.Common.Loggers;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Identity;
-using CqrsProject.Core.Tenants;
+using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

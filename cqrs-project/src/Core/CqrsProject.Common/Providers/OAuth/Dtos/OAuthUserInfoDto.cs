@@ -1,4 +1,4 @@
-namespace CqrsProject.Common.Providers.OAuth;
+namespace CqrsProject.Common.Providers.OAuth.Dtos;
 
 public record OAuthUserInfoDto(
     string Email,

@@ -1,12 +1,12 @@
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Events;
-using CqrsProject.Core.Exceptions;
+using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Rules;
+namespace CqrsProject.Core.Tenants.Rules;
 
 public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAccessedByUserEvent>
 {

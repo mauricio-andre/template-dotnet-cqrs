@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Exceptions;
+namespace CqrsProject.Core.Tenants.Exceptions;
 
 public class TenantUnreleasedException : UnauthorizedAccessException
 {

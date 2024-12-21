@@ -1,4 +1,4 @@
-namespace CqrsProject.Common.Providers.KeyVaults;
+namespace CqrsProject.Common.Providers.KeyVaults.Interfaces;
 
 public interface IKeyVaultService
 {

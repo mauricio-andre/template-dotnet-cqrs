@@ -1,6 +1,6 @@
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants;
-using CqrsProject.Postegre.Configurations;
+using CqrsProject.Core.Tenants.Interfaces;
+using CqrsProject.Postegre.Configurations.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Postegre.Data;

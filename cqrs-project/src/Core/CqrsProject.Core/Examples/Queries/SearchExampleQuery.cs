@@ -1,9 +1,9 @@
 using CqrsProject.Common.Queries;
 using CqrsProject.Common.Responses;
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Examples.Responses;
 using MediatR;
 
-namespace CqrsProject.Core.Queries;
+namespace CqrsProject.Core.Examples.Queries;
 
 public record SearchExampleQuery(
     string? Term,

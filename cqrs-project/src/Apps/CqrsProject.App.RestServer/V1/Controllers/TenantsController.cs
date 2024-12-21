@@ -2,9 +2,9 @@ using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.V1.Dtos;
-using CqrsProject.Core.Commands;
-using CqrsProject.Core.Queries;
-using CqrsProject.Core.Responses;
+using CqrsProject.Core.Tenants.Commands;
+using CqrsProject.Core.Tenants.Queries;
+using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +54,7 @@ public class TenantsController : ControllerBase
     [ProducesResponseType(typeof(TenantResponse), 200)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
-        [FromBody] UpdateTenantDto request)
+        [FromBody] UpdateTenantRequestDto request)
     {
         var result = await _mediator.Send(new UpdateTenantCommand(id, request.Name));
         return Ok(result);

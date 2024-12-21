@@ -1,4 +1,3 @@
-using CqrsProject.Common.Exceptions;
 using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Common.Exceptions;

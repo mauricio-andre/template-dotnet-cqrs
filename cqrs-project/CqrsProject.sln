@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -7,25 +7,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7331E8B1-458
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{E22356A9-B723-46AB-8AA9-AC711A370013}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.App.DbMigrator", "src\Apps\CqrsProject.App.DbMigrator\CqrsProject.App.DbMigrator.csproj", "{08760A24-30D9-42A0-AF6B-91C075B1FF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.App.DbMigrator", "src\Apps\CqrsProject.App.DbMigrator\CqrsProject.App.DbMigrator.csproj", "{08760A24-30D9-42A0-AF6B-91C075B1FF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.App.RestServer", "src\Apps\CqrsProject.App.RestServer\CqrsProject.App.RestServer.csproj", "{96CA22D3-996C-49E0-802A-A5D7351B2A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.App.RestServer", "src\Apps\CqrsProject.App.RestServer\CqrsProject.App.RestServer.csproj", "{96CA22D3-996C-49E0-802A-A5D7351B2A5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{000935B1-86E4-4891-BB97-372AFD8283C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Common", "src\Core\CqrsProject.Common\CqrsProject.Common.csproj", "{E9C72F65-6F42-4E73-B7FB-DD92ADC046C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Common", "src\Core\CqrsProject.Common\CqrsProject.Common.csproj", "{E9C72F65-6F42-4E73-B7FB-DD92ADC046C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Core", "src\Core\CqrsProject.Core\CqrsProject.Core.csproj", "{73392135-4842-4E69-B5E8-E90D7A009B6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Core", "src\Core\CqrsProject.Core\CqrsProject.Core.csproj", "{73392135-4842-4E69-B5E8-E90D7A009B6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{28B095E8-BBD5-4600-9962-0656CA5E7AEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Auth0", "src\Providers\CqrsProject.Auth0\CqrsProject.Auth0.csproj", "{B5491F30-EE1B-49FD-BCAE-0DD2BB644813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Auth0", "src\Providers\CqrsProject.Auth0\CqrsProject.Auth0.csproj", "{B5491F30-EE1B-49FD-BCAE-0DD2BB644813}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomResourceWriter", "src\Providers\CqrsProject.CustomResourceWriter\CqrsProject.CustomResourceWriter.csproj", "{1E1393FD-1A38-45DD-8198-646E1BB433C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.CustomResourceWriter", "src\Providers\CqrsProject.CustomResourceWriter\CqrsProject.CustomResourceWriter.csproj", "{1E1393FD-1A38-45DD-8198-646E1BB433C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Postegre", "src\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj", "{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Postegre", "src\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj", "{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomConsoleFormatter", "src\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj", "{CFC00D1B-16BA-440F-A90D-7A1294B54C73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.CustomConsoleFormatter", "src\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj", "{CFC00D1B-16BA-440F-A90D-7A1294B54C73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

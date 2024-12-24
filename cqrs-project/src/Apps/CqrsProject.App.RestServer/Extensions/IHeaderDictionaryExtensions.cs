@@ -4,11 +4,23 @@ namespace CqrsProject.App.RestServer.Extensions;
 
 public static class IHeaderDictionaryExtensions
 {
-    public static IHeaderDictionary AddCollectionHeaders(
+    public static IHeaderDictionary AddContentRangeHeaders(
         this IHeaderDictionary headers,
-        int totalCount)
+        int? rangeStart,
+        int? rangeEnd,
+        int? size,
+        string unit = "items")
     {
-        headers.Append("x-total-count", totalCount.ToString());
+        headers.Append("Content-Range", string.Concat(
+            unit,
+            " ",
+            rangeStart ?? 0,
+            "-",
+            rangeEnd ?? size ?? 0,
+            "/",
+            size?.ToString() ?? "*"
+        ));
+
         return headers;
     }
 }

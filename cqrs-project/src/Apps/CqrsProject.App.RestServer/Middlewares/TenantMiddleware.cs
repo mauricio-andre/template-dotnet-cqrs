@@ -27,7 +27,7 @@ public class TenantMiddleware
         ICurrentIdentity currentIdentity,
         IMediator mediator)
     {
-        if (!context.Request.Headers.TryGetValue("x-tenant-id", out var tenantIdHeader)
+        if (!context.Request.Headers.TryGetValue("Tenant-Id", out var tenantIdHeader)
             || string.IsNullOrEmpty(tenantIdHeader))
         {
             await _next(context);

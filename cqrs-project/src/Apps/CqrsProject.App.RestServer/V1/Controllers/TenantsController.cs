@@ -30,7 +30,7 @@ public class TenantsController : ControllerBase
     public async Task<IActionResult> Search([FromQuery] SearchTenantQuery request)
     {
         var result = await _mediator.Send(request);
-        Response.Headers.AddCollectionHeaders(result.TotalCount);
+        Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
         return Ok(await result.Items.ToListAsync());
     }
 

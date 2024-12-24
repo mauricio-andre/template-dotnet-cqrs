@@ -1,5 +1,5 @@
 using System.Reflection;
-using CqrsProject.App.RestServer.Attributes;
+using CqrsProject.App.RestServer.Filters;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 

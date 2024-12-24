@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using CqrsProject.App.RestServer.Authentication;
 using CqrsProject.App.RestServer.Authorization;
+using CqrsProject.App.RestServer.Filters;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
 using CqrsProject.App.RestServer.Swagger;
@@ -18,7 +19,6 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.Postegre.Extensions;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -73,12 +73,15 @@ builder.Services.AddAuth0Provider(builder.Configuration);
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 
 // configuration controllers
-builder.Services.AddControllers(options =>
-{
-    options.Conventions.Add(
-        new RouteTokenTransformerConvention(
-            new KebabCaseParameterTransformer()));
-});
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Conventions.Add(
+            new RouteTokenTransformerConvention(
+                new KebabCaseParameterTransformer()));
+
+        options.Filters.Add<ExceptionFilter>();
+    });
 
 // configuration API Explorer
 builder.Services
@@ -117,8 +120,8 @@ builder.Services.AddCors(options =>
             .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowCredentials()
             .AllowAnyMethod()
-            .WithHeaders("x-tenant-id")
-            .WithExposedHeaders("x-total-count");
+            .WithHeaders("Tenant-Id")
+            .WithExposedHeaders("Content-Range");
     });
 });
 
@@ -138,20 +141,6 @@ builder.Services
     {
         options.Authority = builder.Configuration.GetValue<string>("Authentication:Bearer:Authority");
         options.Audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience");
-        options.Events = new JwtBearerEvents()
-        {
-            OnMessageReceived = context =>
-            {
-                // Accept access_token inside cookies
-                if (context.Request.Cookies.TryGetValue("access_token", out var token)
-                    && context.Request.Headers.Authorization.ToString() == null)
-                {
-                    context.Token = token;
-                }
-
-                return Task.CompletedTask;
-            }
-        };
     })
     .AddScheme<AuthenticationOptions, AuthenticationHandler>(
         AuthenticationDefaults.AuthenticationScheme,

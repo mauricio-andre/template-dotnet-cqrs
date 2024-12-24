@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CqrsProject.App.RestServer.Attributes;
+namespace CqrsProject.App.RestServer.Filters;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class HeaderFilterAttribute : ActionFilterAttribute

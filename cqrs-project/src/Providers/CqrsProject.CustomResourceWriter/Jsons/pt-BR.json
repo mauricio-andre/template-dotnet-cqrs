@@ -1,4 +1,7 @@
 {
+  "message:validation:fluentValidationExceptionDetail": "Para resolver esse problema, corrija os erros listados em error",
+  "message:validation:fluentValidationExceptionTitle": "Um ou mais erros de validação ocorreram",
+  "message:validation:businessExceptionTitle": "Ocorreu um erro devido a algumas validações de negócio",
   "message:validation:emptyApiResponse": "A API respondeu com sucesso, mas não enviou nenhum conteúdo",
   "message:validation:entityNotFound": "Não foi possível encontrar um {0} com os dados fornecidos {1}",
   "message:validation:duplicatedEntity": "Já existe um {0} cadastrado com os mesmos dados informados",

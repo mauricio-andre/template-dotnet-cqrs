@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
@@ -83,6 +84,7 @@ internal sealed class JsonCustomConsoleFormatter : ConsoleFormatter, IDisposable
                 writer.WriteString("userProcess", Environment.UserName);
                 writer.WriteNumber("eventId", logEntry.EventId.Id);
                 writer.WriteNumber("thread", Thread.CurrentThread.ManagedThreadId);
+                writer.WriteString("traceId", Activity.Current?.Id);
                 writer.WriteString(nameof(LogEntry<object>.Category), logEntry.Category);
                 writer.WriteString(nameof(LogEntry<object>.LogLevel), GetLogLevelString(logEntry.LogLevel));
                 writer.WriteString("appUser", _loggerPropertiesService.GetAppUser());

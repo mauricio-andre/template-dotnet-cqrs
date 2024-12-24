@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -12,9 +14,44 @@ public class AuthorizeOperationFilter : IOperationFilter
         if (!context.ApiDescription.ActionDescriptor.EndpointMetadata.OfType<AuthorizeAttribute>().Any())
             return;
 
-        operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-        operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-        operation.Responses.Add("400", new OpenApiResponse { Description = "Bad Request" });
+        operation.Responses.Add(
+            StatusCodes.Status401Unauthorized.ToString(),
+            new OpenApiResponse { Description = "Unauthorized" });
+
+        operation.Responses.Add(
+            StatusCodes.Status403Forbidden.ToString(),
+            new OpenApiResponse { Description = "Forbidden" });
+
+        operation.Responses.Add(
+            StatusCodes.Status400BadRequest.ToString(),
+            new OpenApiResponse
+            {
+                Description = "Bad Request",
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    {
+                        "application/json", new OpenApiMediaType
+                        {
+                            Example = new OpenApiObject
+                            {
+                                ["type"] = new OpenApiString("string"),
+                                ["title"] = new OpenApiString("string"),
+                                ["status"] = new OpenApiInteger(StatusCodes.Status400BadRequest),
+                                ["detail"] = new OpenApiString("string"),
+                                ["instance"] = new OpenApiString("string"),
+                                ["errors"] = new OpenApiObject
+                                {
+                                    ["string"] = new OpenApiArray
+                                    {
+                                        new OpenApiString("string")
+                                    }
+                                },
+                                ["traceId"] = new OpenApiString("string")
+                            }
+                        }
+                    }
+                }
+            });
 
         operation.Security = new List<OpenApiSecurityRequirement>
         {

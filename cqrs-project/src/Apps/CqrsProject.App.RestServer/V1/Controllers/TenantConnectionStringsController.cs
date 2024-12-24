@@ -36,7 +36,7 @@ public class TenantConnectionStringsController : ControllerBase
             SortBy: request.SortBy
         ));
 
-        Response.Headers.AddCollectionHeaders(result.TotalCount);
+        Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
         return Ok(await result.Items.ToListAsync());
     }
 

@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using CqrsProject.App.RestServer.Attributes;
+using CqrsProject.App.RestServer.Filters;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.Core.Examples.Commands;
@@ -31,7 +31,7 @@ public class ExamplesController : ControllerBase
     public async Task<IActionResult> Search([FromQuery] SearchExampleQuery request)
     {
         var result = await _mediator.Send(request);
-        Response.Headers.AddCollectionHeaders(result.TotalCount);
+        Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
         return Ok(await result.Items.ToListAsync());
     }
 

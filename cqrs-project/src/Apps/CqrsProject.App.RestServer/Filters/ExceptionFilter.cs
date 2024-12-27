@@ -60,6 +60,11 @@ public class ExceptionFilter : IExceptionFilter
             context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.ExceptionHandled = true;
         }
+        else if (context.Exception is UnauthorizedAccessException)
+        {
+            context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.ExceptionHandled = true;
+        }
     }
 
     private static string GetNormalizedKey(string key) => string.Concat(

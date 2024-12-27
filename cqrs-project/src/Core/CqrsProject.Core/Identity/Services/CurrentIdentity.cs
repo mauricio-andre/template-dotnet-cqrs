@@ -30,4 +30,13 @@ public class CurrentIdentity : ICurrentIdentity
 
         return Guid.Parse(id);
     }
+
+    public bool HasLocalPermission(string permissionName)
+    {
+        return _principal?.Identities
+            .FirstOrDefault(identity => identity.AuthenticationType == AuthenticationDefaults.LocalIdentityType)
+            ?.Claims.Any(claim => claim.Type == AuthorizationPermissionClaims.ClaimType
+                && claim.Value == permissionName)
+            ?? false;
+    }
 }

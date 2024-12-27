@@ -1,6 +1,7 @@
 using CqrsProject.Common.Loggers;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -40,10 +41,18 @@ public class TenantMiddleware
             return;
         }
 
-        await mediator.Publish(new TenantAccessedByUserEvent(
-            UserId: currentIdentity.GetLocalIdentityId(),
-            TenantId: tenantId
-        ));
+        try
+        {
+            await mediator.Publish(new TenantAccessedByUserEvent(
+                UserId: currentIdentity.GetLocalIdentityId(),
+                TenantId: tenantId
+            ));
+        }
+        catch (TenantUnreleasedException)
+        {
+            context.Response.StatusCode = 403;
+            return;
+        }
 
         currentTenant.SetCurrentTenantId(tenantId);
 

@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Rules;
+namespace CqrsProject.Core.Tenants.Rules;
 
 public class ShallNotAllowDuplicateTenantConnectionStringRule
     : INotificationHandler<CreateTenantConnectionStringEvent>

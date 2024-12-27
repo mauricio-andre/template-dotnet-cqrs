@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace CqrsProject.Core.Tenants.Validators;
 
-public class RemoveTenantValidator : AbstractValidator<RemoveTenantCommand>
+public class RemoveUserTenantValidator : AbstractValidator<RemoveTenantCommand>
 {
-    public RemoveTenantValidator()
+    public RemoveUserTenantValidator()
     {
         RuleFor(prop => prop.Id)
             .NotEmpty()

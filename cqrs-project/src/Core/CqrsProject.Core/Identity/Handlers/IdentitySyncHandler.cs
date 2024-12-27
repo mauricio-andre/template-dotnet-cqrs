@@ -69,15 +69,15 @@ public class IdentitySyncHandler : IRequestHandler<IdentitySyncCommand>
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var userWithSameUsername = await _userManager.FindByNameAsync(userInfo.PreferredUserName);
-        var username = userWithSameUsername == null ? userInfo.PreferredUserName : userInfo.Email;
+        var userWithSameUserName = await _userManager.FindByNameAsync(userInfo.PreferredUserName);
+        var userName = userWithSameUserName == null ? userInfo.PreferredUserName : userInfo.Email;
 
         var localUser = new User()
         {
             EmailConfirmed = false,
             TwoFactorEnabled = false,
             Email = userInfo.Email,
-            UserName = username,
+            UserName = userName,
             CreationTime = DateTimeOffset.Now.UtcDateTime,
             IsDeleted = false
         };

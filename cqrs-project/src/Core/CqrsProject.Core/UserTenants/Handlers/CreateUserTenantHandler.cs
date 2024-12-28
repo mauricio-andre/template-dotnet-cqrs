@@ -1,17 +1,18 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Core.Identity.Events;
-using CqrsProject.Core.Identity.Responses;
+using CqrsProject.Core.UserTenants.Commands;
+using CqrsProject.Core.UserTenants.Entities;
+using CqrsProject.Core.UserTenants.Events;
+using CqrsProject.Core.UserTenants.Responses;
 using CqrsProject.Core.Tenants.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using CqrsProject.Core.Identity.Entities;
 
-namespace CqrsProject.Core.Identity.Handlers;
+namespace CqrsProject.Core.UserTenants.Handlers;
 
 public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand, UserTenantResponse>
 {

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CqrsProject.Core.Identity.Commands;
+namespace CqrsProject.Core.UserTenants.Commands;
 
 public record RemoveUserTenantCommand(
     Guid UserId,

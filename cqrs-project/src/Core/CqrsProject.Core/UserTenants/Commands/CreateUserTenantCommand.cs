@@ -1,7 +1,7 @@
-using CqrsProject.Core.Identity.Responses;
+using CqrsProject.Core.UserTenants.Responses;
 using MediatR;
 
-namespace CqrsProject.Core.Identity.Commands;
+namespace CqrsProject.Core.UserTenants.Commands;
 
 public record CreateUserTenantCommand(
     Guid UserId,

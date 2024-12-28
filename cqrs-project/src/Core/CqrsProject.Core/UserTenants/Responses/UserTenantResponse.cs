@@ -1,4 +1,4 @@
-namespace CqrsProject.Core.Identity.Responses;
+namespace CqrsProject.Core.UserTenants.Responses;
 
 public record UserTenantResponse(
     Guid UserId,

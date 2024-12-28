@@ -16,12 +16,6 @@ public static class AuthorizationPolicyFactory
                     AuthorizationPermissionClaims.ManageAdministration));
 
             options.AddPolicy(
-                AuthorizationPolicyNames.CanManageSelf,
-                policy => policy.RequireClaim(
-                    AuthorizationPermissionClaims.ClaimType,
-                    AuthorizationPermissionClaims.ManageSelf));
-
-            options.AddPolicy(
                 AuthorizationPolicyNames.CanReadExamples,
                 policy => policy.RequireClaim(
                     AuthorizationPermissionClaims.ClaimType,

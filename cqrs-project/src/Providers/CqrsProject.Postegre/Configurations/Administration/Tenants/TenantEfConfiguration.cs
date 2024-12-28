@@ -1,5 +1,6 @@
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.UserTenants.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

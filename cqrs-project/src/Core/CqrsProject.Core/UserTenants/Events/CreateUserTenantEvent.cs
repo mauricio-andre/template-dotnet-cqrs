@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CqrsProject.Core.Identity.Events;
+namespace CqrsProject.Core.UserTenants.Events;
 
 public record CreateUserTenantEvent(
     Guid UserId,

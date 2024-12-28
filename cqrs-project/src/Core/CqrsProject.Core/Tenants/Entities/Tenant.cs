@@ -1,4 +1,5 @@
 using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.UserTenants.Entities;
 
 namespace CqrsProject.Core.Tenants.Entities;
 

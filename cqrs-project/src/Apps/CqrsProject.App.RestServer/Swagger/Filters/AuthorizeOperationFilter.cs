@@ -41,12 +41,18 @@ public class AuthorizeOperationFilter : IOperationFilter
                                 ["instance"] = new OpenApiString("string"),
                                 ["errors"] = new OpenApiObject
                                 {
-                                    ["string"] = new OpenApiArray
+                                    ["additionalProp1"] = new OpenApiArray
+                                    {
+                                        new OpenApiString("string")
+                                    },
+                                    ["additionalProp2"] = new OpenApiArray
                                     {
                                         new OpenApiString("string")
                                     }
                                 },
-                                ["traceId"] = new OpenApiString("string")
+                                ["traceId"] = new OpenApiString("string"),
+                                ["additionalProp1"] = new OpenApiString("string"),
+                                ["additionalProp2"] = new OpenApiString("string")
                             }
                         }
                     }

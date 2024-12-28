@@ -1,7 +1,7 @@
-using CqrsProject.Core.Identity.Queries;
+using CqrsProject.Core.UserTenants.Queries;
 using FluentValidation;
 
-namespace CqrsProject.Core.Tenants.Validations;
+namespace CqrsProject.Core.UserTenants.Validations;
 
 public class SearchUserTenantValidator : AbstractValidator<SearchUserTenantQuery>
 {

@@ -1,4 +1,5 @@
 using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.UserTenants.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace CqrsProject.Core.Identity.Entities;

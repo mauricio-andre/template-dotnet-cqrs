@@ -1,13 +1,13 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Core.Identity.Events;
+using CqrsProject.Core.UserTenants.Entities;
+using CqrsProject.Core.UserTenants.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Identity.Rules;
+namespace CqrsProject.Core.UserTenants.Rules;
 
 public class ShallNotAllowDuplicateUserTenantRule: INotificationHandler<CreateUserTenantEvent>
 {

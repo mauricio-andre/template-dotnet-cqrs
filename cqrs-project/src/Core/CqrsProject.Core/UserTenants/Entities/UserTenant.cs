@@ -1,6 +1,7 @@
+using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Entities;
 
-namespace CqrsProject.Core.Identity.Entities;
+namespace CqrsProject.Core.UserTenants.Entities;
 
 public class UserTenant
 {

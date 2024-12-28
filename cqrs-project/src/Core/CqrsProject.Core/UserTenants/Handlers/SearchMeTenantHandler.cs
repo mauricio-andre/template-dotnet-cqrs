@@ -1,30 +1,34 @@
 using CqrsProject.Common.Extensions;
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Core.Identity.Queries;
-using CqrsProject.Core.Identity.Responses;
+using CqrsProject.Core.UserTenants.Entities;
+using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.UserTenants.Queries;
+using CqrsProject.Core.UserTenants.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Identity.Handlers;
+namespace CqrsProject.Core.UserTenants.Handlers;
 
-public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, CollectionResponse<UserTenantResponse>>
+public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, CollectionResponse<MeTenantResponse>>
 {
     private readonly AdministrationDbContext _administrationDbContext;
-    private readonly IValidator<SearchUserTenantQuery> _validator;
+    private readonly IValidator<SearchMeTenantQuery> _validator;
+    private readonly ICurrentIdentity _currentIdentity;
 
-    public SearchUserTenantHandler(
+    public SearchMeTenantHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
-        IValidator<SearchUserTenantQuery> validator)
+        IValidator<SearchMeTenantQuery> validator,
+        ICurrentIdentity currentIdentity)
     {
         _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
+        _currentIdentity = currentIdentity;
     }
 
-    public async Task<CollectionResponse<UserTenantResponse>> Handle(
-        SearchUserTenantQuery request,
+    public async Task<CollectionResponse<MeTenantResponse>> Handle(
+        SearchMeTenantQuery request,
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
@@ -36,26 +40,25 @@ public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, Co
             .ApplyPagination(request);
 
         var items = MapToResponse(query).AsAsyncEnumerable();
-        return new CollectionResponse<UserTenantResponse>(items, totalCount);
+        return new CollectionResponse<MeTenantResponse>(items, totalCount);
     }
 
-    private IQueryable<UserTenant> CreateSearchQuery(SearchUserTenantQuery request)
+    private IQueryable<UserTenant> CreateSearchQuery(SearchMeTenantQuery request)
     {
         return _administrationDbContext.UserTenants
             .Where(tenant => !tenant.Tenant!.IsDeleted)
             .Where(tenant => !tenant.User!.IsDeleted)
+            .Where(tenant => tenant.UserId == _currentIdentity.GetLocalIdentityId())
             .WhereIf(
-                !string.IsNullOrEmpty(request.UserName),
-                tenant => tenant.User!.UserName!.ToLower().Contains(request.UserName!.ToLower()))
+                request.TenantIdList?.Any() ?? false,
+                tenant => request.TenantIdList!.Contains(tenant.TenantId))
             .WhereIf(
                 !string.IsNullOrEmpty(request.TenantName),
                 tenant => tenant.Tenant!.Name!.ToLower().Contains(request.TenantName!.ToLower()));
     }
 
-    private static IQueryable<UserTenantResponse> MapToResponse(IQueryable<UserTenant> query)
-        => query.Select(entity => new UserTenantResponse(
-            entity.UserId,
+    private static IQueryable<MeTenantResponse> MapToResponse(IQueryable<UserTenant> query)
+        => query.Select(entity => new MeTenantResponse(
             entity.TenantId,
-            entity.User!.UserName!,
             entity.Tenant!.Name));
 }

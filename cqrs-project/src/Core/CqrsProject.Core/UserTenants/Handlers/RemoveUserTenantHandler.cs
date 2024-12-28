@@ -1,14 +1,14 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.UserTenants.Commands;
+using CqrsProject.Core.UserTenants.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace CqrsProject.Core.Identity.Handlers;
+namespace CqrsProject.Core.UserTenants.Handlers;
 
 public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
 {

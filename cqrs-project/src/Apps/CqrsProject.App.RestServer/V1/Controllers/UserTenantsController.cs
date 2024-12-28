@@ -1,9 +1,9 @@
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Queries;
-using CqrsProject.Core.Identity.Responses;
+using CqrsProject.Core.UserTenants.Commands;
+using CqrsProject.Core.UserTenants.Queries;
+using CqrsProject.Core.UserTenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,5 @@
 using CqrsProject.Common.Consts;
-using CqrsProject.Core.Identity.Events;
+using CqrsProject.Core.UserTenants.Events;
 using CqrsProject.Core.Identity.Interfaces;
 using MediatR;
 

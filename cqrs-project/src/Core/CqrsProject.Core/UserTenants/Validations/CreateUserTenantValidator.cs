@@ -1,11 +1,11 @@
-using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.UserTenants.Commands;
 using FluentValidation;
 
-namespace CqrsProject.Core.Identity.Validators;
+namespace CqrsProject.Core.UserTenants.Validators;
 
-public class RemoveUserTenantValidator : AbstractValidator<RemoveUserTenantCommand>
+public class CreateUserTenantValidator : AbstractValidator<CreateUserTenantCommand>
 {
-    public RemoveUserTenantValidator()
+    public CreateUserTenantValidator()
     {
         RuleFor(prop => prop.UserId)
             .NotEmpty()

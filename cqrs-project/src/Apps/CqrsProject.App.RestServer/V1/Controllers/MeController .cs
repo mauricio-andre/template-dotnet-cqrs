@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.App.RestServer.V1.Dtos;
 using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Queries;
+using CqrsProject.Core.UserTenants.Queries;
+using CqrsProject.Core.UserTenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,23 +36,11 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IList<SearchMeTenantsResponseDto>), 200)]
-    public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantsRequestDto request)
+    [ProducesResponseType(typeof(IList<MeTenantResponse>), 200)]
+    public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {
-        var result = await _mediator.Send(new SearchUserTenantQuery(
-            UserName: request.UserName,
-            TenantName: request.TenantName,
-            Take: request.Take,
-            Skip: request.Skip,
-            SortBy: request.SortBy
-        ));
-
-        var dto = result.Items.Select(item => new SearchMeTenantsResponseDto(
-            Id: item.TenantId,
-            Name: item.TenantName
-        ));
-
+        var result = await _mediator.Send(request);
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        return Ok(await dto.ToListAsync());
+        return Ok(await result.Items.ToListAsync());
     }
 }

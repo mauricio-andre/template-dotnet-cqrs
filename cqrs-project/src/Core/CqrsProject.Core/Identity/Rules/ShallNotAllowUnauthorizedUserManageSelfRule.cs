@@ -2,10 +2,13 @@ using CqrsProject.Common.Consts;
 using CqrsProject.Core.UserTenants.Events;
 using CqrsProject.Core.Identity.Interfaces;
 using MediatR;
+using CqrsProject.Core.UserRoles.Events;
 
 namespace CqrsProject.Core.Identity.Rules;
 
-public class ShallNotAllowUnauthorizedUserManageSelfRule: INotificationHandler<CreateUserTenantEvent>
+public class ShallNotAllowUnauthorizedUserManageSelfRule
+    : INotificationHandler<CreateUserTenantEvent>,
+    INotificationHandler<CreateUserRoleEvent>
 {
     private readonly ICurrentIdentity _currentIdentity;
 
@@ -14,9 +17,19 @@ public class ShallNotAllowUnauthorizedUserManageSelfRule: INotificationHandler<C
         _currentIdentity = currentIdentity;
     }
 
-    public async Task Handle(CreateUserTenantEvent notification, CancellationToken cancellationToken)
+    public Task Handle(CreateUserTenantEvent notification, CancellationToken cancellationToken)
     {
-        if (notification.UserId == _currentIdentity.GetLocalIdentityId()
+        return HandleRule(notification.UserId);
+    }
+
+    public Task Handle(CreateUserRoleEvent notification, CancellationToken cancellationToken)
+    {
+        return HandleRule(notification.UserId);
+    }
+
+    public async Task HandleRule(Guid userId)
+    {
+        if (userId == _currentIdentity.GetLocalIdentityId()
             && !_currentIdentity.HasLocalPermission(AuthorizationPermissionClaims.ManageSelf))
         {
             throw new UnauthorizedAccessException();

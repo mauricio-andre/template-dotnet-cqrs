@@ -1,28 +1,27 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.UserTenants.Commands;
-using CqrsProject.Core.UserTenants.Entities;
-using CqrsProject.Core.UserTenants.Events;
-using CqrsProject.Core.Tenants.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.UserRoles.Commands;
+using CqrsProject.Core.UserRoles.Events;
+using Microsoft.AspNetCore.Identity;
 
-namespace CqrsProject.Core.UserTenants.Handlers;
+namespace CqrsProject.Core.UserRoles.Handlers;
 
-public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
+public class CreateUserRoleHandler : IRequestHandler<CreateUserRoleCommand>
 {
     private readonly AdministrationDbContext _administrationDbContext;
-    private readonly IValidator<CreateUserTenantCommand> _validator;
+    private readonly IValidator<CreateUserRoleCommand> _validator;
     private readonly IMediator _mediator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
-    public CreateUserTenantHandler(
+    public CreateUserRoleHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
-        IValidator<CreateUserTenantCommand> validator,
+        IValidator<CreateUserRoleCommand> validator,
         IMediator mediator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
@@ -33,21 +32,21 @@ public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
     }
 
     public async Task Handle(
-        CreateUserTenantCommand request,
+        CreateUserRoleCommand request,
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        await _mediator.Publish(new CreateUserTenantEvent(request.UserId, request.TenantId));
+        await _mediator.Publish(new CreateUserRoleEvent(request.UserId, request.RoleId));
 
         await CheckUserExistsAsync(request, cancellationToken);
-        await CheckTenantExistsAsync(request, cancellationToken);
+        await CheckRoleExistsAsync(request, cancellationToken);
         var entity = MapToEntity(request);
 
         _administrationDbContext.Add(entity);
         await _administrationDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task CheckUserExistsAsync(CreateUserTenantCommand request, CancellationToken cancellationToken)
+    private async Task CheckUserExistsAsync(CreateUserRoleCommand request, CancellationToken cancellationToken)
     {
         var userExists = await _administrationDbContext.Users
             .Where(user => user.Id == request.UserId
@@ -58,17 +57,16 @@ public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
             throw new EntityNotFoundException(_stringLocalizer, nameof(User), request.UserId.ToString());
     }
 
-    private async Task CheckTenantExistsAsync(CreateUserTenantCommand request, CancellationToken cancellationToken)
+    private async Task CheckRoleExistsAsync(CreateUserRoleCommand request, CancellationToken cancellationToken)
     {
         var tenantExists = await _administrationDbContext.Tenants
-            .Where(tenant => tenant.Id == request.TenantId
-                && !tenant.IsDeleted)
+            .Where(role => role.Id == request.RoleId)
             .AnyAsync(cancellationToken);
 
         if (tenantExists)
-            throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.TenantId.ToString());
+            throw new EntityNotFoundException(_stringLocalizer, nameof(IdentityRole<Guid>), request.RoleId.ToString());
     }
 
-    private static UserTenant MapToEntity(CreateUserTenantCommand request)
-        => new UserTenant { UserId = request.UserId, TenantId = request.TenantId };
+    private static IdentityUserRole<Guid> MapToEntity(CreateUserRoleCommand request)
+        => new IdentityUserRole<Guid> { UserId = request.UserId, RoleId = request.RoleId };
 }

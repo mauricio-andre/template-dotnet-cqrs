@@ -8,8 +8,8 @@ namespace CqrsProject.Core.UserTenants.Queries;
 public record SearchUserTenantQuery(
     string? UserName,
     string? TenantName,
-    IList<Guid>? UserIdList,
-    IList<Guid>? TenantIdList,
+    Guid? UserId,
+    Guid? TenantId,
     int? Take,
     int? Skip,
     string? SortBy

@@ -45,11 +45,11 @@ public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, Co
             .Where(tenant => !tenant.Tenant!.IsDeleted)
             .Where(tenant => !tenant.User!.IsDeleted)
             .WhereIf(
-                request.UserIdList?.Any() ?? false,
-                tenant => request.UserIdList!.Contains(tenant.UserId))
+                request.UserId.HasValue,
+                tenant => request.UserId == tenant.UserId)
             .WhereIf(
-                request.TenantIdList?.Any() ?? false,
-                tenant => request.TenantIdList!.Contains(tenant.TenantId))
+                request.TenantId.HasValue,
+                tenant => request.TenantId == tenant.TenantId)
             .WhereIf(
                 !string.IsNullOrEmpty(request.UserName),
                 tenant => tenant.User!.UserName!.ToLower().Contains(request.UserName!.ToLower()))

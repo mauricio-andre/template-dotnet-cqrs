@@ -7,6 +7,7 @@ using CqrsProject.Core.Tenants.Queries;
 using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CqrsProject.App.RestServer.V1.Controllers;
@@ -14,7 +15,8 @@ namespace CqrsProject.App.RestServer.V1.Controllers;
 [ApiController]
 [ApiVersion(1)]
 [Produces("application/json")]
-[Route("v{version:apiVersion}/[controller]")]
+[Route("v{version:apiVersion}/tenants/{tenantId}/connection-strings")]
+[Tags("Tenants")]
 [Authorize(Policy = AuthorizationPolicyNames.CanManageAdministration)]
 public class TenantConnectionStringsController : ControllerBase
 {
@@ -22,7 +24,7 @@ public class TenantConnectionStringsController : ControllerBase
 
     public TenantConnectionStringsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpGet("{tenantId}")]
+    [HttpGet()]
     [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), 200)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid tenantId,
@@ -40,7 +42,7 @@ public class TenantConnectionStringsController : ControllerBase
         return Ok(await result.Items.ToListAsync());
     }
 
-    [HttpPost("{tenantId}")]
+    [HttpPost()]
     [ProducesResponseType(typeof(TenantConnectionStringResponse), 201)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid tenantId,
@@ -55,7 +57,7 @@ public class TenantConnectionStringsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{tenantId}/{id}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(204)]
     public async Task<IActionResult> Remove(
         [FromRoute] Guid tenantId,

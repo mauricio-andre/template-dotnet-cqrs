@@ -30,7 +30,7 @@ public class AuthorizeOperationFilter : IOperationFilter
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
                     {
-                        "application/json", new OpenApiMediaType
+                        "application/problem+json", new OpenApiMediaType
                         {
                             Example = new OpenApiObject
                             {

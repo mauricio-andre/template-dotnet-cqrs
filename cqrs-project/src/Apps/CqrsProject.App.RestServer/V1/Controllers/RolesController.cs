@@ -2,11 +2,11 @@ using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.V1.Dtos;
-using CqrsProject.Core.Tenants.Commands;
-using CqrsProject.Core.Tenants.Queries;
-using CqrsProject.Core.Tenants.Responses;
-using CqrsProject.Core.UserTenants.Queries;
-using CqrsProject.Core.UserTenants.Responses;
+using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Queries;
+using CqrsProject.Core.Identity.Responses;
+using CqrsProject.Core.UserRoles.Queries;
+using CqrsProject.Core.UserRoles.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,18 +18,18 @@ namespace CqrsProject.App.RestServer.V1.Controllers;
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize(Policy = AuthorizationPolicyNames.CanManageAdministration)]
-public class TenantsController : ControllerBase
+public class RolesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public TenantsController(IMediator mediator)
+    public RolesController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<TenantResponse>), 200)]
-    public async Task<IActionResult> Search([FromQuery] SearchTenantQuery request)
+    [ProducesResponseType(typeof(IList<RoleResponse>), 200)]
+    public async Task<IActionResult> Search([FromQuery] SearchRoleQuery request)
     {
         var result = await _mediator.Send(request);
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
@@ -37,28 +37,28 @@ public class TenantsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(TenantResponse), 200)]
+    [ProducesResponseType(typeof(RoleResponse), 200)]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new GetTenantByKeyQuery(id));
+        var result = await _mediator.Send(new GetRoleQuery(id));
         return Ok(result);
     }
 
     [HttpPost()]
-    [ProducesResponseType(typeof(TenantResponse), 201)]
-    public async Task<IActionResult> Create([FromBody] CreateTenantCommand request)
+    [ProducesResponseType(typeof(RoleResponse), 201)]
+    public async Task<IActionResult> Create([FromBody] CreateRoleCommand request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(TenantResponse), 200)]
+    [ProducesResponseType(typeof(RoleResponse), 200)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
-        [FromBody] UpdateTenantRequestDto request)
+        [FromBody] UpdateRoleRequestDto request)
     {
-        var result = await _mediator.Send(new UpdateTenantCommand(id, request.Name));
+        var result = await _mediator.Send(new UpdateRoleCommand(id, request.Name));
         return Ok(result);
     }
 
@@ -66,21 +66,21 @@ public class TenantsController : ControllerBase
     [ProducesResponseType(204)]
     public async Task<IActionResult> Remove([FromRoute] Guid id)
     {
-        await _mediator.Send(new RemoveTenantCommand(id));
+        await _mediator.Send(new RemoveRoleCommand(id));
         return NoContent();
     }
 
     [HttpGet("{id}/users")]
-    [ProducesResponseType(typeof(IList<UserTenantResponse>), 200)]
-    public async Task<IActionResult> SearchUser(
+    [ProducesResponseType(typeof(IList<UserRoleResponse>), 200)]
+    public async Task<IActionResult> SearchUsers(
         [FromRoute] Guid id,
-        [FromQuery] SearchTenantUserTenantRequestDto request)
+        [FromQuery] SearchRoleUserRoleRequestDto request)
     {
-        var result = await _mediator.Send(new SearchUserTenantQuery(
-            UserName: request.UserName,
-            TenantName: null,
+        var result = await _mediator.Send(new SearchUserRoleQuery(
             UserId: request.UserId,
-            TenantId: id,
+            RoleId: id,
+            UserName: request.UserName,
+            RoleName: null,
             Take: request.Take,
             Skip: request.Skip,
             SortBy: request.SortBy

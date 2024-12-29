@@ -77,7 +77,7 @@ public class RolesController : ControllerBase
         [FromQuery] SearchRoleUserRoleRequestDto request)
     {
         var result = await _mediator.Send(new SearchUserRoleQuery(
-            UserId: request.UserId,
+            UserId: null,
             RoleId: id,
             UserName: request.UserName,
             RoleName: null,

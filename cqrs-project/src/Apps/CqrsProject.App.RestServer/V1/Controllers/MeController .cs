@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Extensions;
+using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Commands;
 using CqrsProject.Core.UserTenants.Queries;
 using CqrsProject.Core.UserTenants.Responses;
@@ -42,5 +43,18 @@ public class MeController : ControllerBase
         var result = await _mediator.Send(request);
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
         return Ok(await result.Items.ToListAsync());
+    }
+
+    [HttpGet("[action]")]
+    [ProducesResponseType(typeof(IList<string>), 200)]
+    public IActionResult Permissions()
+    {
+        var list = HttpContext.User.Identities
+            .SelectMany(identity => identity.Claims)
+            .Where(claim => claim.Type == AuthorizationPermissionClaims.ClaimType)
+            .Select(claim => claim.Value)
+            .Order();
+
+        return Ok(list);
     }
 }

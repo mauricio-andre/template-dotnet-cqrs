@@ -79,7 +79,7 @@ public class TenantsController : ControllerBase
         var result = await _mediator.Send(new SearchUserTenantQuery(
             UserName: request.UserName,
             TenantName: null,
-            UserId: request.UserId,
+            UserId: null,
             TenantId: id,
             Take: request.Take,
             Skip: request.Skip,

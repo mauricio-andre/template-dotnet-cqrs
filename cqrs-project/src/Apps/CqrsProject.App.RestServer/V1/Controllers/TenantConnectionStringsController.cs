@@ -24,7 +24,7 @@ public class TenantConnectionStringsController : ControllerBase
 
     public TenantConnectionStringsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), 200)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid tenantId,
@@ -42,7 +42,7 @@ public class TenantConnectionStringsController : ControllerBase
         return Ok(await result.Items.ToListAsync());
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(TenantConnectionStringResponse), 201)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid tenantId,

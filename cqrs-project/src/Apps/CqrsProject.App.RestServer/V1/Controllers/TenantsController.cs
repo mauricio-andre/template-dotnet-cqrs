@@ -44,7 +44,7 @@ public class TenantsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(TenantResponse), 201)]
     public async Task<IActionResult> Create([FromBody] CreateTenantCommand request)
     {

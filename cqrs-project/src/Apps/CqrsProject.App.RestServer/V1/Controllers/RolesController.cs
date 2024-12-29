@@ -44,7 +44,7 @@ public class RolesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(RoleResponse), 201)]
     public async Task<IActionResult> Create([FromBody] CreateRoleCommand request)
     {

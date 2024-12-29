@@ -8,4 +8,4 @@ public record SearchRoleUserRoleRequestDto(
     int? Take,
     int? Skip,
     string? SortBy
-): IPageableQuery, ISortableQuery;
+) : IPageableQuery, ISortableQuery;

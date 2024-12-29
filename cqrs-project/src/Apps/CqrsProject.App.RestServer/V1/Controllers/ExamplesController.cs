@@ -1,7 +1,7 @@
 using Asp.Versioning;
-using CqrsProject.App.RestServer.Filters;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
+using CqrsProject.App.RestServer.Filters;
 using CqrsProject.Core.Examples.Commands;
 using CqrsProject.Core.Examples.Queries;
 using CqrsProject.Core.Examples.Responses;
@@ -43,7 +43,7 @@ public class ExamplesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(ExampleResponse), 201)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)

@@ -22,7 +22,7 @@ public class UserRolesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(201)]
     public async Task<IActionResult> Create([FromBody] CreateUserRoleCommand request)
     {

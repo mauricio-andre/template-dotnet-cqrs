@@ -7,7 +7,6 @@ namespace CqrsProject.Core.Identity.Queries;
 
 public record SearchRoleQuery(
     string? Name,
-    Guid? UserId,
     int? Take,
     int? Skip,
     string? SortBy

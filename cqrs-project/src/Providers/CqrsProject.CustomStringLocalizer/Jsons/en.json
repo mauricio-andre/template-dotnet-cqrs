@@ -1,0 +1,10 @@
+{
+  "message:validation:fluentValidationExceptionDetail": "To resolve this problem, correct the errors listed in error",
+  "message:validation:fluentValidationExceptionTitle": "One or more validation errors occurred",
+  "message:validation:businessExceptionTitle": "One or more business validation errors occurred",
+  "message:validation:emptyApiResponse": "The API responded successfully but did not send any content",
+  "message:validation:entityNotFound": "Unable to find an {0} with the data provided {1}",
+  "message:validation:duplicatedEntity": "There is already an {0} registered with the same data provided",
+  "message:validation:tenantUnreleased": "The tenant provided does not exist or its user is not authorized to access it",
+  "message:validation:valueAlreadyUse": "The value {0} is already in use"
+}

@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.Auth0\CqrsProject.Auth0.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.CustomStringLocalizer\CqrsProject.CustomStringLocalizer.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
   </ItemGroup>
   <ItemGroup>

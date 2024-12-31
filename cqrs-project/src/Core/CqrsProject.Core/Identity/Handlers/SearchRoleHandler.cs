@@ -45,22 +45,10 @@ public class SearchRoleHandler : IRequestHandler<SearchRoleQuery, CollectionResp
 
     private IQueryable<IdentityRole<Guid>> CreateSearchQuery(SearchRoleQuery request)
     {
-        var query = _administrationDbContext.Roles
+        return _administrationDbContext.Roles
             .WhereIf(
                 !string.IsNullOrEmpty(request.Name),
                 role => role.NormalizedName!.Contains(_roleManager.NormalizeKey(request.Name)!));
-
-        if (request.UserId != null)
-        {
-            query = query.Join(
-                _administrationDbContext.UserRoles
-                    .Where(userRole => request.UserId == userRole.UserId),
-                role => role.Id,
-                userRole => userRole.RoleId,
-                (role, userRole) => role);
-        }
-
-        return query;
     }
 
     private static IQueryable<RoleResponse> MapToResponse(IQueryable<IdentityRole<Guid>> query)

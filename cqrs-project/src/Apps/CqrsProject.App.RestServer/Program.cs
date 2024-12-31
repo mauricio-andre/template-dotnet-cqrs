@@ -28,6 +28,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using CqrsProject.CustomStringLocalizer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,7 @@ builder.Services
     .AddScoped<ICurrentIdentity, CurrentIdentity>();
 
 // Configuration string location
+builder.Services.AddCustomStringLocalizerProvider();
 builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {

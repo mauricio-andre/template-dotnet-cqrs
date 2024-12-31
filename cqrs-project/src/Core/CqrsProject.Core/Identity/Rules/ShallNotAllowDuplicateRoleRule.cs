@@ -39,7 +39,7 @@ public class ShallNotAllowDuplicateRoleRule
         var hasRole = await _administrationDbContext.Roles
             .AnyAsync(
                 entity => entity.Id != id
-                    && entity.Name == _roleManager.NormalizeKey(name),
+                    && entity.NormalizedName == _roleManager.NormalizeKey(name),
                 cancellationToken);
 
         if (hasRole)

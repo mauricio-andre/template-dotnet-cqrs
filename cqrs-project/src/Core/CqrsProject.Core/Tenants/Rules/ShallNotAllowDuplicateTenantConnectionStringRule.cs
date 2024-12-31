@@ -32,6 +32,15 @@ public class ShallNotAllowDuplicateTenantConnectionStringRule
                 cancellationToken);
 
         if (hasDuplicate)
-            throw new DuplicatedEntityException(_stringLocalizer, nameof(Tenant));
+            throw new DuplicatedEntityException(
+                _stringLocalizer,
+                nameof(TenantConnectionString),
+                new Dictionary<string, string[]>
+                {
+                    {
+                        nameof(TenantConnectionString.ConnectionName),
+                        [ _stringLocalizer["message:validation:valueAlreadyUse", notification.ConnectionName] ]
+                    }
+                });
     }
 }

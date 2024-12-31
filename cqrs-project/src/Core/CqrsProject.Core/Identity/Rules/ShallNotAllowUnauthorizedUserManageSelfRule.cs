@@ -2,7 +2,7 @@ using CqrsProject.Common.Consts;
 using CqrsProject.Core.UserTenants.Events;
 using CqrsProject.Core.Identity.Interfaces;
 using MediatR;
-using CqrsProject.Core.UserRoles.Events;
+using CqrsProject.Core.Identity.Events;
 
 namespace CqrsProject.Core.Identity.Rules;
 

@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Events;
 using CqrsProject.Core.Identity.Responses;
 using FluentValidation;
 using MediatR;
@@ -14,15 +15,18 @@ public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, RoleResponse
     private readonly IValidator<UpdateRoleCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly IMediator _mediator;
 
     public UpdateRoleHandler(
         IValidator<UpdateRoleCommand> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
-        RoleManager<IdentityRole<Guid>> roleManager)
+        RoleManager<IdentityRole<Guid>> roleManager,
+        IMediator mediator)
     {
         _validator = validator;
         _stringLocalizer = stringLocalizer;
         _roleManager = roleManager;
+        _mediator = mediator;
     }
 
     public async Task<RoleResponse> Handle(
@@ -30,6 +34,7 @@ public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, RoleResponse
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        await _mediator.Publish(new UpdateRoleEvent(request.Id, request.Name));
 
         var entity = await _roleManager.FindByIdAsync(request.Id.ToString());
 

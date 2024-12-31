@@ -103,6 +103,7 @@ public class IdentitySyncHandler : IRequestHandler<IdentitySyncCommand>
         localUser.LastModificationTime = DateTimeOffset.Now.UtcDateTime;
         localUser.Email = userInfo.Email;
         localUser.EmailConfirmed = userInfo.EmailVerified;
+        localUser.IsDeleted = false;
 
         await _userManager.UpdateAsync(localUser);
     }

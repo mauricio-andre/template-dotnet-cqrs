@@ -65,7 +65,7 @@ public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
                 && !tenant.IsDeleted)
             .AnyAsync(cancellationToken);
 
-        if (tenantExists)
+        if (!tenantExists)
             throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.TenantId.ToString());
     }
 

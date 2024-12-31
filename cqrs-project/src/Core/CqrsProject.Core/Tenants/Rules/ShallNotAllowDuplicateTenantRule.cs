@@ -38,6 +38,15 @@ public class ShallNotAllowDuplicateTenantRule
                 cancellationToken);
 
         if (hasDuplicate)
-            throw new DuplicatedEntityException(_stringLocalizer, nameof(Tenant));
+            throw new DuplicatedEntityException(
+                _stringLocalizer,
+                nameof(Tenant),
+                new Dictionary<string, string[]>
+                {
+                    {
+                        nameof(Tenant.Name),
+                        [ _stringLocalizer["message:validation:valueAlreadyUse", name] ]
+                    }
+                });
     }
 }

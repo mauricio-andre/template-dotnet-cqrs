@@ -1,7 +1,7 @@
 using CqrsProject.Core.Identity.Commands;
 using FluentValidation;
 
-namespace CqrsProject.Core.Tenants.Validators;
+namespace CqrsProject.Core.Identity.Validators;
 
 public class CreateRoleClaimPermissionValidator : AbstractValidator<CreateRoleClaimPermissionCommand>
 {

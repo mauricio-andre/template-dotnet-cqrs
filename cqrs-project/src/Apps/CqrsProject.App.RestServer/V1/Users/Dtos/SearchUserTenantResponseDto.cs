@@ -1,0 +1,9 @@
+using CqrsProject.App.RestServer.Filters;
+
+namespace CqrsProject.App.RestServer.V1.Users.Dtos;
+
+[SwaggerSchemaIdFilter("Users.SearchUserTenantResponseDto")]
+public record SearchUserTenantResponseDto(
+    Guid Id,
+    string TenantName
+);

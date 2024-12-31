@@ -2,6 +2,7 @@
 using CqrsProject.App.RestServer.Authentication;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Filters;
+using CqrsProject.App.RestServer.Helpers;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
 using CqrsProject.App.RestServer.Swagger;
@@ -101,7 +102,10 @@ builder.Services
 
 // configuration swagger
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => SwaggerSchemaIdHelper.GetSwaggerSchemaId(type));
+});
 
 // configuration cors
 builder.Services.AddCors(options =>

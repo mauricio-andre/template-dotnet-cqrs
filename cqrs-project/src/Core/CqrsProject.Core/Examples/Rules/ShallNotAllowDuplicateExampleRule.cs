@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
+using CqrsProject.Core.Examples.Entities;
 using CqrsProject.Core.Examples.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,15 @@ public class ShallNotAllowDuplicateExampleRule : INotificationHandler<CreateExam
             .AnyAsync(example => example.Name.ToLower() == notification.Name.ToLower());
 
         if (hasDuplicate)
-            throw new DuplicatedEntityException(_stringLocalizer, nameof(Examples));
+            throw new DuplicatedEntityException(
+                _stringLocalizer,
+                nameof(Example),
+                new Dictionary<string, string[]>
+                {
+                    {
+                        nameof(Example.Name),
+                        [ _stringLocalizer["message:validation:valueAlreadyUse", notification.Name] ]
+                    }
+                });
     }
 }

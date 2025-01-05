@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">

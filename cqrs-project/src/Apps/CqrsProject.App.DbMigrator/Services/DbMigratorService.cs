@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Interfaces;
@@ -54,6 +55,18 @@ public class DbMigratorService : IDbMigratorService
             await dbContext.Database.MigrateAsync(cancellationToken);
     }
 
+    private static bool IsHostDatabaseConfigured(DatabaseFacade database)
+    {
+        try
+        {
+            return !string.IsNullOrEmpty(database.GetConnectionString());
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     private async Task RunMigrateCoreTenants(CancellationToken cancellationToken)
     {
         var administrationDbContext = await _administrationDbContextFactory.CreateDbContextAsync();
@@ -65,11 +78,9 @@ public class DbMigratorService : IDbMigratorService
         await foreach (var tenantId in tenants)
         {
             _currentTenant.SetCurrentTenantId(tenantId);
+            Activity.Current?.AddTag("tenantId", tenantId);
             var coreDbContext = await _coreDbContextFactory.CreateDbContextAsync();
             await coreDbContext.Database.MigrateAsync(cancellationToken);
         }
     }
-
-    private static bool IsHostDatabaseConfigured(DatabaseFacade database)
-        => !string.IsNullOrEmpty(database.GetConnectionString());
 }

@@ -29,6 +29,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.CustomStringLocalizer.Extensions;
+using CqrsProject.OpenTelemetry.Extensions;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,10 +53,10 @@ builder.Services
             .WithScopedLifetime())
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
-    .AddScoped<ICurrentIdentity, CurrentIdentity>();
+    .AddScoped<ICurrentIdentity, CurrentIdentity>()
+    .AddSingleton(_ => new ActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // Configuration string location
-builder.Services.AddCustomStringLocalizerProvider();
 builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
@@ -73,7 +75,9 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 // Configure providers
 builder.Services.AddAuth0Provider(builder.Configuration);
+builder.Services.AddCustomStringLocalizerProvider();
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
+builder.AddOpenTelemetryProvider();
 
 // configuration controllers
 builder.Services

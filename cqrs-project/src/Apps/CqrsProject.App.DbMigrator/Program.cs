@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.App.DbMigrator.Loggers;
 using CqrsProject.App.DbMigrator.Services;
@@ -6,6 +7,7 @@ using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
+using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postegre.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +24,8 @@ builder.Services
     .AddPostegreCoreDbContext()
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
-    .AddScoped<IDbMigratorService, DbMigratorService>();
+    .AddScoped<IDbMigratorService, DbMigratorService>()
+    .AddSingleton(_ => new ActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // configuration identity
 builder.Services
@@ -31,6 +34,7 @@ builder.Services
 
 // Configure providers
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
+builder.AddOpenTelemetryProvider();
 
 // Configure additional appsettings
 builder.Configuration
@@ -39,6 +43,10 @@ builder.Configuration
 
 var app = builder.Build();
 
-await app.Services
-    .GetRequiredService<IDbMigratorService>()
-    .RunMigrateAsync();
+await app.StartAsync();
+
+var activitySource = app.Services.GetRequiredService<ActivitySource>();
+using (var activity = activitySource.StartActivity("RunDbMigrator"))
+    await app.Services
+        .GetRequiredService<IDbMigratorService>()
+        .RunMigrateAsync();

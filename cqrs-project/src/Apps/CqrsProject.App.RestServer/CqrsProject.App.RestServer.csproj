@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\Providers\CqrsProject.Auth0\CqrsProject.Auth0.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomStringLocalizer\CqrsProject.CustomStringLocalizer.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />

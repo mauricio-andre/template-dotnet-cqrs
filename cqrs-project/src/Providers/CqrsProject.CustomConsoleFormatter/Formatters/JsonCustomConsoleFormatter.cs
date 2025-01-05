@@ -79,14 +79,14 @@ internal sealed class JsonCustomConsoleFormatter : ConsoleFormatter, IDisposable
                 writer.WriteStartObject();
                 writer.WriteString("timestamp", GetTimestamp());
                 writer.WriteString("environmentName", FormatterOptions.EnvironmentName);
-                writer.WriteString("appName", FormatterOptions.AppName);
+                writer.WriteString("serviceName", FormatterOptions.ServiceName);
                 writer.WriteString("hostName", _hostName);
                 writer.WriteString("userProcess", Environment.UserName);
                 writer.WriteNumber("eventId", logEntry.EventId.Id);
                 writer.WriteNumber("thread", Thread.CurrentThread.ManagedThreadId);
                 writer.WriteString("traceId", Activity.Current?.Id);
-                writer.WriteString(nameof(LogEntry<object>.Category), logEntry.Category);
-                writer.WriteString(nameof(LogEntry<object>.LogLevel), GetLogLevelString(logEntry.LogLevel));
+                writer.WriteString("category", logEntry.Category);
+                writer.WriteString("logLevel", GetLogLevelString(logEntry.LogLevel));
                 writer.WriteString("appUser", _loggerPropertiesService.GetAppUser());
                 writer.WriteString("message", message);
                 writer.WriteString("exceptionMessage", logEntry.Exception?.Message ?? "");
@@ -207,8 +207,8 @@ internal sealed class JsonCustomConsoleFormatter : ConsoleFormatter, IDisposable
     }
 
     private string GetNormalizedAppName() => string.Concat(
-        char.ToLowerInvariant(FormatterOptions.AppName[0]),
-        FormatterOptions.AppName.Substring(1)
+        char.ToLowerInvariant(FormatterOptions.ServiceName[0]),
+        FormatterOptions.ServiceName.Substring(1)
     );
 
     private static void WhileAppDetailProperties(KeyValuePair<string, object?> element, Utf8JsonWriter state)

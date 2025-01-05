@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CqrsProject.Common.Loggers;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Events;
@@ -55,7 +56,7 @@ public class TenantMiddleware
         }
 
         currentTenant.SetCurrentTenantId(tenantId);
-
+        Activity.Current?.AddTag("tenantId", tenantId);
         using (_logger.BeginScope(new TenantLoggerRecord(tenantId)))
             await _next(context);
     }

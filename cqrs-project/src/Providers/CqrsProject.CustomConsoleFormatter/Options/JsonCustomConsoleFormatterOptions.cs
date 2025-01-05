@@ -6,7 +6,7 @@ public sealed class JsonCustomConsoleFormatterOptions : JsonConsoleFormatterOpti
 {
     public static readonly string FormatterName = "JsonCustom";
     public string EnvironmentName { get; set; } = string.Empty;
-    public string AppName { get; set; } = string.Empty;
+    public string ServiceName { get; set; } = string.Empty;
     public bool IncludeDetails { get; set; }
     new public string? TimestampFormat { get; set; } = "yyyy-MM-dd\"T\"HH:mm:ss.fffzzz";
 }

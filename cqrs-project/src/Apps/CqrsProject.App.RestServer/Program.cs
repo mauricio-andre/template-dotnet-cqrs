@@ -30,7 +30,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
-using System.Diagnostics;
+using CqrsProject.Common.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +54,7 @@ builder.Services
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<ICurrentIdentity, CurrentIdentity>()
-    .AddSingleton(_ => new ActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
+    .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // Configuration string location
 builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));

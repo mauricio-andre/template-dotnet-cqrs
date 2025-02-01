@@ -1,7 +1,7 @@
-using System.Diagnostics;
 using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.App.DbMigrator.Loggers;
 using CqrsProject.App.DbMigrator.Services;
+using CqrsProject.Common.Diagnostics;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Interfaces;
@@ -16,6 +16,11 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+// Configure additional appsettings
+builder.Configuration
+    .AddJsonFile("appsettings.Development.json", true)
+    .AddEnvironmentVariables();
+
 builder.Services
     .AddPostegreAdministrationDbContext(options =>
     {
@@ -25,7 +30,7 @@ builder.Services
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<IDbMigratorService, DbMigratorService>()
-    .AddSingleton(_ => new ActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
+    .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // configuration identity
 builder.Services
@@ -36,17 +41,12 @@ builder.Services
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 builder.AddOpenTelemetryProvider();
 
-// Configure additional appsettings
-builder.Configuration
-    .AddJsonFile("appsettings.Development.json", true)
-    .AddEnvironmentVariables();
-
 var app = builder.Build();
 
 await app.StartAsync();
 
-var activitySource = app.Services.GetRequiredService<ActivitySource>();
-using (var activity = activitySource.StartActivity("RunDbMigrator"))
+var activitySource = app.Services.GetRequiredService<CqrsProjectActivitySource>();
+using (var activity = activitySource.ActivitySourceDefault.StartActivity("RunDbMigrator"))
     await app.Services
         .GetRequiredService<IDbMigratorService>()
         .RunMigrateAsync();

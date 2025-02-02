@@ -20,17 +20,15 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.Postegre.Extensions;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Common.Diagnostics;
+using CqrsProject.CustomCacheService.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +73,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 // Configure providers
 builder.Services.AddAuth0Provider(builder.Configuration);
+builder.Services.AddCustomCacheProvider();
 builder.Services.AddCustomStringLocalizerProvider();
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 builder.AddOpenTelemetryProvider();

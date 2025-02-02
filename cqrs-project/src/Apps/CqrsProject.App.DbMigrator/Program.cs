@@ -10,16 +10,8 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postegre.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
-
-// Configure additional appsettings
-builder.Configuration
-    .AddJsonFile("appsettings.Development.json", true)
-    .AddEnvironmentVariables();
 
 builder.Services
     .AddPostegreAdministrationDbContext(options =>

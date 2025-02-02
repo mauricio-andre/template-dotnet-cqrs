@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomStringLoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.OpenTelemetry", "src\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj", "{14394CEE-2273-4560-B6F7-9B7611C892EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.CustomCacheService", "src\Providers\CqrsProject.CustomCacheService\CqrsProject.CustomCacheService.csproj", "{BEFA81C4-2E71-420A-B113-E0284C1CA02F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{14394CEE-2273-4560-B6F7-9B7611C892EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14394CEE-2273-4560-B6F7-9B7611C892EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14394CEE-2273-4560-B6F7-9B7611C892EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEFA81C4-2E71-420A-B113-E0284C1CA02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEFA81C4-2E71-420A-B113-E0284C1CA02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEFA81C4-2E71-420A-B113-E0284C1CA02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEFA81C4-2E71-420A-B113-E0284C1CA02F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E22356A9-B723-46AB-8AA9-AC711A370013} = {7331E8B1-4586-4D3B-976B-08DA05DAF145}
@@ -95,5 +101,6 @@ Global
 		{CFC00D1B-16BA-440F-A90D-7A1294B54C73} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 		{7258BDAA-BB3A-491A-BE58-288E430955B9} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 		{14394CEE-2273-4560-B6F7-9B7611C892EB} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
+		{BEFA81C4-2E71-420A-B113-E0284C1CA02F} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 	EndGlobalSection
 EndGlobal

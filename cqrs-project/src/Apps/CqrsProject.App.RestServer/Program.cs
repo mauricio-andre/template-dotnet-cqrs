@@ -151,6 +151,7 @@ builder.Services
     {
         options.Authority = builder.Configuration.GetValue<string>("Authentication:Bearer:Authority");
         options.Audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience");
+        options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
     })
     .AddScheme<AuthenticationOptions, AuthenticationHandler>(
         AuthenticationDefaults.AuthenticationScheme,
@@ -179,6 +180,7 @@ app.UseSwaggerUI(options =>
     var audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience")!;
     options.OAuthClientId(clientId);
     options.OAuthClientSecret(clientSecret);
+    options.OAuthScopes(builder.Configuration.GetValue<string>("PlatformSwagger:Scopes")!.Split(" "));
     options.OAuthUsePkce();
     options.OAuthAdditionalQueryStringParams(new Dictionary<string, string>()
     {
@@ -186,6 +188,7 @@ app.UseSwaggerUI(options =>
     });
 
     options.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+    options.InjectJavascript("/swagger-ui/SwaggerRefreshToken.js");
 });
 
 // configuration app

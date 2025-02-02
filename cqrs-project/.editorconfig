@@ -515,3 +515,11 @@ indent_style = unset
 insert_final_newline = false
 tab_width = unset
 trim_trailing_whitespace = false
+
+# Javascript
+[*.js]
+end_of_line = crlf
+indent_style = space
+indent_size = 2
+charset = utf-8-bom
+trim_trailing_whitespace = true

@@ -24,7 +24,9 @@ public sealed class CurrentTenant : ICurrentTenant
         if (previousTenant != null)
             _loggerScope?.Dispose();
 
-        Activity.Current?.AddTag("tenantId", tenantId?.ToString() ?? string.Empty);
+        Activity.Current?.AddTag("tenantId", tenantId?.ToString());
+        Activity.Current?.AddEvent(new ActivityEvent($"Change current tenant to \"{tenantId?.ToString()}\""));
+
         _loggerScope = _logger.BeginScope(new TenantLoggerRecord(tenantId));
 
         return new TenantScope(this, previousTenant);
@@ -37,11 +39,11 @@ public sealed class CurrentTenant : ICurrentTenant
     private void RestorePreviousTenant(Guid? previousTenant)
     {
         _tenantStack.Pop();
+
+        Activity.Current?.AddEvent(new ActivityEvent($"Change current tenant to \"{previousTenant?.ToString()}\""));
+
         if (previousTenant != null && previousTenant != Guid.Empty)
-        {
             _loggerScope = _logger.BeginScope(new TenantLoggerRecord(previousTenant));
-            Activity.Current?.AddTag("tenantId", previousTenant?.ToString());
-        }
     }
 
     private sealed class TenantScope : IDisposable
@@ -58,7 +60,6 @@ public sealed class CurrentTenant : ICurrentTenant
         public void Dispose()
         {
             _currentTenant._loggerScope?.Dispose();
-            Activity.Current?.AddTag("tenantId", string.Empty);
             _currentTenant.RestorePreviousTenant(_previousTenant);
         }
     }

@@ -2,7 +2,7 @@ namespace CqrsProject.Core.Tenants.Interfaces;
 
 public interface ICurrentTenant
 {
-    void SetCurrentTenantId(Guid? tenantId);
+    IDisposable BeginTenantScope(Guid? tenantId);
     Guid? GetCurrentTenantId();
     bool IsHost();
 }

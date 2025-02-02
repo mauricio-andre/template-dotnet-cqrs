@@ -77,10 +77,11 @@ public class DbMigratorService : IDbMigratorService
 
         await foreach (var tenantId in tenants)
         {
-            _currentTenant.SetCurrentTenantId(tenantId);
-            Activity.Current?.AddTag("tenantId", tenantId);
-            var coreDbContext = await _coreDbContextFactory.CreateDbContextAsync();
-            await coreDbContext.Database.MigrateAsync(cancellationToken);
+            using (_currentTenant.BeginTenantScope(tenantId))
+            {
+                var coreDbContext = await _coreDbContextFactory.CreateDbContextAsync();
+                await coreDbContext.Database.MigrateAsync(cancellationToken);
+            }
         }
     }
 }

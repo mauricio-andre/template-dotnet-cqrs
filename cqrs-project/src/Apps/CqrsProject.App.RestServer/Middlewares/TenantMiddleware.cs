@@ -1,26 +1,18 @@
-using System.Diagnostics;
-using CqrsProject.Common.Loggers;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Events;
 using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace CqrsProject.App.RestServer.Middlewares;
 
 public class TenantMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<TenantMiddleware> _logger;
 
-    public TenantMiddleware(
-        RequestDelegate next,
-        ILogger<TenantMiddleware> logger)
+    public TenantMiddleware(RequestDelegate next)
     {
         _next = next;
-        _logger = logger;
     }
 
     public async Task InvokeAsync(
@@ -55,9 +47,7 @@ public class TenantMiddleware
             return;
         }
 
-        currentTenant.SetCurrentTenantId(tenantId);
-        Activity.Current?.AddTag("tenantId", tenantId);
-        using (_logger.BeginScope(new TenantLoggerRecord(tenantId)))
+        using (currentTenant.BeginTenantScope(tenantId))
             await _next(context);
     }
 }

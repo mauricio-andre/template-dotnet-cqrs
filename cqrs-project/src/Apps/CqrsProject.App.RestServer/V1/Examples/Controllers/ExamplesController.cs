@@ -1,3 +1,4 @@
+using System.Net;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
@@ -27,19 +28,25 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<ExampleResponse>), 200)]
+    [ProducesResponseType(typeof(IList<ExampleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<ExampleResponse>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchExampleQuery request)
     {
         var result = await _mediator.Send(request);
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ExampleResponse), 200)]
+    [ProducesResponseType(typeof(ExampleResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var result = await _mediator.Send(new GetExampleByKeyQuery(id));
@@ -47,16 +54,18 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(ExampleResponse), 201)]
+    [ProducesResponseType(typeof(ExampleResponse), StatusCodes.Status201Created)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)
     {
         var result = await _mediator.Send(request);
-        return Ok(result);
+        var uri = Url.Action(nameof(Get), new { id = result.Id });
+
+        return Created(uri, result);
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Remove([FromRoute] int id)
     {

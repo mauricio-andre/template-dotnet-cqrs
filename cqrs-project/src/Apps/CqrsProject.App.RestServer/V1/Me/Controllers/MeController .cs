@@ -26,7 +26,7 @@ public class MeController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Sync()
     {
         await _mediator.Send(new IdentitySyncCommand(
@@ -37,19 +37,25 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IList<MeTenantResponse>), 200)]
+    [ProducesResponseType(typeof(IList<MeTenantResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<MeTenantResponse>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {
         var result = await _mediator.Send(request);
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IList<string>), 200)]
+    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status200OK)]
     public IActionResult Permissions()
     {
         var list = HttpContext.User.Identities

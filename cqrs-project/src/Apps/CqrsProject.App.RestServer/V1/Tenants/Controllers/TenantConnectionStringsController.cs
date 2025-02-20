@@ -24,7 +24,8 @@ public class TenantConnectionStringsController : ControllerBase
     public TenantConnectionStringsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), 200)]
+    [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid tenantId,
         [FromQuery] SearchTenantConnectionStringRequestDto request)
@@ -40,12 +41,31 @@ public class TenantConnectionStringsController : ControllerBase
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(TenantConnectionStringResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Get(
+        [FromRoute] Guid tenantId,
+        [FromRoute] Guid id)
+    {
+        var result = await _mediator.Send(new GetTenantConnectionStringQuery(
+            TenantId: tenantId,
+            Id: id
+        ));
+
+        return Ok(result);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TenantConnectionStringResponse), 201)]
+    [ProducesResponseType(typeof(TenantConnectionStringResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid tenantId,
         [FromBody] CreateTenantConnectionStringRequestDto request)
@@ -56,11 +76,13 @@ public class TenantConnectionStringsController : ControllerBase
             TenantId: tenantId
         ));
 
-        return Ok(result);
+        var uri = Url.Action(nameof(Get), new { id = result.Id });
+
+        return Created(uri, result);
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Remove(
         [FromRoute] Guid tenantId,
         [FromRoute] Guid id)

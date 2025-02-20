@@ -28,19 +28,25 @@ public class TenantsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<TenantResponse>), 200)]
+    [ProducesResponseType(typeof(IList<TenantResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<TenantResponse>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchTenantQuery request)
     {
         var result = await _mediator.Send(request);
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(TenantResponse), 200)]
+    [ProducesResponseType(typeof(TenantResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetTenantByKeyQuery(id));
@@ -48,15 +54,16 @@ public class TenantsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TenantResponse), 201)]
+    [ProducesResponseType(typeof(TenantResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateTenantCommand request)
     {
         var result = await _mediator.Send(request);
-        return Ok(result);
+        var uri = Url.Action(nameof(Get), new { id = result.Id });
+        return Created(uri, result);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(TenantResponse), 200)]
+    [ProducesResponseType(typeof(TenantResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateTenantRequestDto request)
@@ -66,7 +73,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Remove([FromRoute] Guid id)
     {
         await _mediator.Send(new RemoveTenantCommand(id));
@@ -74,7 +81,8 @@ public class TenantsController : ControllerBase
     }
 
     [HttpGet("{id}/users")]
-    [ProducesResponseType(typeof(IList<SearchUserTenantResponseDto>), 200)]
+    [ProducesResponseType(typeof(IList<SearchUserTenantResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<SearchUserTenantResponseDto>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> SearchUsers(
         [FromRoute] Guid id,
         [FromQuery] SearchUserTenantRequestDto request)
@@ -94,12 +102,17 @@ public class TenantsController : ControllerBase
             .ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpPost("{id}/users/{userId}")]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateUsers([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         await _mediator.Send(new CreateUserTenantCommand(userId, id));
@@ -107,7 +120,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpDelete("{id}/users/{userId}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RemoveUsers([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         await _mediator.Send(new RemoveUserTenantCommand(userId, id));

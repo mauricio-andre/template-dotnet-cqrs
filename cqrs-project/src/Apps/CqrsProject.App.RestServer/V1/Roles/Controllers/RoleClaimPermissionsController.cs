@@ -26,7 +26,8 @@ public class RoleClaimPermissionsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<string>), 200)]
+    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid roleId,
         [FromQuery] SearchRoleClaimPermissionRequestDto request)
@@ -41,22 +42,27 @@ public class RoleClaimPermissionsController : ControllerBase
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpPost]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid roleId,
         [FromBody] CreateRoleClaimPermissionRequestDto request)
     {
         await _mediator.Send(new CreateRoleClaimPermissionCommand(roleId, request.Name));
-        return Ok();
+        return Created();
     }
 
     [HttpDelete("{name}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Remove([FromRoute] Guid roleId, [FromRoute] string name)
     {
         await _mediator.Send(new RemoveRoleClaimPermissionCommand(roleId, name));

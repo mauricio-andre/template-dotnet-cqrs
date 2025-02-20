@@ -26,19 +26,25 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<RoleResponse>), 200)]
+    [ProducesResponseType(typeof(IList<RoleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<RoleResponse>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchRoleQuery request)
     {
         var result = await _mediator.Send(request);
         var list = await result.Items.ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(RoleResponse), 200)]
+    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetRoleQuery(id));
@@ -46,15 +52,17 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(RoleResponse), 201)]
+    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateRoleCommand request)
     {
         var result = await _mediator.Send(request);
-        return Ok(result);
+        var uri = Url.Action(nameof(Get), new { id = result.Id });
+
+        return Created(uri, result);
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(RoleResponse), 200)]
+    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateRoleRequestDto request)
@@ -64,7 +72,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Remove([FromRoute] Guid id)
     {
         await _mediator.Send(new RemoveRoleCommand(id));
@@ -72,7 +80,8 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{id}/users")]
-    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), 200)]
+    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> SearchUsers(
         [FromRoute] Guid id,
         [FromQuery] SearchUserRoleRequestDto request)
@@ -92,12 +101,17 @@ public class RolesController : ControllerBase
             .ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        Response.Headers.AddContentLengthHeaders(list.Count);
-        return Ok(list);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
     }
 
     [HttpPost("{id}/users/{userId}")]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateUsers(
         [FromRoute] Guid id,
         [FromRoute] Guid userId)
@@ -107,7 +121,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpDelete("{id}/users/{userId}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RemoveUsers(
         [FromRoute] Guid id,
         [FromRoute] Guid userId)

@@ -27,12 +27,14 @@ public class ShallNotAllowUnauthorizedUserManageSelfRule
         return HandleRule(notification.UserId);
     }
 
-    public async Task HandleRule(Guid userId)
+    public Task HandleRule(Guid userId)
     {
         if (userId == _currentIdentity.GetLocalIdentityId()
             && !_currentIdentity.HasLocalPermission(AuthorizationPermissionClaims.ManageSelf))
         {
             throw new UnauthorizedAccessException();
         }
+
+        return Task.CompletedTask;
     }
 }

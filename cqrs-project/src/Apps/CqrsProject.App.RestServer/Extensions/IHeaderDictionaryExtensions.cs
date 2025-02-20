@@ -23,4 +23,13 @@ public static class IHeaderDictionaryExtensions
 
         return headers;
     }
+
+    public static IHeaderDictionary AddContentLengthHeaders(
+        this IHeaderDictionary headers,
+        int length)
+    {
+        headers.Append("Content-Length", length.ToString());
+
+        return headers;
+    }
 }

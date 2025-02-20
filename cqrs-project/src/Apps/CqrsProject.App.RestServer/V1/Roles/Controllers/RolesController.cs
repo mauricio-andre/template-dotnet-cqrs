@@ -30,8 +30,11 @@ public class RolesController : ControllerBase
     public async Task<IActionResult> Search([FromQuery] SearchRoleQuery request)
     {
         var result = await _mediator.Send(request);
+        var list = await result.Items.ToListAsync();
+
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        return Ok(await result.Items.ToListAsync());
+        Response.Headers.AddContentLengthHeaders(list.Count);
+        return Ok(list);
     }
 
     [HttpGet("{id}")]
@@ -84,10 +87,13 @@ public class RolesController : ControllerBase
             SortBy: request.SortBy
         ));
 
-        var dto = result.Items.Select(item => new SearchUserRoleResponseDto(item.UserId, item.UserName));
+        var list = await result.Items
+            .Select(item => new SearchUserRoleResponseDto(item.UserId, item.UserName))
+            .ToListAsync();
 
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        return Ok(await dto.ToListAsync());
+        Response.Headers.AddContentLengthHeaders(list.Count);
+        return Ok(list);
     }
 
     [HttpPost("{id}/users/{userId}")]

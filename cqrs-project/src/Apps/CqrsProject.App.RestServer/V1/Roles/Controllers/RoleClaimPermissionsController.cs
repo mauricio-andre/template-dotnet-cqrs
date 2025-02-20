@@ -38,8 +38,11 @@ public class RoleClaimPermissionsController : ControllerBase
             Skip: request.Skip,
             SortBy: request.SortBy
         ));
+        var list = await result.Items.ToListAsync();
+
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        return Ok(await result.Items.ToListAsync());
+        Response.Headers.AddContentLengthHeaders(list.Count);
+        return Ok(list);
     }
 
     [HttpPost]

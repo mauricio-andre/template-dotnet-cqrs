@@ -41,8 +41,11 @@ public class MeController : ControllerBase
     public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {
         var result = await _mediator.Send(request);
+        var list = await result.Items.ToListAsync();
+
         Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
-        return Ok(await result.Items.ToListAsync());
+        Response.Headers.AddContentLengthHeaders(list.Count);
+        return Ok(list);
     }
 
     [HttpGet("[action]")]

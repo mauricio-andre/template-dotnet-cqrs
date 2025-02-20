@@ -25,9 +25,9 @@ public sealed class CurrentTenant : ICurrentTenant
             _loggerScope?.Dispose();
 
         Activity.Current?.AddTag("tenantId", tenantId?.ToString());
-        Activity.Current?.AddEvent(new ActivityEvent($"Change current tenant to \"{tenantId?.ToString()}\""));
 
         _loggerScope = _logger.BeginScope(new TenantLoggerRecord(tenantId));
+        _logger.LogInformation("Change current tenant");
 
         return new TenantScope(this, previousTenant);
     }

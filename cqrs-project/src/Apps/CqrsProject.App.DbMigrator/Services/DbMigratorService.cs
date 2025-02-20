@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using CqrsProject.App.DbMigrator.Interfaces;
-using CqrsProject.Common.Diagnostics;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +12,15 @@ public class DbMigratorService : IDbMigratorService
     private readonly IDbContextFactory<AdministrationDbContext> _administrationDbContextFactory;
     private readonly IDbContextFactory<CoreDbContext> _coreDbContextFactory;
     private readonly ICurrentTenant _currentTenant;
-    private readonly CqrsProjectActivitySource _cqrsProjectActivitySource;
 
     public DbMigratorService(
         IDbContextFactory<AdministrationDbContext> administrationDbContextFactory,
         IDbContextFactory<CoreDbContext> coreDbContextFactory,
-        ICurrentTenant currentTenant,
-        CqrsProjectActivitySource cqrsProjectActivitySource)
+        ICurrentTenant currentTenant)
     {
         _administrationDbContextFactory = administrationDbContextFactory;
         _coreDbContextFactory = coreDbContextFactory;
         _currentTenant = currentTenant;
-        _cqrsProjectActivitySource = cqrsProjectActivitySource;
     }
 
     public async Task RunMigrateAsync(CancellationToken cancellationToken = default)
@@ -36,12 +32,9 @@ public class DbMigratorService : IDbMigratorService
 
     private async Task RunMigrateAdministration(CancellationToken cancellationToken)
     {
-        using (_cqrsProjectActivitySource.ActivitySourceDefault.StartActivity("RunMigrateAdministration"))
-        {
-            Activity.Current?.AddEvent(new ActivityEvent("Start migration Administration"));
-            var dbContext = await _administrationDbContextFactory.CreateDbContextAsync();
-            await dbContext.Database.MigrateAsync(cancellationToken);
-        }
+        Activity.Current?.AddEvent(new ActivityEvent("Start migration Administration"));
+        var dbContext = await _administrationDbContextFactory.CreateDbContextAsync();
+        await dbContext.Database.MigrateAsync(cancellationToken);
     }
 
     private async Task RunMigrateCore(CancellationToken cancellationToken)
@@ -52,15 +45,12 @@ public class DbMigratorService : IDbMigratorService
 
     private async Task RunMigrateCoreHost(CancellationToken cancellationToken)
     {
-        using (_cqrsProjectActivitySource.ActivitySourceDefault.StartActivity("RunMigrateCoreHost"))
-        {
-            var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
+        var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
 
-            if (IsHostDatabaseConfigured(dbContext.Database))
-            {
-                Activity.Current?.AddEvent(new ActivityEvent("Start migration Core Host"));
-                await dbContext.Database.MigrateAsync(cancellationToken);
-            }
+        if (IsHostDatabaseConfigured(dbContext.Database))
+        {
+            Activity.Current?.AddEvent(new ActivityEvent("Start migration Core Host"));
+            await dbContext.Database.MigrateAsync(cancellationToken);
         }
     }
 
@@ -87,7 +77,6 @@ public class DbMigratorService : IDbMigratorService
 
         await foreach (var tenantId in tenants)
         {
-            using (_cqrsProjectActivitySource.ActivitySourceDefault.StartActivity("RunMigrateCoreTenants"))
             using (_currentTenant.BeginTenantScope(tenantId))
             {
                 Activity.Current?.AddEvent(new ActivityEvent("Start migration Core Tenant"));

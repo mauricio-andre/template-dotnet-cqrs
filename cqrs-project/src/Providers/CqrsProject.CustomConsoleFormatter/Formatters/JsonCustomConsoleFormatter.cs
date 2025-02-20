@@ -84,7 +84,17 @@ internal sealed class JsonCustomConsoleFormatter : ConsoleFormatter, IDisposable
                 writer.WriteString("userProcess", Environment.UserName);
                 writer.WriteNumber("eventId", logEntry.EventId.Id);
                 writer.WriteNumber("thread", Thread.CurrentThread.ManagedThreadId);
-                writer.WriteString("traceId", Activity.Current?.Id);
+
+                writer.WriteStartObject("trace");
+                writer.WriteString("id", Activity.Current?.TraceId.ToString());
+                writer.WriteEndObject();
+                writer.WriteStartObject("transaction");
+                writer.WriteString("id", Activity.Current?.Id);
+                writer.WriteEndObject();
+                writer.WriteStartObject("span");
+                writer.WriteString("id", Activity.Current?.SpanId.ToString());
+                writer.WriteEndObject();
+
                 writer.WriteString("category", logEntry.Category);
                 writer.WriteString("logLevel", GetLogLevelString(logEntry.LogLevel));
                 writer.WriteString("appUser", _loggerPropertiesService.GetAppUser());

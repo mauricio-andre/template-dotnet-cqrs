@@ -5,22 +5,21 @@ using CqrsProject.Common.Diagnostics;
 namespace CqrsProject.App.DbMigrator;
 
 public sealed class DbMigratorBackgroundService : BackgroundService
-{
-    private readonly IDbMigratorService _dbMigratorService;
-    private readonly CqrsProjectActivitySource _cqrsProjectActivitySource;
+{    private readonly CqrsProjectActivitySource _cqrsProjectActivitySource;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
     private readonly ILogger<DbMigratorBackgroundService> _logger;
+    private readonly IServiceProvider _serviceProvider;
 
     public DbMigratorBackgroundService(
-        IDbMigratorService dbMigratorService,
         CqrsProjectActivitySource cqrsProjectActivitySource,
         IHostApplicationLifetime hostApplicationLifetime,
-        ILogger<DbMigratorBackgroundService> logger)
+        ILogger<DbMigratorBackgroundService> logger,
+        IServiceProvider serviceProvider)
     {
-        _dbMigratorService = dbMigratorService;
         _cqrsProjectActivitySource = cqrsProjectActivitySource;
         _hostApplicationLifetime = hostApplicationLifetime;
         _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,7 +27,11 @@ public sealed class DbMigratorBackgroundService : BackgroundService
         _logger.LogInformation("Start DbMigrator BackgroundService");
 
         using (_cqrsProjectActivitySource.ActivitySourceDefault.StartActivity("RunDbMigrator"))
-            await _dbMigratorService.RunMigrateAsync(stoppingToken);
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var dbMigratorService = scope.ServiceProvider.GetRequiredService<IDbMigratorService>();
+            await dbMigratorService.RunMigrateAsync(stoppingToken);
+        }
 
         _hostApplicationLifetime.StopApplication();
     }

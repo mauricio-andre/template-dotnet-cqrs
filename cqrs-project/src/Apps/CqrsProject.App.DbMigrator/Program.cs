@@ -15,11 +15,6 @@ using CqrsProject.Core.Tenants.Extensions;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-// Configure additional appsettings
-builder.Configuration
-    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
-    .AddEnvironmentVariables();
-
 builder.Services
     .AddPostegreAdministrationDbContext(options =>
     {

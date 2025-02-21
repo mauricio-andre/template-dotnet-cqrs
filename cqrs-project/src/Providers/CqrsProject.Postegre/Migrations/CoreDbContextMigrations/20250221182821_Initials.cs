@@ -17,7 +17,7 @@ namespace CqrsProject.Postegre.Migrations.CoreDbContextMigrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                    Name = table.Column<string>(type: "character varying(200)", unicode: false, maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {

@@ -16,12 +16,12 @@ namespace CqrsProject.Postegre.Migrations.CoreDbContextMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CqrsProject.Core.Examples.Example", b =>
+            modelBuilder.Entity("CqrsProject.Core.Examples.Entities.Example", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,6 +32,7 @@ namespace CqrsProject.Postegre.Migrations.CoreDbContextMigrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
+                        .IsUnicode(false)
                         .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");

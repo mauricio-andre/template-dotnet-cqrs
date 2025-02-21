@@ -19,12 +19,9 @@ public class TenantEfConfiguration : IEntityTypeConfiguration<Tenant>
         builder.Property(tenant => tenant.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(tenant => tenant.Name)
-            .IsRequired()
-            .HasMaxLength(TenantConstrains.NameMaxLength);
+        builder.Property(tenant => tenant.Name);
 
-        builder.Property(tenant => tenant.IsDeleted)
-            .IsRequired();
+        builder.Property(tenant => tenant.IsDeleted);
 
         builder
             .HasMany(tenant => tenant.UserList)

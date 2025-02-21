@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using CqrsProject.Core.Identity.Interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace CqrsProject.App.RestServer.Middlewares;
 
@@ -13,7 +12,10 @@ public class IdentityMiddleware
     public async Task InvokeAsync(HttpContext context, ICurrentIdentity currentIdentity)
     {
         currentIdentity.SetCurrentIdentity(context.User);
-        Activity.Current?.AddTag("appUser", currentIdentity.GetLocalIdentityId());
+
+        if (currentIdentity.HasLocalIdentity())
+            Activity.Current?.AddTag("appUser", currentIdentity.GetLocalIdentityId());
+
         await _next(context);
     }
 }

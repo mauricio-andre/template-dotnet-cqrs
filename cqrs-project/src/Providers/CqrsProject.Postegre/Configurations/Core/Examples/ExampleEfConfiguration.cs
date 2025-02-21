@@ -15,8 +15,6 @@ public class ExampleEfConfiguration : IEntityTypeConfiguration<Example>
         builder.Property(example => example.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(example => example.Name)
-            .IsRequired()
-            .HasMaxLength(ExampleConstrains.NameMaxLength);
+        builder.Property(example => example.Name);
     }
 }

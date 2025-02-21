@@ -12,20 +12,20 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 {
     [DbContext(typeof(PostegresAdministrationDbContext))]
-    [Migration("20241124151404_CreateTable_TenantConnectionString")]
-    partial class CreateTable_TenantConnectionString
+    [Migration("20250221182810_Initials")]
+    partial class Initials
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CqrsProject.Core.Identity.User", b =>
+            modelBuilder.Entity("CqrsProject.Core.Identity.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,7 +99,58 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("CqrsProject.Core.Identity.UserTenant", b =>
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Entities.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tenants", (string)null);
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Entities.TenantConnectionString", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConnectionName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("KeyName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("TenantConnectionStrings");
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.UserTenants.Entities.UserTenant", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -112,49 +163,6 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("UserTenants", (string)null);
-                });
-
-            modelBuilder.Entity("CqrsProject.Core.Tenants.Tenant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants", (string)null);
-                });
-
-            modelBuilder.Entity("CqrsProject.Core.Tenants.TenantConnectionString", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ConnectionName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("KeyName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
-
-                    b.ToTable("TenantConnectionStrings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -182,6 +190,14 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51"),
+                            Name = "host_admin",
+                            NormalizedName = "HOST_ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -206,6 +222,22 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RoleClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            ClaimType = "permissions",
+                            ClaimValue = "manage_self",
+                            RoleId = new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51")
+                        },
+                        new
+                        {
+                            Id = -2,
+                            ClaimType = "permissions",
+                            ClaimValue = "manage_administration",
+                            RoleId = new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -287,15 +319,26 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CqrsProject.Core.Identity.UserTenant", b =>
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Entities.TenantConnectionString", b =>
                 {
-                    b.HasOne("CqrsProject.Core.Tenants.Tenant", "Tenant")
+                    b.HasOne("CqrsProject.Core.Tenants.Entities.Tenant", "Tenant")
+                        .WithMany("TenantConnectionStringList")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("CqrsProject.Core.UserTenants.Entities.UserTenant", b =>
+                {
+                    b.HasOne("CqrsProject.Core.Tenants.Entities.Tenant", "Tenant")
                         .WithMany("UserTenantList")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CqrsProject.Core.Identity.User", "User")
+                    b.HasOne("CqrsProject.Core.Identity.Entities.User", "User")
                         .WithMany("UserTenantList")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,17 +347,6 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                     b.Navigation("Tenant");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CqrsProject.Core.Tenants.TenantConnectionString", b =>
-                {
-                    b.HasOne("CqrsProject.Core.Tenants.Tenant", "Tenant")
-                        .WithMany("TenantConnectionStringList")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -328,7 +360,7 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("CqrsProject.Core.Identity.User", null)
+                    b.HasOne("CqrsProject.Core.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -337,7 +369,7 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("CqrsProject.Core.Identity.User", null)
+                    b.HasOne("CqrsProject.Core.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -352,7 +384,7 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CqrsProject.Core.Identity.User", null)
+                    b.HasOne("CqrsProject.Core.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -361,19 +393,19 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("CqrsProject.Core.Identity.User", null)
+                    b.HasOne("CqrsProject.Core.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CqrsProject.Core.Identity.User", b =>
+            modelBuilder.Entity("CqrsProject.Core.Identity.Entities.User", b =>
                 {
                     b.Navigation("UserTenantList");
                 });
 
-            modelBuilder.Entity("CqrsProject.Core.Tenants.Tenant", b =>
+            modelBuilder.Entity("CqrsProject.Core.Tenants.Entities.Tenant", b =>
                 {
                     b.Navigation("TenantConnectionStringList");
 

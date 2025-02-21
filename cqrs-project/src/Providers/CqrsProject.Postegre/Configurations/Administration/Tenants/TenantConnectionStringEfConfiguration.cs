@@ -23,13 +23,9 @@ public class TenantConnectionStringEfConfiguration : IEntityTypeConfiguration<Te
         builder.Property(tenantConnectionString => tenantConnectionString.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(tenantConnectionString => tenantConnectionString.ConnectionName)
-            .IsRequired()
-            .HasMaxLength(TenantConnectionStringConstrains.ConnectionNameMaxLength);
+        builder.Property(tenantConnectionString => tenantConnectionString.ConnectionName);
 
-        builder.Property(tenantConnectionString => tenantConnectionString.KeyName)
-            .IsRequired()
-            .HasMaxLength(TenantConnectionStringConstrains.KeyNameMaxLength);
+        builder.Property(tenantConnectionString => tenantConnectionString.KeyName);
 
         builder
             .HasOne(tenantConnectionString => tenantConnectionString.Tenant)

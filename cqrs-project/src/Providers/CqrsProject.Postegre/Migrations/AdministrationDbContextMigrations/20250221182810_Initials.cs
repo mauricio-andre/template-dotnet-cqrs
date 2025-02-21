@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
 {
     /// <inheritdoc />
@@ -31,7 +33,8 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                    Name = table.Column<string>(type: "character varying(200)", unicode: false, maxLength: 200, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,6 +86,26 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         name: "FK_RoleClaims_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TenantConnectionStrings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ConnectionName = table.Column<string>(type: "character varying(50)", unicode: false, maxLength: 50, nullable: false),
+                    KeyName = table.Column<string>(type: "character varying(200)", unicode: false, maxLength: 200, nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TenantConnectionStrings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TenantConnectionStrings_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -196,6 +219,20 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51"), null, "host_admin", "HOST_ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "RoleClaims",
+                columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
+                values: new object[,]
+                {
+                    { -2, "permissions", "manage_administration", new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51") },
+                    { -1, "permissions", "manage_self", new Guid("e83bfc7d-61af-ef11-b120-a830f9d53c51") }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
                 table: "RoleClaims",
@@ -205,6 +242,17 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
                 name: "RoleNameIndex",
                 table: "Roles",
                 column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TenantConnectionStrings_TenantId",
+                table: "TenantConnectionStrings",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_Name",
+                table: "Tenants",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -244,6 +292,9 @@ namespace CqrsProject.Postegre.Migrations.AdministrationDbContextMigrations
         {
             migrationBuilder.DropTable(
                 name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "TenantConnectionStrings");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");

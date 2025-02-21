@@ -5,13 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <Target Name="RunCustomResourceWriter" BeforeTargets="BeforeBuild">
-    <Exec Command="dotnet run --project ../../Providers/CqrsProject.CustomResourceWriter/CqrsProject.CustomResourceWriter.csproj --output ../../Core/CqrsProject.Common/Localization/Resources" />
-    <Exec Command="dotnet build ../../Core/CqrsProject.Common/CqrsProject.Common.csproj" />
-  </Target>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\**\*.resources" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />

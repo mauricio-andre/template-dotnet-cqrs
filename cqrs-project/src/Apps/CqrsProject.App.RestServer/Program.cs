@@ -55,7 +55,6 @@ builder.Services
     .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // Configuration string location
-builder.Services.AddLocalization(options => options.ResourcesPath = Path.Combine("Localization", "Resources"));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportCultures = builder

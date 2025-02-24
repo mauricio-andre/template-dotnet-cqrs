@@ -29,8 +29,13 @@ public class LoggerPropertiesService : ILoggerPropertiesService
     }
 
     public KeyValuePair<string, object?>[] DefaultPropertyList() =>
-        LoggerPropertiesHelper.DefaultPropertyList();
+        new TenantLoggerRecord().ToArray();
 
-    public KeyValuePair<string, object?>[] ScopeObjectStructuring(object value) =>
-        LoggerPropertiesHelper.ScopeObjectStructuring(value);
+    public KeyValuePair<string, object?>[] ScopeObjectStructuring(object value)
+    {
+        if (value is TenantLoggerRecord tenantLoggerRecord)
+            return tenantLoggerRecord.ToArray();
+
+        return [];
+    }
 }

@@ -1,15 +1,15 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Interfaces;
-using CqrsProject.Postegre.Configurations.Core;
+using CqrsProject.Postgres.Configurations.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Postegre.Data;
+namespace CqrsProject.Postgres.Data;
 
-public class PostegresCoreDbContext : CoreDbContext
+public class PostgresCoreDbContext : CoreDbContext
 {
     private readonly ITenantConnectionProvider _tenantConnectionProvider;
 
-    public PostegresCoreDbContext(
+    public PostgresCoreDbContext(
         DbContextOptions<CoreDbContext> options,
         ITenantConnectionProvider tenantConnectionProvider) : base(options)
     {

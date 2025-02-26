@@ -2,7 +2,7 @@ using CqrsProject.Core.UserTenants.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CqrsProject.Postegre.Configurations.Administration;
+namespace CqrsProject.Postgres.Configurations.Administration;
 
 public class UserTenantEfConfiguration : IEntityTypeConfiguration<UserTenant>
 {

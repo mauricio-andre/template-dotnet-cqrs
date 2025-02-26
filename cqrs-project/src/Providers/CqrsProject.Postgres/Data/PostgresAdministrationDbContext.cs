@@ -1,14 +1,14 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Postegre.Configurations.Administration;
+using CqrsProject.Postgres.Configurations.Administration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Postegre.Data;
+namespace CqrsProject.Postgres.Data;
 
-public class PostegresAdministrationDbContext : AdministrationDbContext
+public class PostgresAdministrationDbContext : AdministrationDbContext
 {
-    public PostegresAdministrationDbContext(
+    public PostgresAdministrationDbContext(
         DbContextOptions<AdministrationDbContext> options) : base(options)
     {
     }

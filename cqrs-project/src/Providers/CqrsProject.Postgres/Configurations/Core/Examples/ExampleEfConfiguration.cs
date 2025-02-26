@@ -2,7 +2,7 @@ using CqrsProject.Core.Examples.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CqrsProject.Postegre.Configurations.Core;
+namespace CqrsProject.Postgres.Configurations.Core;
 
 public class ExampleEfConfiguration : IEntityTypeConfiguration<Example>
 {

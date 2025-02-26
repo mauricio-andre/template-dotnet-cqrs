@@ -7,7 +7,7 @@ using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CqrsProject.Postegre.Extensions;
+using CqrsProject.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
 using CqrsProject.Common.Diagnostics;
 using CqrsProject.App.DbMigratorTest.Database;
@@ -33,11 +33,11 @@ public static class DbMigratorHostFactory
         builder.Configuration.AddInMemoryCollection(configValues);
 
         builder.Services
-            .AddPostegreAdministrationDbContext(options =>
+            .AddPostgresAdministrationDbContext(options =>
             {
                 options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
             })
-            .AddPostegreCoreDbContext()
+            .AddPostgresCoreDbContext()
             .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
             .AddScoped<ICurrentTenant, CurrentTenant>()
             .AddScoped<IDbMigratorService, DbMigratorService>()

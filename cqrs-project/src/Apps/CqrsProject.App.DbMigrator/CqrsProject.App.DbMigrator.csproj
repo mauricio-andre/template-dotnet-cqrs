@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\CqrsProject.Core\CqrsProject.Core.csproj" />
-    <ProjectReference Include="..\..\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.Postgres\CqrsProject.Postgres.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj" />
   </ItemGroup>

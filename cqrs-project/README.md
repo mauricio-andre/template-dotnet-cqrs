@@ -3,13 +3,13 @@
 Criar migrations para o contexto de administração
 
 ```bash
-dotnet ef migrations add Initials -p ./src/Providers/CqrsProject.Postegre -s ./src/Apps/CqrsProject.App.DbMigrator -o Migrations/AdministrationDbContextMigrations -c PostegresAdministrationDbContext
+dotnet ef migrations add Initials -p ./src/Providers/CqrsProject.Postgres -s ./src/Apps/CqrsProject.App.DbMigrator -o Migrations/AdministrationDbContextMigrations -c PostgresAdministrationDbContext
 ```
 
 Criar migrations para o contexto do Core
 
 ```bash
-dotnet ef migrations add Initials -p ./src/Providers/CqrsProject.Postegre -s ./src/Apps/CqrsProject.App.DbMigrator -o Migrations/CoreDbContextMigrations -c CoreDbContext
+dotnet ef migrations add Initials -p ./src/Providers/CqrsProject.Postgres -s ./src/Apps/CqrsProject.App.DbMigrator -o Migrations/CoreDbContextMigrations -c CoreDbContext
 ```
 
 Executar as migrations

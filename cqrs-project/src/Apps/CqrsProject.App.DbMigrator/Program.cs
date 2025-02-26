@@ -9,18 +9,18 @@ using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
-using CqrsProject.Postegre.Extensions;
+using CqrsProject.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
 using CqrsProject.Core.Tenants.Extensions;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services
-    .AddPostegreAdministrationDbContext(options =>
+    .AddPostgresAdministrationDbContext(options =>
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
     })
-    .AddPostegreCoreDbContext()
+    .AddPostgresCoreDbContext()
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<IDbMigratorService, DbMigratorService>()

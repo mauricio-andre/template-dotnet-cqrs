@@ -17,7 +17,7 @@ using CqrsProject.Core.Tenants.Extensions;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
-using CqrsProject.Postegre.Extensions;
+using CqrsProject.Postgres.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -33,11 +33,11 @@ using CqrsProject.CustomCacheService.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddPostegreAdministrationDbContext(options =>
+    .AddPostgresAdministrationDbContext(options =>
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
     })
-    .AddPostegreCoreDbContext()
+    .AddPostgresCoreDbContext()
     .AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CoreDbContext>())
     .Scan(scan => scan.FromAssembliesOf(typeof(CoreDbContext))
         .AddClasses(classes => classes.AssignableTo(typeof(AbstractValidator<>)))

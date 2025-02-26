@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Auth0", "src\Pr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.CustomResourceWriter", "src\Providers\CqrsProject.CustomResourceWriter\CqrsProject.CustomResourceWriter.csproj", "{1E1393FD-1A38-45DD-8198-646E1BB433C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Postegre", "src\Providers\CqrsProject.Postegre\CqrsProject.Postegre.csproj", "{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.Postgres", "src\Providers\CqrsProject.Postgres\CqrsProject.Postgres.csproj", "{1E0E2F68-D9BB-4FA3-950B-F0622CF4996C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CqrsProject.CustomConsoleFormatter", "src\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj", "{CFC00D1B-16BA-440F-A90D-7A1294B54C73}"
 EndProject

@@ -7,21 +7,14 @@ namespace CqrsProject.Postgres.Data;
 
 public class PostgresCoreDbContext : CoreDbContext
 {
-    private readonly ITenantConnectionProvider _tenantConnectionProvider;
-
     public PostgresCoreDbContext(
         DbContextOptions<CoreDbContext> options,
-        ITenantConnectionProvider tenantConnectionProvider) : base(options)
-    {
-        _tenantConnectionProvider = tenantConnectionProvider;
-    }
+        ITenantConnectionProvider tenantConnectionProvider) : base(options, tenantConnectionProvider)
+    { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void UseTenantConnectionString(DbContextOptionsBuilder optionsBuilder, string connectionString)
     {
-        base.OnConfiguring(optionsBuilder);
-
-        var connectionString = _tenantConnectionProvider.GetConnectionStringToCurrentTenant("CoreDbContext");
-        if (!string.IsNullOrEmpty(connectionString)) optionsBuilder.UseNpgsql(connectionString);
+        optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

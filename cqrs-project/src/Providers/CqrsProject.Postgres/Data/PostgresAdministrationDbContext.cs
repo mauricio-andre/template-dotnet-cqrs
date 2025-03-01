@@ -3,14 +3,23 @@ using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Postgres.Configurations.Administration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace CqrsProject.Postgres.Data;
 
 public class PostgresAdministrationDbContext : AdministrationDbContext
 {
+    private readonly IConfiguration _configuration;
     public PostgresAdministrationDbContext(
-        DbContextOptions<AdministrationDbContext> options) : base(options)
+        DbContextOptions<AdministrationDbContext> options,
+        IConfiguration configuration) : base(options)
     {
+        _configuration = configuration;
+    }
+
+    protected override void UseConnectionString(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("AdministrationDbContext"));
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -27,7 +36,5 @@ public class PostgresAdministrationDbContext : AdministrationDbContext
 
         builder.ApplyConfiguration(new TenantEfConfiguration());
         builder.ApplyConfiguration(new UserTenantEfConfiguration());
-
-        AdministrationSeedDataConfiguration.Configure(builder);
     }
 }

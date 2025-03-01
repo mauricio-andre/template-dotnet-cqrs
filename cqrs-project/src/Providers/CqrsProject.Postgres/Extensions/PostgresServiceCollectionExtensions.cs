@@ -18,7 +18,7 @@ public static class PostgresServiceCollectionExtensions
 
     public static IServiceCollection AddPostgresAdministrationDbContext(
         this IServiceCollection services,
-        Action<DbContextOptionsBuilder> optionsAction)
+        Action<DbContextOptionsBuilder>? optionsAction = default)
     {
         return services
             .AddScoped<AdministrationDbContext, PostgresAdministrationDbContext>()

@@ -24,7 +24,7 @@ public abstract class CoreDbContext : DbContext
     }
 
     /// <summary>
-    ///  This function should implement the configuration for connecting to the
+    /// This function should implement the configuration for connecting to the
     /// database according to the driver used by the infrastructure being implemented.
     /// For example, when using PostgreSQL, the expected configuration is
     /// `optionsBuilder.UseNpgsql(connectionString);`

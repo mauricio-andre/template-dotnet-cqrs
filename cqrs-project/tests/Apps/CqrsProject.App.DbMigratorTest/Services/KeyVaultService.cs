@@ -7,9 +7,9 @@ public class KeyVaultService : IKeyVaultService
 {
     private readonly IDatabaseDocker _databaseDocker;
 
-    public KeyVaultService(IDatabaseDocker postgresDocker)
+    public KeyVaultService(IDatabaseDocker databaseDocker)
     {
-        _databaseDocker = postgresDocker;
+        _databaseDocker = databaseDocker;
     }
 
     public ValueTask<string> GetKeyValueAsync(string keyName)

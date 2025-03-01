@@ -18,11 +18,11 @@ public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAcc
     private readonly IChaceService _chaceService;
 
     public ShallNotAccessUnreleasedTenantRule(
-        AdministrationDbContext administrationDbContext,
+        IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         IChaceService chaceService)
     {
-        _administrationDbContext = administrationDbContext;
+        _administrationDbContext = dbContextFactory.CreateDbContext();
         _stringLocalizer = stringLocalizer;
         _chaceService = chaceService;
     }

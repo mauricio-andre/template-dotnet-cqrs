@@ -30,7 +30,7 @@ public class TenantMiddleware
 
         if (!Guid.TryParse(tenantIdHeader, out Guid tenantId))
         {
-            context.Response.StatusCode = 403;
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
         }
 
@@ -43,7 +43,12 @@ public class TenantMiddleware
         }
         catch (TenantUnreleasedException)
         {
-            context.Response.StatusCode = 403;
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
         }
 

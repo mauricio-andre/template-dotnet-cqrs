@@ -10,4 +10,4 @@ public record SearchRoleQuery(
     int? Take,
     int? Skip,
     string? SortBy
-): IPageableQuery, ISortableQuery, IRequest<CollectionResponse<RoleResponse>>;
+) : IPageableQuery, ISortableQuery, IRequest<CollectionResponse<RoleResponse>>;

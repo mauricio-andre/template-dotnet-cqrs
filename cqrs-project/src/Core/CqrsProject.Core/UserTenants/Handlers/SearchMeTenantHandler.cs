@@ -1,8 +1,8 @@
 using CqrsProject.Common.Extensions;
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.UserTenants.Entities;
 using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.UserTenants.Entities;
 using CqrsProject.Core.UserTenants.Queries;
 using CqrsProject.Core.UserTenants.Responses;
 using FluentValidation;

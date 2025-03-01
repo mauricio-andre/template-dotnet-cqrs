@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using System.Security.Claims;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Interfaces;
@@ -26,7 +25,7 @@ public class CurrentIdentity : ICurrentIdentity
             ?.Value;
 
         if (string.IsNullOrEmpty(id))
-            throw new AuthenticationException();
+            throw new UnauthorizedAccessException();
 
         return Guid.Parse(id);
     }

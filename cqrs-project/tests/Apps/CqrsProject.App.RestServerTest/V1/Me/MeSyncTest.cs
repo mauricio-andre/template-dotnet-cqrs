@@ -13,8 +13,7 @@ using NSubstitute;
 
 namespace CqrsProject.App.RestServerTest.V1.Me;
 
-public class MeSyncTest
-    : IClassFixture<RestServerWebApplicationFactory>
+public class MeSyncTest : IClassFixture<RestServerWebApplicationFactory>
 {
     private readonly HttpClient _client;
     private readonly RestServerWebApplicationFactory _factory;
@@ -38,8 +37,7 @@ public class MeSyncTest
     [Fact(DisplayName = "Should create a user account when the token is valid and the user does not exist")]
     public async Task GivenMeAsync_WhenUserDoesNotExist_ThenCreateLocalUser()
     {
-        var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using (var scope = scopeFactory.CreateScope())
+        using (var scope = _factory.Services.CreateScope())
         {
             var fakeData = _meSyncTestFake.Generate();
 
@@ -73,8 +71,7 @@ public class MeSyncTest
     [Fact(DisplayName = "Should update the user account when the user exists")]
     public async Task GivenMeAsync_WhenUserExists_ThenUpdateUser()
     {
-        var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using (var scope = scopeFactory.CreateScope())
+        using (var scope = _factory.Services.CreateScope())
         {
             var fakeData = _meSyncTestFake.Generate();
 
@@ -127,8 +124,7 @@ public class MeSyncTest
     [Fact(DisplayName = "Should reactivate the user when it was deleted")]
     public async Task GivenMeAsync_WhenUserIsDeleted_ThenReactivateUser()
     {
-        var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using (var scope = scopeFactory.CreateScope())
+        using (var scope = _factory.Services.CreateScope())
         {
             var fakeData = _meSyncTestFake.Generate();
 
@@ -178,8 +174,7 @@ public class MeSyncTest
     [Fact(DisplayName = "Should bind user accounts when an email exists with another login")]
     public async Task GivenMeAsync_WhenUserExistsWithOtherLogin_ThenBindLogin()
     {
-        var scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using (var scope = scopeFactory.CreateScope())
+        using (var scope = _factory.Services.CreateScope())
         {
             var fakeData = _meSyncTestFake.Generate();
 

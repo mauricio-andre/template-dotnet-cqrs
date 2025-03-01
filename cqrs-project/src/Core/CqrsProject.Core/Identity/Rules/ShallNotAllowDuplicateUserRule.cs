@@ -48,10 +48,10 @@ public class ShallNotAllowDuplicateUserRule
             var errors = new Dictionary<string, string[]>();
 
             if (user.NormalizedUserName == _userManager.NormalizeName(userName))
-                errors.Add(nameof(User.UserName), [ _stringLocalizer["message:validation:valueAlreadyUse", userName] ]);
+                errors.Add(nameof(User.UserName), [_stringLocalizer["message:validation:valueAlreadyUse", userName]]);
 
             if (user.NormalizedEmail == _userManager.NormalizeEmail(email))
-                errors.Add(nameof(User.Email), [ _stringLocalizer["message:validation:valueAlreadyUse", email] ]);
+                errors.Add(nameof(User.Email), [_stringLocalizer["message:validation:valueAlreadyUse", email]]);
 
             throw new DuplicatedEntityException(_stringLocalizer, nameof(User), errors);
         }

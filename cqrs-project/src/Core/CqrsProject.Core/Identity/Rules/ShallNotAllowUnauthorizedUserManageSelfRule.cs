@@ -1,8 +1,8 @@
 using CqrsProject.Common.Consts;
-using CqrsProject.Core.UserTenants.Events;
-using CqrsProject.Core.Identity.Interfaces;
-using MediatR;
 using CqrsProject.Core.Identity.Events;
+using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.UserTenants.Events;
+using MediatR;
 
 namespace CqrsProject.Core.Identity.Rules;
 

@@ -1,12 +1,12 @@
 ﻿using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants.Extensions;
+using CqrsProject.Core.Examples.Entities;
 using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Extensions;
 using CqrsProject.Core.Tenants.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CqrsProject.Core.Examples.Entities;
 
 namespace CqrsProject.App.DbMigratorTest;
 

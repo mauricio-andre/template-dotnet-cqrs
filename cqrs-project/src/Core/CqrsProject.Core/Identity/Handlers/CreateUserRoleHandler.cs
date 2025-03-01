@@ -1,14 +1,14 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
+using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Identity.Events;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Events;
-using Microsoft.AspNetCore.Identity;
 
 namespace CqrsProject.Core.Identity.Handlers;
 

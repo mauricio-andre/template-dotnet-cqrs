@@ -1,15 +1,15 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.UserTenants.Commands;
 using CqrsProject.Core.UserTenants.Entities;
 using CqrsProject.Core.UserTenants.Events;
-using CqrsProject.Core.Tenants.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using CqrsProject.Core.Identity.Entities;
 
 namespace CqrsProject.Core.UserTenants.Handlers;
 

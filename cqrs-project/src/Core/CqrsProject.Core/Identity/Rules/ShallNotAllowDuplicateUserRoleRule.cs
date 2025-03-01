@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Identity.Rules;
 
-public class ShallNotAllowDuplicateUserRoleRule: INotificationHandler<CreateUserRoleEvent>
+public class ShallNotAllowDuplicateUserRoleRule : INotificationHandler<CreateUserRoleEvent>
 {
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;

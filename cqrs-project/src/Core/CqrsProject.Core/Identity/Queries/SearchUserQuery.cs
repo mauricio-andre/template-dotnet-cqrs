@@ -11,4 +11,4 @@ public record SearchUserQuery(
     int? Take,
     int? Skip,
     string? SortBy
-): IPageableQuery, ISortableQuery, IRequest<CollectionResponse<UserResponse>>;
+) : IPageableQuery, ISortableQuery, IRequest<CollectionResponse<UserResponse>>;

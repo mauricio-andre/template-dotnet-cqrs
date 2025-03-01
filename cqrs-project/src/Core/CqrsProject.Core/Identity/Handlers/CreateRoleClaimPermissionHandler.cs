@@ -1,13 +1,13 @@
+using System.Reflection;
+using System.Security.Claims;
+using CqrsProject.Common.Consts;
+using CqrsProject.Common.Exceptions;
+using CqrsProject.Common.Localization;
+using CqrsProject.Core.Identity.Commands;
 using FluentValidation;
 using MediatR;
-using CqrsProject.Core.Identity.Commands;
 using Microsoft.AspNetCore.Identity;
-using CqrsProject.Common.Consts;
-using System.Reflection;
-using CqrsProject.Common.Exceptions;
 using Microsoft.Extensions.Localization;
-using CqrsProject.Common.Localization;
-using System.Security.Claims;
 
 namespace CqrsProject.Core.Identity.Handlers;
 

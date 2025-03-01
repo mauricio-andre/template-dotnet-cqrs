@@ -1,9 +1,9 @@
+using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Events;
+using CqrsProject.Core.Identity.Responses;
 using FluentValidation;
 using MediatR;
-using CqrsProject.Core.Identity.Responses;
-using CqrsProject.Core.Identity.Commands;
 using Microsoft.AspNetCore.Identity;
-using CqrsProject.Core.Identity.Events;
 
 namespace CqrsProject.Core.Identity.Handlers;
 

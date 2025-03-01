@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.UserTenants.Rules;
 
-public class ShallNotAllowDuplicateUserTenantRule: INotificationHandler<CreateUserTenantEvent>
+public class ShallNotAllowDuplicateUserTenantRule : INotificationHandler<CreateUserTenantEvent>
 {
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;

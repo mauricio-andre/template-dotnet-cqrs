@@ -1,19 +1,19 @@
 using CqrsProject.App.DbMigrator;
 using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.App.DbMigrator.Services;
+using CqrsProject.App.DbMigratorTest.Database;
+using CqrsProject.App.DbMigratorTest.Services;
+using CqrsProject.Common.Diagnostics;
+using CqrsProject.Common.Providers.KeyVaults.Interfaces;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using CqrsProject.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
-using CqrsProject.Common.Diagnostics;
-using CqrsProject.App.DbMigratorTest.Database;
 using Microsoft.Extensions.Configuration;
-using CqrsProject.Common.Providers.KeyVaults.Interfaces;
-using CqrsProject.App.DbMigratorTest.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CqrsProject.App.DbMigratorTest;
 

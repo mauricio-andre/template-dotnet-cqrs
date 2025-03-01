@@ -1,10 +1,10 @@
-using FluentValidation;
-using MediatR;
-using CqrsProject.Core.Identity.Responses;
 using CqrsProject.Core.Identity.Commands;
-using Microsoft.AspNetCore.Identity;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Events;
+using CqrsProject.Core.Identity.Responses;
+using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace CqrsProject.Core.Identity.Handlers;
 

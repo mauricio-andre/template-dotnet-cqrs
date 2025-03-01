@@ -5,7 +5,8 @@ using CqrsProject.Common.Diagnostics;
 namespace CqrsProject.App.DbMigrator;
 
 public sealed class DbMigratorBackgroundService : BackgroundService
-{    private readonly CqrsProjectActivitySource _cqrsProjectActivitySource;
+{
+    private readonly CqrsProjectActivitySource _cqrsProjectActivitySource;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
     private readonly ILogger<DbMigratorBackgroundService> _logger;
     private readonly IServiceProvider _serviceProvider;

@@ -2,6 +2,8 @@ using System.Text;
 using CqrsProject.App.RestServer;
 using CqrsProject.App.RestServer.Authentication;
 using CqrsProject.Common.Consts;
+using CqrsProject.Common.Providers.OAuth.Interfaces;
+using CqrsProject.Commons.Test.Database;
 using CqrsProject.Commons.Test.Helpers;
 using CqrsProject.Core.Data;
 using Microsoft.AspNetCore.Hosting;
@@ -12,8 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using CqrsProject.Commons.Test.Database;
-using CqrsProject.Common.Providers.OAuth.Interfaces;
 using NSubstitute;
 
 namespace CqrsProject.App.RestServerTest;

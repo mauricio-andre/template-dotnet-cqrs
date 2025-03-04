@@ -1,18 +1,15 @@
+using System.Collections.Concurrent;
 using Microsoft.Data.Sqlite;
 
 namespace CqrsProject.Commons.Test.Database;
 
 public class SqliteConnectionPull
 {
-    private static readonly SqliteConnectionPull _instance = new SqliteConnectionPull();
+    private readonly ConcurrentDictionary<string, SqliteConnection> _dictionaryConnection;
 
-    public static SqliteConnectionPull Instance => _instance;
-
-    private readonly Dictionary<string, SqliteConnection> _dictionaryConnection;
-
-    private SqliteConnectionPull()
+    public SqliteConnectionPull()
     {
-        _dictionaryConnection = new Dictionary<string, SqliteConnection>();
+        _dictionaryConnection = new ConcurrentDictionary<string, SqliteConnection>();
     }
 
     public SqliteConnection GetOpenedConnection(string connectionString)
@@ -23,8 +20,9 @@ public class SqliteConnectionPull
         connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
 
-        _dictionaryConnection.Add(connectionString, connection);
+        if (!_dictionaryConnection.TryAdd(connectionString, connection))
+            _dictionaryConnection.TryGetValue(connectionString, out connection);
 
-        return connection;
+        return connection!;
     }
 }

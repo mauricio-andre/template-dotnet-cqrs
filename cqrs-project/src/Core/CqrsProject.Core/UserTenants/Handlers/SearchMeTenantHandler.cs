@@ -45,10 +45,11 @@ public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, Collec
 
     private IQueryable<UserTenant> CreateSearchQuery(SearchMeTenantQuery request)
     {
+        var userId = _currentIdentity.GetLocalIdentityId();
         return _administrationDbContext.UserTenants
             .Where(tenant => !tenant.Tenant!.IsDeleted)
             .Where(tenant => !tenant.User!.IsDeleted)
-            .Where(tenant => tenant.UserId == _currentIdentity.GetLocalIdentityId())
+            .Where(tenant => tenant.UserId == userId)
             .WhereIf(
                 request.TenantIdList?.Any() ?? false,
                 tenant => request.TenantIdList!.Contains(tenant.TenantId))

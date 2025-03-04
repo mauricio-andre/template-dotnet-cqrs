@@ -8,8 +8,8 @@ public class MeSyncTestFake
     {
         Faker = new Faker<MeSyncTestFake>()
             .RuleFor(me => me.Email, fake => fake.Person.Email)
-            .RuleFor(me => me.Username, fake => fake.Person.FirstName)
-            .RuleFor(me => me.NameIdentifier, fake => string.Concat(fake.Person.Email, "|", fake.UniqueIndex));
+            .RuleFor(me => me.Username, fake => fake.Person.UserName)
+            .RuleFor(me => me.NameIdentifier, fake => string.Concat(fake.Person.Email, "|", fake.IndexFaker));
     }
 
     public Faker<MeSyncTestFake> Faker { get; init; }

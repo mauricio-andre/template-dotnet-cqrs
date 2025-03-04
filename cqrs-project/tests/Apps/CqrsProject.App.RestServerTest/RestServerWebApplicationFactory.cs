@@ -97,6 +97,8 @@ public class RestServerWebApplicationFactory : WebApplicationFactory<Program>
                     ServiceLifetime.Scoped);
 
             // Cria estrutura para o banco de dados
+            var sqliteConnectionPull = new SqliteConnectionPull();
+            services.AddSingleton(_ => sqliteConnectionPull);
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 var coreDbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<CoreDbContext>>();

@@ -8,17 +8,20 @@ namespace CqrsProject.Commons.Test.Database;
 public class SqliteAdministrationDbContext : PostgresAdministrationDbContext
 {
     private readonly IConfiguration _configuration;
+    private readonly SqliteConnectionPull _sqliteConnectionPull;
     public SqliteAdministrationDbContext(
         DbContextOptions<AdministrationDbContext> options,
-        IConfiguration configuration) : base(options, configuration)
+        IConfiguration configuration,
+        SqliteConnectionPull sqliteConnectionPull) : base(options, configuration)
     {
         _configuration = configuration;
+        _sqliteConnectionPull = sqliteConnectionPull;
     }
 
     protected override void UseConnectionString(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(
-            SqliteConnectionPull.Instance.GetOpenedConnection(
+            _sqliteConnectionPull.GetOpenedConnection(
                 _configuration.GetConnectionString("AdministrationDbContext")!
             ));
     }

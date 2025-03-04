@@ -13,29 +13,31 @@ using NSubstitute;
 
 namespace CqrsProject.App.RestServerTest.V1.Me;
 
-public class MeSyncTest : IClassFixture<RestServerWebApplicationFactory>
+public class MeSyncTest
+    : IClassFixture<RestServerWebApplicationFactory>,
+    IClassFixture<MeSyncTestFake>
 {
     private readonly HttpClient _client;
     private readonly RestServerWebApplicationFactory _factory;
     private readonly MeSyncTestFake _meSyncTestFake;
     private const string Route = "/v1/me/sync";
 
-    public MeSyncTest(RestServerWebApplicationFactory factory)
+    public MeSyncTest(RestServerWebApplicationFactory factory, MeSyncTestFake meSyncTestFake)
     {
         _factory = factory;
         _client = _factory.CreateClient();
-        _meSyncTestFake = new MeSyncTestFake();
+        _meSyncTestFake = meSyncTestFake;
     }
 
     [Fact(DisplayName = "Should fail with unauthorized code when the token is missing")]
-    public async Task GivenMeAsync_WhenTokenIsMissing_ThenFailWithUnauthorized()
+    public async Task GivenMeSync_WhenTokenIsMissing_ThenFailWithUnauthorized()
     {
         var response = await _client.PostAsync(Route, null);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
     [Fact(DisplayName = "Should create a user account when the token is valid and the user does not exist")]
-    public async Task GivenMeAsync_WhenUserDoesNotExist_ThenCreateLocalUser()
+    public async Task GivenMeSync_WhenUserDoesNotExist_ThenCreateLocalUser()
     {
         using (var scope = _factory.Services.CreateScope())
         {
@@ -69,7 +71,7 @@ public class MeSyncTest : IClassFixture<RestServerWebApplicationFactory>
     }
 
     [Fact(DisplayName = "Should update the user account when the user exists")]
-    public async Task GivenMeAsync_WhenUserExists_ThenUpdateUser()
+    public async Task GivenMeSync_WhenUserExists_ThenUpdateUser()
     {
         using (var scope = _factory.Services.CreateScope())
         {
@@ -122,7 +124,7 @@ public class MeSyncTest : IClassFixture<RestServerWebApplicationFactory>
     }
 
     [Fact(DisplayName = "Should reactivate the user when it was deleted")]
-    public async Task GivenMeAsync_WhenUserIsDeleted_ThenReactivateUser()
+    public async Task GivenMeSync_WhenUserIsDeleted_ThenReactivateUser()
     {
         using (var scope = _factory.Services.CreateScope())
         {
@@ -172,7 +174,7 @@ public class MeSyncTest : IClassFixture<RestServerWebApplicationFactory>
     }
 
     [Fact(DisplayName = "Should bind user accounts when an email exists with another login")]
-    public async Task GivenMeAsync_WhenUserExistsWithOtherLogin_ThenBindLogin()
+    public async Task GivenMeSync_WhenUserExistsWithOtherLogin_ThenBindLogin()
     {
         using (var scope = _factory.Services.CreateScope())
         {

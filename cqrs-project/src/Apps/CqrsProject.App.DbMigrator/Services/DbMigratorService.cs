@@ -12,15 +12,18 @@ public class DbMigratorService : IDbMigratorService
     private readonly IDbContextFactory<AdministrationDbContext> _administrationDbContextFactory;
     private readonly IDbContextFactory<CoreDbContext> _coreDbContextFactory;
     private readonly ICurrentTenant _currentTenant;
+    private readonly IConfiguration _configuration;
 
     public DbMigratorService(
         IDbContextFactory<AdministrationDbContext> administrationDbContextFactory,
         IDbContextFactory<CoreDbContext> coreDbContextFactory,
-        ICurrentTenant currentTenant)
+        ICurrentTenant currentTenant,
+        IConfiguration configuration)
     {
         _administrationDbContextFactory = administrationDbContextFactory;
         _coreDbContextFactory = coreDbContextFactory;
         _currentTenant = currentTenant;
+        _configuration = configuration;
     }
 
     public async Task RunMigrateAsync(CancellationToken cancellationToken = default)
@@ -45,25 +48,17 @@ public class DbMigratorService : IDbMigratorService
 
     private async Task RunMigrateCoreHost(CancellationToken cancellationToken)
     {
-        var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
-
-        if (IsHostDatabaseConfigured(dbContext.Database))
+        if (IsHostDatabaseConfigured())
         {
+            var dbContext = await _coreDbContextFactory.CreateDbContextAsync();
             Activity.Current?.AddEvent(new ActivityEvent("Start migration Core Host"));
             await dbContext.Database.MigrateAsync(cancellationToken);
         }
     }
 
-    private static bool IsHostDatabaseConfigured(DatabaseFacade database)
+    private bool IsHostDatabaseConfigured()
     {
-        try
-        {
-            return !string.IsNullOrEmpty(database.GetConnectionString());
-        }
-        catch (Exception)
-        {
-            return false;
-        }
+        return !string.IsNullOrEmpty(_configuration.GetConnectionString("CoreDbContext"));
     }
 
     private async Task RunMigrateCoreTenants(CancellationToken cancellationToken)

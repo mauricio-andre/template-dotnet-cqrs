@@ -13,16 +13,13 @@ namespace CqrsProject.Core.Identity.Handlers;
 
 public class SearchUserHandler : IRequestHandler<SearchUserQuery, CollectionResponse<UserResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
     private readonly IValidator<SearchUserQuery> _validator;
     private readonly UserManager<User> _userManager;
 
     public SearchUserHandler(
-        IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchUserQuery> validator,
         UserManager<User> userManager)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _userManager = userManager;
     }
@@ -46,7 +43,7 @@ public class SearchUserHandler : IRequestHandler<SearchUserQuery, CollectionResp
 
     private IQueryable<User> CreateSearchQuery(SearchUserQuery request)
     {
-        return _administrationDbContext.Users
+        return _userManager.Users
             .WhereIf(
                 request.IsDeleted.HasValue,
                 entity => entity.IsDeleted == request.IsDeleted)

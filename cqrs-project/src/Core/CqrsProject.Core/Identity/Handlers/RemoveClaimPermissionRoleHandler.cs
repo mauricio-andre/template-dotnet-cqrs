@@ -2,12 +2,10 @@ using System.Security.Claims;
 using CqrsProject.Common.Consts;
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
-using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Commands;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Identity.Handlers;

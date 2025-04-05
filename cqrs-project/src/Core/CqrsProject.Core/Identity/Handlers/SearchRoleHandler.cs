@@ -12,16 +12,13 @@ namespace CqrsProject.Core.Identity.Handlers;
 
 public class SearchRoleHandler : IRequestHandler<SearchRoleQuery, CollectionResponse<RoleResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
     private readonly IValidator<SearchRoleQuery> _validator;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
     public SearchRoleHandler(
-        IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchRoleQuery> validator,
         RoleManager<IdentityRole<Guid>> roleManager)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _roleManager = roleManager;
     }
@@ -45,7 +42,7 @@ public class SearchRoleHandler : IRequestHandler<SearchRoleQuery, CollectionResp
 
     private IQueryable<IdentityRole<Guid>> CreateSearchQuery(SearchRoleQuery request)
     {
-        return _administrationDbContext.Roles
+        return _roleManager.Roles
             .WhereIf(
                 !string.IsNullOrEmpty(request.Name),
                 role => role.NormalizedName!.Contains(_roleManager.NormalizeKey(request.Name)!));

@@ -2,6 +2,7 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Commands;
+using CqrsProject.Core.Identity.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,18 +13,22 @@ namespace CqrsProject.Core.Identity.Handlers;
 
 public class RemoveUserRoleHandler : IRequestHandler<RemoveUserRoleCommand>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
     private readonly IValidator<RemoveUserRoleCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
     public RemoveUserRoleHandler(
-        IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<RemoveUserRoleCommand> validator,
-        IStringLocalizer<CqrsProjectResource> stringLocalizer)
+        IStringLocalizer<CqrsProjectResource> stringLocalizer,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole<Guid>> roleManager)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _stringLocalizer = stringLocalizer;
+        _userManager = userManager;
+        _roleManager = roleManager;
+
     }
 
     public async Task Handle(
@@ -31,23 +36,22 @@ public class RemoveUserRoleHandler : IRequestHandler<RemoveUserRoleCommand>
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.UserRoles.FirstOrDefaultAsync(
-            userRole => userRole.UserId == request.UserId
-                && userRole.RoleId == request.RoleId,
-            cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
-        if (entity == null)
+        if (user == null || user.IsDeleted)
             throw new EntityNotFoundException(
                 _stringLocalizer,
-                nameof(IdentityUserRole<Guid>),
-                string.Concat(
-                    "userId: ",
-                    request.UserId,
-                    " roleId: ",
-                    request.RoleId
-                ));
+                nameof(User),
+                request.UserId.ToString());
 
-        _administrationDbContext.Remove(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
+
+        if (role == null)
+            throw new EntityNotFoundException(
+                _stringLocalizer,
+                nameof(IdentityRole<Guid>),
+                request.RoleId.ToString());
+
+        await _userManager.RemoveFromRoleAsync(user, role.NormalizedName!);
     }
 }

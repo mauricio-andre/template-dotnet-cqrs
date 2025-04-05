@@ -33,7 +33,10 @@ public class RemoveRoleHandler : IRequestHandler<RemoveRoleCommand>
         var entity = await _roleManager.FindByIdAsync(request.Id.ToString());
 
         if (entity == null)
-            throw new EntityNotFoundException(_stringLocalizer, nameof(IdentityRole<Guid>), request.Id.ToString());
+            throw new EntityNotFoundException(
+                _stringLocalizer,
+                nameof(IdentityRole<Guid>),
+                request.Id.ToString());
 
         await _roleManager.DeleteAsync(entity);
     }

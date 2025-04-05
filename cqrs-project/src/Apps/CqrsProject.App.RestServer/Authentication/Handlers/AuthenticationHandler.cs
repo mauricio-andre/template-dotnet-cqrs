@@ -71,6 +71,12 @@ public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions
             return;
         }
 
+        if (localUser.IsDeleted)
+        {
+            Logger.LogWarning("User was deleted in the local database: {0}", nameIdentifier);
+            return;
+        }
+
         var identity = await CreateLocalIdentity(localUser);
         principal.AddIdentity(identity);
     }

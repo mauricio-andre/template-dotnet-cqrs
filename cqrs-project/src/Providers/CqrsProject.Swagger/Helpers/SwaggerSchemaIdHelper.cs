@@ -1,7 +1,7 @@
 using System.Reflection;
-using CqrsProject.App.RestServer.Filters;
+using CqrsProject.Swagger.Attributes;
 
-namespace CqrsProject.App.RestServer.Helpers;
+namespace CqrsProject.Swagger.Helpers;
 
 public static class SwaggerSchemaIdHelper
 {

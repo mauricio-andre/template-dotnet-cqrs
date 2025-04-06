@@ -13,11 +13,12 @@
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomStringLocalizer\CqrsProject.CustomStringLocalizer.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.Swagger\CqrsProject.Swagger.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
   </ItemGroup>
 </Project>

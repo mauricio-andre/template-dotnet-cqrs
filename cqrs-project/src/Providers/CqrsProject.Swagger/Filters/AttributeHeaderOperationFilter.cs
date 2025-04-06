@@ -1,9 +1,9 @@
 using System.Reflection;
-using CqrsProject.App.RestServer.Filters;
+using CqrsProject.Swagger.Attributes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CqrsProject.App.RestServer.Swagger;
+namespace CqrsProject.Swagger.Filters;
 
 public class AttributeHeaderOperationFilter : IOperationFilter
 {

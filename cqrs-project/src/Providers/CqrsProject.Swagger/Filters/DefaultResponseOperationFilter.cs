@@ -1,10 +1,11 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace CqrsProject.App.RestServer.Swagger;
+namespace CqrsProject.Swagger.Filters;
 
 public class DefaultResponseOperationFilter : IOperationFilter
 {

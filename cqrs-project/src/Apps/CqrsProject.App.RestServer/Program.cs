@@ -2,10 +2,8 @@
 using CqrsProject.App.RestServer.Authentication;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Filters;
-using CqrsProject.App.RestServer.Helpers;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
-using CqrsProject.App.RestServer.Swagger;
 using CqrsProject.App.RestServer.Transformers;
 using CqrsProject.Auth0.Extensions;
 using CqrsProject.Common.Consts;
@@ -22,13 +20,12 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postgres.Extensions;
+using CqrsProject.Swagger.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CqrsProject.App.RestServer;
 
@@ -82,6 +79,7 @@ public class Program
         builder.Services.AddCustomCacheProvider();
         builder.Services.AddCustomStringLocalizerProvider();
         builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
+        builder.Services.AddSwaggerProvider();
         builder.AddOpenTelemetryProvider();
 
         // configuration controllers
@@ -96,6 +94,7 @@ public class Program
             });
 
         // configuration API Explorer
+        builder.Services.AddOpenApi();
         builder.Services
             .AddEndpointsApiExplorer()
             .AddApiVersioning(options =>
@@ -110,13 +109,6 @@ public class Program
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
-
-        // configuration swagger
-        builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.CustomSchemaIds(type => SwaggerSchemaIdHelper.GetSwaggerSchemaId(type));
-        });
 
         // configuration cors
         builder.Services.AddCors(options =>
@@ -169,32 +161,7 @@ public class Program
         var app = builder.Build();
 
         // configuration swagger app
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
-        {
-            var descriptionList = app.DescribeApiVersions();
-            foreach (var groupName in descriptionList.Select(desc => desc.GroupName))
-            {
-                var url = $"/swagger/{groupName}/swagger.json";
-                var name = groupName.ToUpperInvariant();
-                options.SwaggerEndpoint(url, name);
-            }
-
-            var clientId = builder.Configuration.GetValue<string>("PlatformSwagger:ClientId");
-            var clientSecret = builder.Configuration.GetValue<string>("PlatformSwagger:ClientSecret");
-            var audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience")!;
-            options.OAuthClientId(clientId);
-            options.OAuthClientSecret(clientSecret);
-            options.OAuthScopes(builder.Configuration.GetValue<string>("PlatformSwagger:Scopes")!.Split(" "));
-            options.OAuthUsePkce();
-            options.OAuthAdditionalQueryStringParams(new Dictionary<string, string>()
-            {
-                {"audience", audience}
-            });
-
-            options.InjectStylesheet("/swagger-ui/SwaggerDark.css");
-            options.InjectJavascript("/swagger-ui/SwaggerRefreshToken.js");
-        });
+        app.UseSwaggerProvider(builder.Configuration);
 
         // configuration app
         app.UseHttpsRedirection();
@@ -205,6 +172,7 @@ public class Program
         app.UseStaticFiles();
         app.UseRequestLocalization();
         app.LoadMultiTenantConnections();
+        app.MapOpenApi();
 
         app.UseMiddleware<IdentityMiddleware>();
         app.UseMiddleware<TenantMiddleware>();

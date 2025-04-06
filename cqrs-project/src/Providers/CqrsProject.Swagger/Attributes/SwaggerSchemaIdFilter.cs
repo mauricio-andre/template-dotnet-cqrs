@@ -1,4 +1,4 @@
-namespace CqrsProject.App.RestServer.Filters;
+namespace CqrsProject.Swagger.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class SwaggerSchemaIdFilterAttribute : Attribute

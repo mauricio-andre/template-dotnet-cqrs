@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commons", "Commons", "{4675
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Commons.Test", "tests\Commons\CqrsProject.Commons.Test\CqrsProject.Commons.Test.csproj", "{7B1D4488-A06B-4F66-A57A-87310A0AA85B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CqrsProject.Swagger", "src\Providers\CqrsProject.Swagger\CqrsProject.Swagger.csproj", "{70F47B16-E534-47F5-8ECD-6CB6341CACB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{7B1D4488-A06B-4F66-A57A-87310A0AA85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B1D4488-A06B-4F66-A57A-87310A0AA85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B1D4488-A06B-4F66-A57A-87310A0AA85B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F47B16-E534-47F5-8ECD-6CB6341CACB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F47B16-E534-47F5-8ECD-6CB6341CACB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F47B16-E534-47F5-8ECD-6CB6341CACB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F47B16-E534-47F5-8ECD-6CB6341CACB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E22356A9-B723-46AB-8AA9-AC711A370013} = {7331E8B1-4586-4D3B-976B-08DA05DAF145}
@@ -131,5 +137,6 @@ Global
 		{1BD2858F-B44F-4949-8E3D-D5038A7401F7} = {B3F011D9-F48F-4DD1-BAC4-8E5EE3E6F5F2}
 		{4675EDBB-E55E-471E-97DF-4CCF69FF1F43} = {80868BDD-1A85-4CD3-8031-8803DA7C0BF3}
 		{7B1D4488-A06B-4F66-A57A-87310A0AA85B} = {4675EDBB-E55E-471E-97DF-4CCF69FF1F43}
+		{70F47B16-E534-47F5-8ECD-6CB6341CACB2} = {28B095E8-BBD5-4600-9962-0656CA5E7AEB}
 	EndGlobalSection
 EndGlobal

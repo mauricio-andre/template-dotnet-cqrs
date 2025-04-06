@@ -1,11 +1,9 @@
-using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace CqrsProject.App.RestServer.Swagger;
+namespace CqrsProject.Swagger.Filters;
 
 public class AuthorizeOperationFilter : IOperationFilter
 {

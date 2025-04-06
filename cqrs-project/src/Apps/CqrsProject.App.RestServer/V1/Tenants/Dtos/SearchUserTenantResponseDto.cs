@@ -1,4 +1,4 @@
-using CqrsProject.App.RestServer.Filters;
+using CqrsProject.Swagger.Attributes;
 
 namespace CqrsProject.App.RestServer.V1.Tenants.Dtos;
 

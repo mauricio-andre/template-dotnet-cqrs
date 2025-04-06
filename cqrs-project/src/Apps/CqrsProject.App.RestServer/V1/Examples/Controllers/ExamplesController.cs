@@ -1,11 +1,10 @@
-using System.Net;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.App.RestServer.Filters;
 using CqrsProject.Core.Examples.Commands;
 using CqrsProject.Core.Examples.Queries;
 using CqrsProject.Core.Examples.Responses;
+using CqrsProject.Swagger.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

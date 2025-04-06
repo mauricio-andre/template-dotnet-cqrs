@@ -1,4 +1,4 @@
-namespace CqrsProject.App.RestServer.Filters;
+namespace CqrsProject.Swagger.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class HeaderFilterTenantIdAttribute : HeaderFilterAttribute

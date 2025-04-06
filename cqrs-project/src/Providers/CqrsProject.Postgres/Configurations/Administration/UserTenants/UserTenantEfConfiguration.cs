@@ -13,7 +13,8 @@ public class UserTenantEfConfiguration : IEntityTypeConfiguration<UserTenant>
         builder.HasKey(userTenant => new { userTenant.UserId, userTenant.TenantId });
 
         builder.Property(userTenant => userTenant.UserId);
-
         builder.Property(userTenant => userTenant.TenantId);
+        builder.Property(userTenant => userTenant.CreationTime);
+        builder.Property(userTenant => userTenant.CreatorId);
     }
 }

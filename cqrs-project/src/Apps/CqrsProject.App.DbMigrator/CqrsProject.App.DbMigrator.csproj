@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\Providers\CqrsProject.Postgres\CqrsProject.Postgres.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.CustomConsoleFormatter\CqrsProject.CustomConsoleFormatter.csproj" />
     <ProjectReference Include="..\..\Providers\CqrsProject.OpenTelemetry\CqrsProject.OpenTelemetry.csproj" />
+    <ProjectReference Include="..\..\Providers\CqrsProject.CustomStringLocalizer\CqrsProject.CustomStringLocalizer.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">

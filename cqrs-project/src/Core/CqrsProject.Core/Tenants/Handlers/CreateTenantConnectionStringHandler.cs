@@ -1,7 +1,9 @@
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Commands;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Events;
+using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Responses;
 using FluentValidation;
 using MediatR;
@@ -16,15 +18,18 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IValidator<CreateTenantConnectionStringCommand> _validator;
     private readonly IMediator _mediator;
+    private readonly ITenantConnectionProvider _tenantConnectionProvider;
 
     public CreateTenantConnectionStringHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<CreateTenantConnectionStringCommand> validator,
-        IMediator mediator)
+        IMediator mediator,
+        ITenantConnectionProvider tenantConnectionProvider)
     {
         _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _mediator = mediator;
+        _tenantConnectionProvider = tenantConnectionProvider;
     }
 
     public async Task<TenantConnectionStringResponse> Handle(
@@ -38,8 +43,24 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
 
         var entity = MapToEntity(request);
         _administrationDbContext.Add(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
-        return MapToResponse(entity);
+
+        await _tenantConnectionProvider.IncludeConnectionStringAsync(
+            entity.TenantId,
+            entity.ConnectionName,
+            entity.KeyName);
+
+        try
+        {
+            await _administrationDbContext.SaveChangesAsync(cancellationToken);
+            return MapToResponse(entity);
+        }
+        catch (Exception)
+        {
+            _tenantConnectionProvider.InvalidateConnectionString(
+                entity.TenantId,
+                entity.ConnectionName);
+            throw;
+        }
     }
 
     private static TenantConnectionString MapToEntity(CreateTenantConnectionStringCommand request)

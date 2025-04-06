@@ -11,7 +11,7 @@ public static class MultiTenantHostExtensions
         using (var scope = app.Services.CreateScope())
         {
             var service = scope.ServiceProvider.GetRequiredService<ITenantConnectionProvider>();
-            service.LoadAllConnectionString();
+            service.LoadAllConnectionStringAsync();
         }
     }
 }

@@ -11,6 +11,8 @@ public class UserTenant
     public Guid UserId { get; set; }
     [Required]
     public Guid TenantId { get; set; }
+    public DateTimeOffset CreationTime { get; set; }
+    public Guid? CreatorId { get; set; }
 
     public User? User { get; set; }
     public Tenant? Tenant { get; set; }

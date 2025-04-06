@@ -27,7 +27,7 @@ public class ShallNotAllowDuplicateTenantConnectionStringRule
     {
         var hasDuplicate = await _administrationDbContext.TenantConnectionStrings
             .AnyAsync(
-                entity => entity.TenantId != notification.TenantId
+                entity => entity.TenantId == notification.TenantId
                     && entity.ConnectionName.ToLower() == notification.ConnectionName.ToLower(),
                 cancellationToken);
 

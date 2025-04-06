@@ -16,7 +16,7 @@ public class TenantConnectionStringEfConfiguration : IEntityTypeConfiguration<Te
             .HasIndex(tenantConnectionString => new
             {
                 tenantConnectionString.TenantId,
-                tenantConnectionString.KeyName
+                tenantConnectionString.ConnectionName
             })
             .IsUnique();
 

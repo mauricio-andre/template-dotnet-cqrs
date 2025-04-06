@@ -11,15 +11,12 @@ using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postgres.Extensions;
-using Microsoft.EntityFrameworkCore;
+using CqrsProject.CustomStringLocalizer.Extensions;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services
-    .AddPostgresAdministrationDbContext(options =>
-    {
-        options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
-    })
+    .AddPostgresAdministrationDbContext()
     .AddPostgresCoreDbContext()
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
@@ -34,6 +31,7 @@ builder.Services
 // Configure providers
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
 builder.AddOpenTelemetryProvider();
+builder.Services.AddCustomStringLocalizerProvider();
 
 builder.Services.AddHostedService<DbMigratorBackgroundService>();
 

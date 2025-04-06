@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace CqrsProject.Core.Tenants.Caches;
 
 public class ConnectionStringCache
@@ -6,23 +8,15 @@ public class ConnectionStringCache
 
     public static ConnectionStringCache Instance => _instance;
 
-    private readonly Dictionary<string, string> _connectionStrings;
+    private readonly ConcurrentDictionary<string, string> _connectionStrings;
 
     private ConnectionStringCache()
     {
-        _connectionStrings = new Dictionary<string, string>();
+        _connectionStrings = new ConcurrentDictionary<string, string>();
     }
 
     public static string ComposeCacheKey(Guid tenantId, string connectionName)
         => string.Concat(tenantId, connectionName);
-
-    public void SetConnections(Dictionary<string, string> connections)
-    {
-        foreach (var connection in connections)
-        {
-            _connectionStrings[connection.Key] = connection.Value;
-        }
-    }
 
     public void SetConnectionString(Guid tenantId, string connectionName, string value)
     {
@@ -34,5 +28,11 @@ public class ConnectionStringCache
     {
         var key = ComposeCacheKey(tenantId, connectionName);
         return _connectionStrings.TryGetValue(key, out var value) ? value : null;
+    }
+
+    public void RemoveConnectionString(Guid tenantId, string connectionName)
+    {
+        var key = ComposeCacheKey(tenantId, connectionName);
+        _connectionStrings.Remove(key, out _);
     }
 }

@@ -37,8 +37,8 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IList<MeTenantResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<MeTenantResponse>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {
         var result = await _mediator.Send(request);
@@ -55,7 +55,7 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<string>>(StatusCodes.Status200OK)]
     public IActionResult Permissions()
     {
         var list = HttpContext.User.Identities

@@ -9,6 +9,7 @@ using CqrsProject.Core.Examples.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CqrsProject.App.RestServer.V1.Examples.Controllers;
 
@@ -28,8 +29,8 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<ExampleResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<ExampleResponse>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<ExampleResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<ExampleResponse>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchExampleQuery request)
     {
         var result = await _mediator.Send(request);
@@ -46,7 +47,7 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ExampleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<ExampleResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var result = await _mediator.Send(new GetExampleByKeyQuery(id));
@@ -54,7 +55,8 @@ public class ExamplesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(ExampleResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType<ExampleResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     [Authorize(Policy = AuthorizationPolicyNames.CanManageExamples)]
     public async Task<IActionResult> Create([FromBody] CreateExampleCommand request)
     {

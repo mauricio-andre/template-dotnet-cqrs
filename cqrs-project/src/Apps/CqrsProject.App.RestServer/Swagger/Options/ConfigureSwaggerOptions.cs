@@ -2,8 +2,6 @@ using System.Text;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -45,6 +43,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         });
 
         options.OperationFilter<AuthorizeOperationFilter>();
+        options.OperationFilter<DefaultResponseOperationFilter>();
         options.OperationFilter<AttributeHeaderOperationFilter>();
     }
 

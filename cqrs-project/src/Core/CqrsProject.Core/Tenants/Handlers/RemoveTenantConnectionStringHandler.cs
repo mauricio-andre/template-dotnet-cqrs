@@ -3,6 +3,7 @@ using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Commands;
 using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Tenants.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +16,18 @@ public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantC
     private readonly AdministrationDbContext _administrationDbContext;
     private readonly IValidator<RemoveTenantConnectionStringCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
+    private readonly ITenantConnectionProvider _tenantConnectionProvider;
 
     public RemoveTenantConnectionStringHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<RemoveTenantConnectionStringCommand> validator,
-        IStringLocalizer<CqrsProjectResource> stringLocalizer)
+        IStringLocalizer<CqrsProjectResource> stringLocalizer,
+        ITenantConnectionProvider tenantConnectionProvider)
     {
         _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _stringLocalizer = stringLocalizer;
+        _tenantConnectionProvider = tenantConnectionProvider;
     }
 
     public async Task Handle(
@@ -41,5 +45,6 @@ public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantC
 
         _administrationDbContext.Remove(entity);
         await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        _tenantConnectionProvider.InvalidateConnectionString(entity.TenantId, entity.ConnectionName);
     }
 }

@@ -6,5 +6,7 @@
   "message:validation:entityNotFound": "Não foi possível encontrar um {0} com os dados fornecidos {1}",
   "message:validation:duplicatedEntity": "Já existe um {0} cadastrado com os mesmos dados informados",
   "message:validation:tenantUnreleased": "O tenant informado não existe ou seu usuário não está autorizado a acessa-lo",
-  "message:validation:valueAlreadyUse": "O valor {0} já está sendo usado"
+  "message:validation:valueAlreadyUse": "O valor {0} já está sendo usado",
+  "message:validation:combinationValuesAlreadyUse": "A combinação de valores {0} já está sendo usado",
+  "message:validation:ConnectionStringKeyNotFound": "A chave {0} da connections string do tenant {1} não foi localizada"
 }

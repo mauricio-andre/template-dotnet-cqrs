@@ -2,6 +2,7 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.UserTenants.Commands;
 using CqrsProject.Core.UserTenants.Entities;
@@ -19,17 +20,20 @@ public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
     private readonly IValidator<CreateUserTenantCommand> _validator;
     private readonly IMediator _mediator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
+    private readonly ICurrentIdentity _currentIdentity;
 
     public CreateUserTenantHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<CreateUserTenantCommand> validator,
         IMediator mediator,
-        IStringLocalizer<CqrsProjectResource> stringLocalizer)
+        IStringLocalizer<CqrsProjectResource> stringLocalizer,
+        ICurrentIdentity currentIdentity)
     {
         _administrationDbContext = dbContextFactory.CreateDbContext();
         _validator = validator;
         _mediator = mediator;
         _stringLocalizer = stringLocalizer;
+        _currentIdentity = currentIdentity;
     }
 
     public async Task Handle(
@@ -69,6 +73,12 @@ public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
             throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.TenantId.ToString());
     }
 
-    private static UserTenant MapToEntity(CreateUserTenantCommand request)
-        => new UserTenant { UserId = request.UserId, TenantId = request.TenantId };
+    private UserTenant MapToEntity(CreateUserTenantCommand request)
+        => new UserTenant
+        {
+            UserId = request.UserId,
+            TenantId = request.TenantId,
+            CreationTime = DateTimeOffset.UtcNow,
+            CreatorId = _currentIdentity.GetLocalIdentityId()
+        };
 }

@@ -3,6 +3,7 @@ using System;
 using CqrsProject.Postgres.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CqrsProject.Postgres.Migrations.AdministrationDbContextMigrations
 {
     [DbContext(typeof(PostgresAdministrationDbContext))]
-    partial class PostgresAdministrationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250406201945_AlterUserTenants_AddAuditColumns")]
+    partial class AlterUserTenants_AddAuditColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

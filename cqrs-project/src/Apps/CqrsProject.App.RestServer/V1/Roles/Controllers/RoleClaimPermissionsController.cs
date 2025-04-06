@@ -7,6 +7,7 @@ using CqrsProject.Core.Identity.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CqrsProject.App.RestServer.V1.Roles.Controllers;
 
@@ -26,8 +27,8 @@ public class RoleClaimPermissionsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<string>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<string>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid roleId,
         [FromQuery] SearchRoleClaimPermissionRequestDto request)
@@ -53,6 +54,7 @@ public class RoleClaimPermissionsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid roleId,
         [FromBody] CreateRoleClaimPermissionRequestDto request)

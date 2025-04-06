@@ -8,6 +8,7 @@ using CqrsProject.Core.Tenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CqrsProject.App.RestServer.V1.Tenants.Controllers;
 
@@ -24,8 +25,8 @@ public class TenantConnectionStringsController : ControllerBase
     public TenantConnectionStringsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<TenantConnectionStringResponse>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<TenantConnectionStringResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<TenantConnectionStringResponse>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search(
         [FromRoute] Guid tenantId,
         [FromQuery] SearchTenantConnectionStringRequestDto request)
@@ -51,7 +52,7 @@ public class TenantConnectionStringsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(TenantConnectionStringResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<TenantConnectionStringResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(
         [FromRoute] Guid tenantId,
         [FromRoute] Guid id)
@@ -65,7 +66,8 @@ public class TenantConnectionStringsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TenantConnectionStringResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType<TenantConnectionStringResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid tenantId,
         [FromBody] CreateTenantConnectionStringRequestDto request)

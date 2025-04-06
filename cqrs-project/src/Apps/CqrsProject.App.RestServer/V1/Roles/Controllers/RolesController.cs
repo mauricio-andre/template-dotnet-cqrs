@@ -8,6 +8,7 @@ using CqrsProject.Core.Identity.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CqrsProject.App.RestServer.V1.Roles.Controllers;
 
@@ -26,8 +27,8 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<RoleResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<RoleResponse>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<RoleResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<RoleResponse>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchRoleQuery request)
     {
         var result = await _mediator.Send(request);
@@ -44,7 +45,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<RoleResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetRoleQuery(id));
@@ -52,7 +53,8 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType<RoleResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Create([FromBody] CreateRoleCommand request)
     {
         var result = await _mediator.Send(request);
@@ -62,7 +64,8 @@ public class RolesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<RoleResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateRoleRequestDto request)
@@ -80,8 +83,8 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{id}/users")]
-    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<SearchUserRoleResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<SearchUserRoleResponseDto>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> SearchUsers(
         [FromRoute] Guid id,
         [FromQuery] SearchUserRoleRequestDto request)
@@ -112,6 +115,7 @@ public class RolesController : ControllerBase
 
     [HttpPost("{id}/users/{userId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> CreateUsers(
         [FromRoute] Guid id,
         [FromRoute] Guid userId)

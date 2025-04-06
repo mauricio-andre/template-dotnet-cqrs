@@ -20,7 +20,7 @@ public class PermissionsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<string>>(StatusCodes.Status200OK)]
     public IActionResult Search()
     {
         var list = typeof(AuthorizationPermissionClaims)

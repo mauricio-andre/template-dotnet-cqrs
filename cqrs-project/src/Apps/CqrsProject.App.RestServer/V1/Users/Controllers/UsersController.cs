@@ -10,6 +10,7 @@ using CqrsProject.Core.UserTenants.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CqrsProject.App.RestServer.V1.Users.Controllers;
 
@@ -28,8 +29,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IList<UserResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<UserResponse>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<UserResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<UserResponse>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> Search([FromQuery] SearchUserQuery request)
     {
         var result = await _mediator.Send(request);
@@ -46,7 +47,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetUserQuery(id));
@@ -54,7 +55,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
     {
         var result = await _mediator.Send(request);
@@ -63,7 +65,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateUserRequestDto request)
@@ -87,8 +90,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}/roles")]
-    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<SearchUserRoleResponseDto>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<SearchUserRoleResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<SearchUserRoleResponseDto>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> SearchRoles(
         [FromRoute] Guid id,
         [FromQuery] SearchUserRoleRequestDto request)
@@ -119,6 +122,7 @@ public class UsersController : ControllerBase
 
     [HttpPost("{id}/roles/{roleId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> CreateRoles(
         [FromRoute] Guid id,
         [FromRoute] Guid roleId)
@@ -138,8 +142,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}/tenants")]
-    [ProducesResponseType(typeof(IList<SearchUserTenantResponseDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(IList<SearchUserTenantResponseDto>), StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<SearchUserTenantResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<SearchUserTenantResponseDto>>(StatusCodes.Status206PartialContent)]
     public async Task<IActionResult> SearchTenants(
         [FromRoute] Guid id,
         [FromQuery] SearchUserTenantRequestDto request)
@@ -170,6 +174,7 @@ public class UsersController : ControllerBase
 
     [HttpPost("{id}/tenants/{tenantId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
     public async Task<IActionResult> CreateTenants([FromRoute] Guid id, [FromRoute] Guid tenantId)
     {
         await _mediator.Send(new CreateUserTenantCommand(id, tenantId));

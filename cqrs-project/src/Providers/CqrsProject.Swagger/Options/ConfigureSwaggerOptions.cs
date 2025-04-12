@@ -37,10 +37,10 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(_configuration.GetValue<string>("PlatformSwagger:AuthorizationUrl")!),
-                    TokenUrl = new Uri(_configuration.GetValue<string>("PlatformSwagger:TokenUrl")!),
-                    RefreshUrl = new Uri(_configuration.GetValue<string>("PlatformSwagger:RefreshTokenUrl")!),
-                    Scopes = _configuration.GetValue<string>("PlatformSwagger:Scopes")!.Split(" ").ToDictionary(x => x)
+                    AuthorizationUrl = new Uri(_configuration.GetValue<string>("OpenApi:AuthorizationUrl")!),
+                    TokenUrl = new Uri(_configuration.GetValue<string>("OpenApi:TokenUrl")!),
+                    RefreshUrl = new Uri(_configuration.GetValue<string>("OpenApi:RefreshTokenUrl")!),
+                    Scopes = _configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ").ToDictionary(x => x)
                 }
             }
         });
@@ -55,11 +55,11 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         var text = new StringBuilder();
         var info = new OpenApiInfo()
         {
-            Title = _configuration.GetValue<string>("PlatformSwagger:ApiName"),
+            Title = _configuration.GetValue<string>("OpenApi:Title"),
             Version = description.ApiVersion.ToString()
         };
 
-        text.Append(_configuration.GetValue<string>("PlatformSwagger:ApiDescription"));
+        text.Append(_configuration.GetValue<string>("OpenApi:Description"));
         AddInfoDeprecated(text, description);
         AddInfoSunsetPolicy(text, description);
 

@@ -1,9 +1,9 @@
 namespace CqrsProject.Swagger.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class HeaderFilterTenantIdAttribute : HeaderFilterAttribute
+public sealed class HeaderFilterSwaggerTenantIdAttribute : HeaderFilterSwaggerAttribute
 {
-    public HeaderFilterTenantIdAttribute() : base("Tenant-Id", "Tenant Id in standard uuid format", "string", "uuid", true)
+    public HeaderFilterSwaggerTenantIdAttribute() : base("Tenant-Id", "Tenant Id in standard uuid format", "string", "uuid", true)
     {
     }
 }

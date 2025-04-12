@@ -30,21 +30,7 @@ public class DefaultResponseOperationFilter : IOperationFilter
             }
         }
 
-        if (!operation.Responses.Any(x => x.Key == StatusCodes.Status401Unauthorized.ToString()))
-        {
-            operation.Responses.Add(
-                StatusCodes.Status401Unauthorized.ToString(),
-                new OpenApiResponse { Description = HttpStatusCode.Unauthorized.ToString() });
-        }
-
-        if (!operation.Responses.Any(x => x.Key == StatusCodes.Status403Forbidden.ToString()))
-        {
-            operation.Responses.Add(
-                StatusCodes.Status403Forbidden.ToString(),
-                new OpenApiResponse { Description = HttpStatusCode.Forbidden.ToString() });
-        }
-
-        if (!operation.Responses.Any(x => x.Key == StatusCodes.Status400BadRequest.ToString()))
+        if (!operation.Responses.ContainsKey(StatusCodes.Status400BadRequest.ToString()))
         {
             operation.Responses.Add(
                 StatusCodes.Status400BadRequest.ToString(),

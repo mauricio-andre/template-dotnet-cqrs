@@ -33,12 +33,12 @@ public static class SwaggerWebApplicationExtension
                 options.SwaggerEndpoint(url, name);
             }
 
-            var clientId = configuration.GetValue<string>("PlatformSwagger:ClientId");
-            var clientSecret = configuration.GetValue<string>("PlatformSwagger:ClientSecret");
+            var clientId = configuration.GetValue<string>("OpenApi:ClientId");
+            var clientSecret = configuration.GetValue<string>("OpenApi:ClientSecret");
             var audience = configuration.GetValue<string>("Authentication:Bearer:Audience")!;
             options.OAuthClientId(clientId);
             options.OAuthClientSecret(clientSecret);
-            options.OAuthScopes(configuration.GetValue<string>("PlatformSwagger:Scopes")!.Split(" "));
+            options.OAuthScopes(configuration.GetValue<string>("OpenApi:Scopes")!.Split(" "));
             options.OAuthUsePkce();
             options.OAuthAdditionalQueryStringParams(new Dictionary<string, string>()
             {

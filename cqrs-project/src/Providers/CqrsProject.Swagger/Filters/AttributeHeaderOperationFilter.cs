@@ -11,10 +11,10 @@ public class AttributeHeaderOperationFilter : IOperationFilter
     {
         operation.Parameters ??= new List<OpenApiParameter>();
 
-        var attributeList = context.MethodInfo.GetCustomAttributes<HeaderFilterAttribute>();
+        var attributeList = context.MethodInfo.GetCustomAttributes<HeaderFilterSwaggerAttribute>();
 
         if (attributeList == null || !attributeList.Any())
-            attributeList = context.MethodInfo.DeclaringType?.GetCustomAttributes<HeaderFilterAttribute>();
+            attributeList = context.MethodInfo.DeclaringType?.GetCustomAttributes<HeaderFilterSwaggerAttribute>();
 
         if (attributeList != null)
         {

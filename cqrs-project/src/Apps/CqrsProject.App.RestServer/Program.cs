@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using CqrsProject.App.RestServer.Authentication;
 using CqrsProject.App.RestServer.Authorization;
+using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.Filters;
 using CqrsProject.App.RestServer.Loggers;
 using CqrsProject.App.RestServer.Middlewares;
@@ -74,14 +75,6 @@ public class Program
                 .AddSupportedUICultures(supportCultures);
         });
 
-        // Configure providers
-        builder.Services.AddAuth0Provider(builder.Configuration);
-        builder.Services.AddCustomCacheProvider();
-        builder.Services.AddCustomStringLocalizerProvider();
-        builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
-        builder.Services.AddSwaggerProvider();
-        builder.AddOpenTelemetryProvider();
-
         // configuration controllers
         builder.Services
             .AddControllers(options =>
@@ -94,7 +87,6 @@ public class Program
             });
 
         // configuration API Explorer
-        builder.Services.AddOpenApi();
         builder.Services
             .AddEndpointsApiExplorer()
             .AddApiVersioning(options =>
@@ -108,7 +100,8 @@ public class Program
             {
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
-            });
+            })
+            .AddOpenApiVersions(builder.Services, builder.Configuration);
 
         // configuration cors
         builder.Services.AddCors(options =>
@@ -157,6 +150,14 @@ public class Program
 
         // configure authorization policies
         builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
+
+        // Configure providers
+        builder.Services.AddAuth0Provider(builder.Configuration);
+        builder.Services.AddCustomCacheProvider();
+        builder.Services.AddCustomStringLocalizerProvider();
+        builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
+        builder.Services.AddSwaggerProvider();
+        builder.AddOpenTelemetryProvider();
 
         var app = builder.Build();
 

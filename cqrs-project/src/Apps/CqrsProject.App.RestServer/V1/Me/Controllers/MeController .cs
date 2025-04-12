@@ -39,6 +39,7 @@ public class MeController : ControllerBase
     [HttpGet("[action]")]
     [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status206PartialContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {
         var result = await _mediator.Send(request);

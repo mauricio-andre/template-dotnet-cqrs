@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CqrsProject.Swagger.Attributes;
+namespace CqrsProject.App.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class HeaderFilterAttribute : ActionFilterAttribute
+public class FromHeaderFilterAttribute : ActionFilterAttribute
 {
     public string HeaderName { get; }
     public string? Description { get; }
@@ -13,7 +13,7 @@ public class HeaderFilterAttribute : ActionFilterAttribute
     public bool IsRequired { get; }
     public bool AllowEmptyValue { get; }
 
-    public HeaderFilterAttribute(
+    public FromHeaderFilterAttribute(
         string headerName,
         string? description = null,
         string? schemaType = null,

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using CqrsProject.CustomStringLocalizer.Extensions;
 
 namespace CqrsProject.App.DbMigratorTest;
 
@@ -33,10 +34,7 @@ public static class DbMigratorHostFactory
         builder.Configuration.AddInMemoryCollection(configValues);
 
         builder.Services
-            .AddPostgresAdministrationDbContext(options =>
-            {
-                options.UseNpgsql(builder.Configuration.GetConnectionString("AdministrationDbContext"));
-            })
+            .AddPostgresAdministrationDbContext()
             .AddPostgresCoreDbContext()
             .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
             .AddScoped<ICurrentTenant, CurrentTenant>()
@@ -49,6 +47,8 @@ public static class DbMigratorHostFactory
         builder.Services
             .AddIdentityCore<User>()
             .AddEntityFrameworkStores<AdministrationDbContext>();
+
+        builder.Services.AddCustomStringLocalizerProvider();
 
         builder.Services.AddHostedService<DbMigratorBackgroundService>();
 

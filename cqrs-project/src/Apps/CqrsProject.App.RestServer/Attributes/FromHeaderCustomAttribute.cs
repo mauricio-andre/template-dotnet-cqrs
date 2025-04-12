@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace CqrsProject.App.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class FromHeaderFilterAttribute : ActionFilterAttribute
+public class FromHeaderCustomAttribute : ActionFilterAttribute
 {
     public string HeaderName { get; }
     public string? Description { get; }
@@ -13,7 +13,7 @@ public class FromHeaderFilterAttribute : ActionFilterAttribute
     public bool IsRequired { get; }
     public bool AllowEmptyValue { get; }
 
-    public FromHeaderFilterAttribute(
+    public FromHeaderCustomAttribute(
         string headerName,
         string? description = null,
         string? schemaType = null,

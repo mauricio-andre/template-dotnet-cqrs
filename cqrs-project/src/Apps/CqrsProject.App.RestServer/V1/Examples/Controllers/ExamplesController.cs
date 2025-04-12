@@ -18,7 +18,7 @@ namespace CqrsProject.App.RestServer.V1.Examples.Controllers;
 [Produces("application/json")]
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
-[FromHeaderFilterTenantId]
+[FromHeaderTenantId]
 [HeaderFilterSwaggerTenantId]
 public class ExamplesController : ControllerBase
 {

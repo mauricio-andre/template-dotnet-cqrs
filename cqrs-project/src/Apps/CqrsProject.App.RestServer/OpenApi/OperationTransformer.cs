@@ -31,7 +31,7 @@ public static class OperationTransformer
         => (operation, context, cancellationToken) =>
         {
             var attributeList = context.Description.ActionDescriptor.EndpointMetadata
-                .OfType<FromHeaderFilterTenantIdAttribute>()
+                .OfType<FromHeaderTenantIdAttribute>()
                 .ToList();
 
             if (!attributeList.Any())

@@ -8,8 +8,7 @@ public static class IApiVersioningBuilderExtension
 {
     public static IApiVersioningBuilder AddOpenApiVersions(
         this IApiVersioningBuilder apiVersion,
-        IServiceCollection services,
-        IConfiguration configuration)
+        IServiceCollection services)
     {
         using (var tempProvider = services.BuildServiceProvider())
         {
@@ -18,7 +17,7 @@ public static class IApiVersioningBuilderExtension
             {
                 services.AddOpenApi(
                     description.GroupName,
-                    OpenApiConfigurations.AddOptions(description, configuration));
+                    OpenApiConfigurations.AddOptions());
             }
         }
 

@@ -21,12 +21,18 @@ using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postgres.Extensions;
+using CqrsProject.Scalar.Extensions;
 using CqrsProject.Swagger.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 
 namespace CqrsProject.App.RestServer;
 
@@ -101,7 +107,7 @@ public class Program
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             })
-            .AddOpenApiVersions(builder.Services, builder.Configuration);
+            .AddOpenApiVersions(builder.Services);
 
         // configuration cors
         builder.Services.AddCors(options =>
@@ -156,13 +162,10 @@ public class Program
         builder.Services.AddCustomCacheProvider();
         builder.Services.AddCustomStringLocalizerProvider();
         builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
-        builder.Services.AddSwaggerProvider();
+        builder.Services.AddSwaggerProvider(builder.Configuration);
         builder.AddOpenTelemetryProvider();
 
         var app = builder.Build();
-
-        // configuration swagger app
-        app.UseSwaggerProvider(builder.Configuration);
 
         // configuration app
         app.UseHttpsRedirection();
@@ -174,6 +177,26 @@ public class Program
         app.UseRequestLocalization();
         app.LoadMultiTenantConnections();
         app.MapOpenApi();
+
+        // configuration swagger app
+        app.UseSwaggerProvider();
+
+        // configure Scalar
+        app.UseScalarProvider(options =>
+        {
+            var clientId = app.Environment.IsDevelopment()
+                ? app.Configuration.GetValue<string>("OpenApi:ClientId")
+                : string.Empty;
+
+            options
+                .WithPreferredScheme(SecuritySchemeType.OAuth2.GetDisplayName())
+                .WithOAuth2Authentication(oauth =>
+                {
+                    oauth.ClientId = clientId;
+                    oauth.Scopes = app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ");
+                })
+                .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
+        });
 
         app.UseMiddleware<IdentityMiddleware>();
         app.UseMiddleware<TenantMiddleware>();

@@ -1,20 +1,17 @@
 using System.Reflection;
-using CqrsProject.Swagger.Helpers;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CqrsProject.Swagger.Extensions;
 
 public static class SwaggerWebApplicationExtension
 {
-    public static WebApplication UseSwaggerProvider(this WebApplication app, ConfigurationManager configuration)
+    public static WebApplication UseSwaggerProvider(this WebApplication app)
     {
+        if (!app.Configuration.GetValue<bool?>("Scalar:Enable") ?? true)
+            return app;
+
         var assembly = typeof(SwaggerWebApplicationExtension).GetTypeInfo().Assembly;
 
         app.UseStaticFiles(new StaticFileOptions
@@ -33,12 +30,12 @@ public static class SwaggerWebApplicationExtension
                 options.SwaggerEndpoint(url, name);
             }
 
-            var clientId = configuration.GetValue<string>("OpenApi:ClientId");
-            var clientSecret = configuration.GetValue<string>("OpenApi:ClientSecret");
-            var audience = configuration.GetValue<string>("Authentication:Bearer:Audience")!;
+            var clientId = app.Configuration.GetValue<string>("OpenApi:ClientId");
+            var clientSecret = app.Configuration.GetValue<string>("OpenApi:ClientSecret");
+            var audience = app.Configuration.GetValue<string>("Authentication:Bearer:Audience")!;
             options.OAuthClientId(clientId);
             options.OAuthClientSecret(clientSecret);
-            options.OAuthScopes(configuration.GetValue<string>("OpenApi:Scopes")!.Split(" "));
+            options.OAuthScopes(app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" "));
             options.OAuthUsePkce();
             options.OAuthAdditionalQueryStringParams(new Dictionary<string, string>()
             {

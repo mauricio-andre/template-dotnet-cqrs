@@ -17,7 +17,15 @@ public static class IApiVersioningBuilderExtension
             {
                 services.AddOpenApi(
                     description.GroupName,
-                    OpenApiConfigurations.AddOptions());
+                    (options) =>
+                    {
+                        options.AddOperationTransformer<HeaderParametersOperationTransformer>();
+                        options.AddOperationTransformer<DefaultResponseOperationTransformer>();
+                        options.AddOperationTransformer<MarkObsoleteOperationTransformer>();
+                        options.AddOperationTransformer<SecurityRequirementOperationTransformer>();
+                        options.AddDocumentTransformer<SecuritySchemeDocumentTransformer>();
+                        options.AddDocumentTransformer<InfoDocumentTransformer>();
+                    });
             }
         }
 

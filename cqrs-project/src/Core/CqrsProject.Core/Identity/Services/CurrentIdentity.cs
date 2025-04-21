@@ -8,7 +8,7 @@ public class CurrentIdentity : ICurrentIdentity
 {
     private ClaimsPrincipal? _principal;
 
-    public void SetCurrentIdentity(ClaimsPrincipal principal) => _principal = principal;
+    public void SetCurrentIdentity(ClaimsPrincipal? principal) => _principal = principal;
 
     public bool HasLocalIdentity()
     {

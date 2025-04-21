@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "CqrsProject.App.GrpcServer.V1.Me.Services";
+
+package V1;
+
+service MeServiceGrpc {
+  rpc GetTenants(google.protobuf.Empty) returns (stream MeTenantReply);
+}
+
+message MeTenantReply {
+  string id = 1;
+  string tenant_name = 2;
+}

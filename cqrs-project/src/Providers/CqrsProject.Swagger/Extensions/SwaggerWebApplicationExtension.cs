@@ -9,7 +9,7 @@ public static class SwaggerWebApplicationExtension
 {
     public static WebApplication UseSwaggerProvider(this WebApplication app)
     {
-        if (!app.Configuration.GetValue<bool?>("Scalar:Enable") ?? true)
+        if (!app.Configuration.GetValue<bool?>("Swagger:Enable") ?? true)
             return app;
 
         var assembly = typeof(SwaggerWebApplicationExtension).GetTypeInfo().Assembly;

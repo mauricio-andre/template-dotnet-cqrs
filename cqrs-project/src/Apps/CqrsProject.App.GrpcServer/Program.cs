@@ -19,7 +19,9 @@ using CqrsProject.Auth0.Extensions;
 using CqrsProject.Common.Consts;
 using CqrsProject.App.GrpcServer.Authentication;
 using CqrsProject.App.GrpcServer.Interceptors;
-using CqrsProject.App.GrpcServer.V1.Me.Services;
+using CqrsProject.App.GrpcServer.Methods.V1.Me;
+using CqrsProject.App.GrpcServer.Methods.V1.Examples;
+using CqrsProject.App.GrpcServer.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,8 +68,7 @@ builder.Services
         null);
 
 // configure authorization policies
-builder.Services.AddAuthorization();
-// builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
+builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
 
 // Configure providers
 builder.Services.AddAuth0Provider(builder.Configuration);
@@ -93,7 +94,10 @@ app.UseAuthorization();
 app.LoadMultiTenantConnections();
 
 // Add gRPC Services
-app.MapGrpcReflectionService();
-app.MapGrpcService<MeService>();
+if (app.Environment.IsDevelopment())
+    app.MapGrpcReflectionService();
+
+app.MapGrpcService<MeGrpcService>();
+app.MapGrpcService<ExamplesGrpcService>();
 
 await app.RunAsync();

@@ -2,15 +2,21 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-option csharp_namespace = "CqrsProject.App.GrpcServer.V1.Me.Services";
+option csharp_namespace = "CqrsProject.App.GrpcServer.Methods.V1.Me";
 
-package V1;
+package cqrsproject.app.grpcserver.methods.v1.me;
 
-service MeServiceGrpc {
-  rpc GetTenants(google.protobuf.Empty) returns (stream MeTenantReply);
+service MeService {
+  rpc SyncUser(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc ListTenants(google.protobuf.Empty) returns (stream MeTenantReply);
+  rpc ListPermissions(google.protobuf.Empty) returns (stream MePermissionReply);
 }
 
 message MeTenantReply {
   string id = 1;
   string tenant_name = 2;
+}
+
+message MePermissionReply {
+  string permission = 1;
 }

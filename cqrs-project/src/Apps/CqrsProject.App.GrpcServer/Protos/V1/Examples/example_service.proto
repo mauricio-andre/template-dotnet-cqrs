@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "CqrsProject.App.GrpcServer.Methods.V1.Examples";
+
+package cqrsproject.app.grpcserver.methods.v1.examples;
+
+service ExamplesService {
+  rpc ListExamples(stream ListExamplesRequest) returns (stream ExampleReply);
+  rpc GetExample(GetExampleRequest) returns (ExampleReply);
+  rpc CreateExample(CreateExampleRequest) returns (ExampleReply);
+  rpc RemoveExample(RemoveExampleRequest) returns (google.protobuf.Empty);
+}
+
+message ListExamplesRequest {
+  optional string term = 1;
+  optional int32 take = 2;
+  optional int32 skip = 3;
+  optional string sortBy = 4;
+}
+
+message GetExampleRequest {
+  int32 id = 1;
+}
+
+message CreateExampleRequest {
+  string name = 1;
+}
+
+message RemoveExampleRequest {
+  int32 id = 1;
+}
+
+message ExampleReply {
+  int32 id = 1;
+  string name = 2;
+}

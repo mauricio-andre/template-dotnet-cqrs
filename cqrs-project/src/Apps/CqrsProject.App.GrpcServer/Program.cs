@@ -82,6 +82,7 @@ builder.AddOpenTelemetryProvider();
 // Add gRPC
 builder.Services.AddGrpc(options =>
 {
+    options.Interceptors.Add<ExceptionInterceptor>();
     options.Interceptors.Add<IdentityInterceptor>();
     options.Interceptors.Add<TenantInterceptor>();
     options.Interceptors.Add<AttributesInterceptor>();

@@ -103,7 +103,7 @@ public class TenantInterceptor : Interceptor
         }
         catch (UnauthorizedAccessException)
         {
-            throw new RpcException(new Status(StatusCode.Unauthenticated, "unrecognized internal user"));
+            throw new RpcException(new Status(StatusCode.PermissionDenied, "unrecognized internal user"));
         }
 
         using (_currentTenant.BeginTenantScope(tenantId))

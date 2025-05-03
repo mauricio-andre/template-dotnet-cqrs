@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -59,6 +60,16 @@ public static class OpenTelemetryHostApplicationExtension
 
             if (loggingSection.GetValue<bool>("ConsoleExporter"))
                 configure.AddConsoleExporter();
+
+            var endpoint = loggingSection.GetValue<string>("OtlpExporter:Endpoint");
+            if (!string.IsNullOrEmpty(endpoint))
+                configure.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri(endpoint);
+                    options.Protocol = loggingSection.GetValue<string>("OtlpExporter:Protocol")?.ToLower() == "httpprotobuf"
+                        ? OtlpExportProtocol.HttpProtobuf
+                        : OtlpExportProtocol.Grpc;
+                });
         });
 
         return builder;

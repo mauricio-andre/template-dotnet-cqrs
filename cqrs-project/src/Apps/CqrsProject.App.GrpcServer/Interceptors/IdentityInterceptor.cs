@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using CqrsProject.App.GrpcServer.Consts;
+using CqrsProject.App.GrpcServer.Extensions;
 using CqrsProject.Core.Identity.Interfaces;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
@@ -49,7 +49,7 @@ public class IdentityInterceptor : Interceptor
         ServerCallContext context,
         DuplexStreamingServerMethod<TRequest, TResponse> continuation)
     {
-        if (context.Method.Equals(GrpcMethodNames.ServerReflection))
+        if (context.IsServerReflectionMethod())
         {
             await continuation(requestStream, responseStream, context);
             return;

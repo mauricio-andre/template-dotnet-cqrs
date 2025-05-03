@@ -1,4 +1,3 @@
-using CqrsProject.App.GrpcServer.Consts;
 using CqrsProject.App.GrpcServer.GrpcMetadata;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
@@ -69,9 +68,6 @@ public class AttributesInterceptor : Interceptor
         ServerCallContext context,
         DuplexStreamingServerMethod<TRequest, TResponse> continuation)
     {
-        if (context.Method.Equals(GrpcMethodNames.ServerReflection))
-            return continuation(requestStream, responseStream, context);
-
         if (!_grpcInterceptorAttributeMap.TryGetInterceptorsByMethod(context.Method, out var actions))
             return continuation(requestStream, responseStream, context);
 

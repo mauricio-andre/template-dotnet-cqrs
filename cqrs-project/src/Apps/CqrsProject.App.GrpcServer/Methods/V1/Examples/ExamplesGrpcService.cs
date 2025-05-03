@@ -1,5 +1,5 @@
+using CqrsProject.App.GrpcServer.Attributes;
 using CqrsProject.App.GrpcServer.Authorization;
-using CqrsProject.App.GrpcServer.Helpers;
 using CqrsProject.Core.Examples.Commands;
 using CqrsProject.Core.Examples.Queries;
 using Google.Protobuf.WellKnownTypes;
@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CqrsProject.App.GrpcServer.Methods.V1.Examples;
 
 [Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
+[RequireTenantIdInterceptor]
 public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
 {
     private readonly IMediator _mediator;
@@ -24,8 +25,6 @@ public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
         IServerStreamWriter<ExampleReply> responseStream,
         ServerCallContext context)
     {
-        GrpcHelper.CheckRequireHeaderTenantId(context);
-
         while (await requestStream.MoveNext())
         {
             var result = await _mediator.Send(new SearchExampleQuery(
@@ -58,7 +57,6 @@ public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
         GetExampleRequest request,
         ServerCallContext context)
     {
-        GrpcHelper.CheckRequireHeaderTenantId(context);
         var result = await _mediator.Send(new GetExampleByKeyQuery(request.Id));
 
         return new ExampleReply
@@ -73,7 +71,6 @@ public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
         CreateExampleRequest request,
         ServerCallContext context)
     {
-        GrpcHelper.CheckRequireHeaderTenantId(context);
         var result = await _mediator.Send(new CreateExampleCommand(request.Name));
 
         return new ExampleReply
@@ -88,7 +85,6 @@ public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
         RemoveExampleRequest request,
         ServerCallContext context)
     {
-        GrpcHelper.CheckRequireHeaderTenantId(context);
         await _mediator.Send(new RemoveExampleCommand(request.Id));
         return new Empty();
     }

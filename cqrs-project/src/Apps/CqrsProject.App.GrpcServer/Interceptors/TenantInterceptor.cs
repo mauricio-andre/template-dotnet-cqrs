@@ -1,3 +1,4 @@
+using CqrsProject.App.GrpcServer.Consts;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Events;
 using CqrsProject.Core.Tenants.Exceptions;
@@ -13,7 +14,6 @@ public class TenantInterceptor : Interceptor
     private readonly ICurrentTenant _currentTenant;
     private readonly ICurrentIdentity _currentIdentity;
     private readonly IMediator _mediator;
-
 
     public TenantInterceptor(
         ICurrentTenant currentTenant,
@@ -64,6 +64,12 @@ public class TenantInterceptor : Interceptor
         ServerCallContext context,
         DuplexStreamingServerMethod<TRequest, TResponse> continuation)
     {
+        if (context.Method.Equals(GrpcMethodNames.ServerReflection))
+        {
+            await continuation(requestStream, responseStream, context);
+            return;
+        }
+
         await CurrentTenantHandler<TResponse?>(
             context,
             async () =>
@@ -77,17 +83,12 @@ public class TenantInterceptor : Interceptor
         ServerCallContext context,
         Func<Task<T>> continuation)
     {
-        var httpContext = context.GetHttpContext();
-        if (!httpContext.Request.Headers.TryGetValue("tenant-id", out var tenantIdHeader)
-            || string.IsNullOrEmpty(tenantIdHeader))
-        {
+        var tenantIdHeader = context.RequestHeaders.GetValue("tenant-id");
+        if (string.IsNullOrEmpty(tenantIdHeader))
             return await continuation();
-        }
 
         if (!Guid.TryParse(tenantIdHeader, out Guid tenantId))
-        {
-            throw new RpcException(new Status(StatusCode.PermissionDenied, "tenant-id not in expected format"));
-        }
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Tenant-Id not in expected format"));
 
         try
         {

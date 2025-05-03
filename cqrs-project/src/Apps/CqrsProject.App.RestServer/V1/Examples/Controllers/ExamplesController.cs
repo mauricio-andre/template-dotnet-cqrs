@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using CqrsProject.App.Attributes;
+using CqrsProject.App.RestServer.Attributes;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.Core.Examples.Commands;

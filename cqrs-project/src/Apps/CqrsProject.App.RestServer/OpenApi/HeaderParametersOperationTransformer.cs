@@ -1,4 +1,4 @@
-using CqrsProject.App.Attributes;
+using CqrsProject.App.RestServer.Attributes;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 

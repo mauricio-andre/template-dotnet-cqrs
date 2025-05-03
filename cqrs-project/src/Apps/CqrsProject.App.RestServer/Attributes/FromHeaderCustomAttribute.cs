@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CqrsProject.App.Attributes;
+namespace CqrsProject.App.RestServer.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class FromHeaderCustomAttribute : ActionFilterAttribute

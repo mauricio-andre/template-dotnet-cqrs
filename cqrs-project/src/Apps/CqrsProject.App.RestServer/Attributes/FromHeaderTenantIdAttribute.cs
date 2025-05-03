@@ -1,4 +1,4 @@
-namespace CqrsProject.App.Attributes;
+namespace CqrsProject.App.RestServer.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public sealed class FromHeaderTenantIdAttribute : FromHeaderCustomAttribute

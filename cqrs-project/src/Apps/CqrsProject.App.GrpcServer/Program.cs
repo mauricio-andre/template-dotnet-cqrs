@@ -22,6 +22,7 @@ using CqrsProject.App.GrpcServer.Interceptors;
 using CqrsProject.App.GrpcServer.Methods.V1.Me;
 using CqrsProject.App.GrpcServer.Methods.V1.Examples;
 using CqrsProject.App.GrpcServer.Authorization;
+using CqrsProject.App.GrpcServer.GrpcMetadata;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services
     .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
     .AddScoped<ICurrentTenant, CurrentTenant>()
     .AddScoped<ICurrentIdentity, CurrentIdentity>()
+    .AddSingleton<IGrpcInterceptorAttributeMap, GrpcInterceptorAttributeMap>()
     .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
 
 // configuration identity
@@ -82,6 +84,7 @@ builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<IdentityInterceptor>();
     options.Interceptors.Add<TenantInterceptor>();
+    options.Interceptors.Add<AttributesInterceptor>();
 });
 
 

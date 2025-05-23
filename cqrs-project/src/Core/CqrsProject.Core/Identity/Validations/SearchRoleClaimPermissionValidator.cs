@@ -13,7 +13,8 @@ public class SearchRoleClaimPermissionValidator : AbstractValidator<SearchRoleCl
             .NotEqual(Guid.Empty);
 
         RuleFor(prop => prop.Take)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .LessThanOrEqualTo(1000);
 
         RuleFor(prop => prop.Skip)
             .GreaterThanOrEqualTo(0);

@@ -15,9 +15,7 @@ service ExamplesService {
 
 message ListExamplesRequest {
   optional string term = 1;
-  optional int32 take = 2;
-  optional int32 skip = 3;
-  optional string sortBy = 4;
+  optional string sortBy = 2;
 }
 
 message GetExampleRequest {

@@ -41,7 +41,7 @@ internal sealed class SecuritySchemeDocumentTransformer(IConfiguration configura
             new OpenApiSecurityScheme
             {
                 Type = SecuritySchemeType.OpenIdConnect,
-                OpenIdConnectUrl = new Uri(configuration.GetValue<string>("OpenApi:RefreshTokenUrl")!)
+                OpenIdConnectUrl = new Uri(configuration.GetValue<string>("OpenApi:OpenIdConnectUrl")!)
             });
 
         return Task.CompletedTask;

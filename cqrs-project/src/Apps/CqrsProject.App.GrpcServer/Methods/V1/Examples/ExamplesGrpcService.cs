@@ -27,29 +27,34 @@ public class ExamplesGrpcService : ExamplesService.ExamplesServiceBase
     {
         while (await requestStream.MoveNext())
         {
-            var result = await _mediator.Send(new SearchExampleQuery(
-                Term: requestStream.Current.HasTerm
-                    ? requestStream.Current.Term
-                    : null,
-                Take: requestStream.Current.HasTake
-                    ? requestStream.Current.Take
-                    : null,
-                Skip: requestStream.Current.HasSkip
-                    ? requestStream.Current.Skip
-                    : null,
-                SortBy: requestStream.Current.HasSortBy
-                    ? requestStream.Current.SortBy
-                    : null
-            ));
-
-            await foreach (var item in result.Items)
+            int total;
+            var skip = 0;
+            var take = 1000;
+            do
             {
-                await responseStream.WriteAsync(new ExampleReply
+                var result = await _mediator.Send(new SearchExampleQuery(
+                    Term: requestStream.Current.HasTerm
+                        ? requestStream.Current.Term
+                        : null,
+                    Take: take,
+                    Skip: skip,
+                    SortBy: requestStream.Current.HasSortBy
+                        ? requestStream.Current.SortBy
+                        : null
+                ));
+
+                total = result.TotalCount;
+                skip += take;
+
+                await foreach (var item in result.Items)
                 {
-                    Id = item.Id,
-                    Name = item.Name
-                });
-            }
+                    await responseStream.WriteAsync(new ExampleReply
+                    {
+                        Id = item.Id,
+                        Name = item.Name
+                    });
+                }
+            } while (skip < total);
         }
     }
 

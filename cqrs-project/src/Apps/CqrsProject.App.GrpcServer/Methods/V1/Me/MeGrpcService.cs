@@ -31,9 +31,9 @@ public class MeGrpcService : MeService.MeServiceBase
         IServerStreamWriter<MeTenantReply> responseStream,
         ServerCallContext context)
     {
-        var total = 0;
+        int total;
         var skip = 0;
-        var take = 500;
+        var take = 1000;
 
         do
         {

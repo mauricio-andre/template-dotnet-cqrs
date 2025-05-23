@@ -8,7 +8,8 @@ public class SearchUserRoleValidator : AbstractValidator<SearchUserRoleQuery>
     public SearchUserRoleValidator()
     {
         RuleFor(prop => prop.Take)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .LessThanOrEqualTo(1000);
 
         RuleFor(prop => prop.Skip)
             .GreaterThanOrEqualTo(0);

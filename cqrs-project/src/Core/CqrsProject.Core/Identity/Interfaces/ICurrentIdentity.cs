@@ -8,4 +8,5 @@ public interface ICurrentIdentity
     public bool HasLocalIdentity();
     public bool HasLocalPermission(string permissionName);
     public Guid GetLocalIdentityId();
+    IEnumerable<string>? GetRoles();
 }

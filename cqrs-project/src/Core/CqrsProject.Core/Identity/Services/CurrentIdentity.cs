@@ -38,4 +38,12 @@ public class CurrentIdentity : ICurrentIdentity
                 && claim.Value == permissionName)
             ?? false;
     }
+
+    public IEnumerable<string>? GetRoles()
+    {
+        return _principal?.Identities
+            .SelectMany(identity => identity.Claims)
+            .Where(claim => claim.Type == ClaimTypes.Role)
+            .Select(claim => claim.Value);
+    }
 }

@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  cqrs-project:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    depends_on:
+      - postgresdb
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    command: sleep infinity
+
+  postgresdb:
+    image: postgres:alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - dev-container:/data/postgresql
+
+volumes:
+  dev-container:

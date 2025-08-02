@@ -1,6 +1,6 @@
 using Bogus;
 
-namespace CqrsProject.App.RestServerTest.V1.Me;
+namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 
 public class MeSyncTestFake
 {

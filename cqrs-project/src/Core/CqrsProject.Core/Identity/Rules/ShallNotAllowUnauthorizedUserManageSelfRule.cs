@@ -8,7 +8,8 @@ namespace CqrsProject.Core.Identity.Rules;
 
 public class ShallNotAllowUnauthorizedUserManageSelfRule
     : INotificationHandler<CreateUserTenantEvent>,
-    INotificationHandler<CreateUserRoleEvent>
+    INotificationHandler<CreateUserRoleEvent>,
+    INotificationHandler<CreateRoleClaimForYourselfEvent>
 {
     private readonly ICurrentIdentity _currentIdentity;
 
@@ -23,6 +24,11 @@ public class ShallNotAllowUnauthorizedUserManageSelfRule
     }
 
     public Task Handle(CreateUserRoleEvent notification, CancellationToken cancellationToken)
+    {
+        return HandleRule(notification.UserId);
+    }
+
+    public Task Handle(CreateRoleClaimForYourselfEvent notification, CancellationToken cancellationToken)
     {
         return HandleRule(notification.UserId);
     }

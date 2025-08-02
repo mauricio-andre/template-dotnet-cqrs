@@ -3,11 +3,15 @@ using FluentValidation;
 
 namespace CqrsProject.Core.Identity.Validators;
 
-public class CreateRoleClaimPermissionValidator : AbstractValidator<CreateRoleClaimPermissionCommand>
+public class RemoveRoleClaimValidator : AbstractValidator<RemoveRoleClaimCommand>
 {
-    public CreateRoleClaimPermissionValidator()
+    public RemoveRoleClaimValidator()
     {
-        RuleFor(prop => prop.Name)
+        RuleFor(prop => prop.ClaimType)
+            .NotEmpty()
+            .NotNull();
+
+        RuleFor(prop => prop.ClaimValue)
             .NotEmpty()
             .NotNull();
 

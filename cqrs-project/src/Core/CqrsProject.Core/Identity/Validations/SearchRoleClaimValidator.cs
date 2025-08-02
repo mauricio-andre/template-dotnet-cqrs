@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace CqrsProject.Core.Identity.Validations;
 
-public class SearchRoleClaimPermissionValidator : AbstractValidator<SearchRoleClaimPermissionQuery>
+public class SearchRoleClaimValidator : AbstractValidator<SearchRoleClaimQuery>
 {
-    public SearchRoleClaimPermissionValidator()
+    public SearchRoleClaimValidator()
     {
         RuleFor(prop => prop.RoleId)
             .NotEmpty()

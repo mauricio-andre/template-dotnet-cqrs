@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
-namespace CqrsProject.App.RestServerTest.V1.Me;
+namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 
 public class MeSyncTest
     : IClassFixture<RestServerWebApplicationFactory>,

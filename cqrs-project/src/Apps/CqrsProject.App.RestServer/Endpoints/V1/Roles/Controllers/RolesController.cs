@@ -133,4 +133,53 @@ public class RolesController : ControllerBase
         await _mediator.Send(new RemoveUserRoleCommand(userId, id));
         return NoContent();
     }
+
+    [HttpGet("{id}/claims")]
+    [ProducesResponseType<KeyValuePair<string, string>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<KeyValuePair<string, string>>(StatusCodes.Status206PartialContent)]
+    public async Task<IActionResult> SearchClaims(
+        [FromRoute] Guid id,
+        [FromQuery] SearchRoleClaimRequestDto request)
+    {
+        var result = await _mediator.Send(new SearchRoleClaimQuery(
+            RoleId: id,
+            ClaimType: request.ClaimType,
+            Take: request.Take,
+            Skip: request.Skip,
+            SortBy: request.SortBy
+        ));
+
+        var list = await result.Items.ToListAsync();
+
+        Response.Headers.AddContentRangeHeaders(request.Skip, request.Take, result.TotalCount);
+
+        return StatusCode(
+            result.TotalCount == list.Count
+                ? StatusCodes.Status200OK
+                : StatusCodes.Status206PartialContent,
+            list
+        );
+    }
+
+    [HttpPost("{id}/claims")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, Application.ProblemJson)]
+    public async Task<IActionResult> CreateClaims(
+        [FromRoute] Guid id,
+        [FromBody] CreateRoleClaimRequestDto request)
+    {
+        await _mediator.Send(new CreateRoleClaimCommand(id, request.ClaimType, request.ClaimValue));
+        return Created();
+    }
+
+    [HttpDelete("{id}/claims/{claimType}/{claimValue}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveClaims(
+        [FromRoute] Guid id,
+        [FromRoute] string claimType,
+        [FromRoute] string claimValue)
+    {
+        await _mediator.Send(new RemoveRoleClaimCommand(id, claimType, claimValue));
+        return NoContent();
+    }
 }

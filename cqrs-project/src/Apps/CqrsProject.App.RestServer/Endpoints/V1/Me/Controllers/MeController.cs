@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Asp.Versioning;
+using CqrsProject.App.RestServer.Endpoints.V1.Me.Dtos;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Commands;
 using CqrsProject.Core.UserTenants.Queries;
 using CqrsProject.Core.UserTenants.Responses;
@@ -57,14 +57,51 @@ public class MeController : ControllerBase
 
     [HttpGet("[action]")]
     [ProducesResponseType<IList<string>>(StatusCodes.Status200OK)]
-    public IActionResult Permissions()
+    public IActionResult Roles()
     {
-        var list = HttpContext.User.Identities
+        var roles = HttpContext.User.Identities
             .SelectMany(identity => identity.Claims)
-            .Where(claim => claim.Type == AuthorizationPermissionClaims.ClaimType)
+            .Where(claim => claim.Type == ClaimTypes.Role)
             .Select(claim => claim.Value)
+            .Distinct()
             .Order();
 
-        return Ok(list);
+        return Ok(roles);
+    }
+
+    [HttpGet("[action]/{claimType}")]
+    [ProducesResponseType<IList<string>>(StatusCodes.Status200OK)]
+    public IActionResult Claims([FromRoute] string claimType)
+    {
+        var claims = HttpContext.User.Identities
+            .SelectMany(identity => identity.Claims)
+            .Where(claim => claim.Type.Equals(claimType, StringComparison.OrdinalIgnoreCase))
+            .Select(claim => claim.Value)
+            .Distinct()
+            .Order();
+
+        return Ok(claims);
+    }
+
+    [HttpGet("[action]")]
+    [ProducesResponseType(typeof(UserInfoResponse), StatusCodes.Status200OK)]
+    public IActionResult UserInfo()
+    {
+        var user = HttpContext.User;
+        var name = user.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).LastOrDefault();
+        var email = user.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).LastOrDefault();
+        var sub = user.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).LastOrDefault();
+        var claims = user.Claims
+            .GroupBy(c => c.Type)
+            .ToDictionary(group => group.Key, group => group.Select(x => x.Value).Distinct());
+
+        var response = new UserInfoResponse(
+            Sub: sub,
+            Name: name,
+            Email: email,
+            Claims: claims
+        );
+
+        return Ok(response);
     }
 }

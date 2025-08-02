@@ -4,26 +4,21 @@ using System.Net.Http.Json;
 using CqrsProject.Common.Consts;
 using CqrsProject.Commons.Test.Helpers;
 using CqrsProject.Commons.Test.Services;
-using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants.Entities;
-using CqrsProject.Core.UserTenants.Entities;
-using CqrsProject.Core.UserTenants.Responses;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CqrsProject.App.RestServerTest.V1.Me;
+namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 
-public class MePermissionsTest
+public class MeClaimPermissionsTest
     : IClassFixture<RestServerWebApplicationFactory>,
     IClassFixture<UserManageTestService>
 {
     private readonly HttpClient _client;
     private readonly RestServerWebApplicationFactory _factory;
     private readonly UserManageTestService _userManageTestService;
-    private const string Route = "/v1/me/permissions";
+    private const string Route = $"/v1/me/claims/{AuthorizationPermissionClaims.ClaimType}";
 
-    public MePermissionsTest(RestServerWebApplicationFactory factory, UserManageTestService userManageTestService)
+    public MeClaimPermissionsTest(RestServerWebApplicationFactory factory, UserManageTestService userManageTestService)
     {
         _factory = factory;
         _client = _factory.CreateClient();

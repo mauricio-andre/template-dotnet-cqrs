@@ -2,7 +2,8 @@ using MediatR;
 
 namespace CqrsProject.Core.Identity.Commands;
 
-public record RemoveRoleClaimPermissionCommand(
+public record RemoveRoleClaimCommand(
     Guid RoleId,
-    string Name
+    string ClaimType,
+    string ClaimValue
 ) : IRequest;

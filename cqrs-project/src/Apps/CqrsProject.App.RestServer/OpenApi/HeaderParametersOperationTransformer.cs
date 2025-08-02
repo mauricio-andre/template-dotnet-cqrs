@@ -12,7 +12,7 @@ internal sealed class HeaderParametersOperationTransformer : IOpenApiOperationTr
         CancellationToken cancellationToken)
     {
         var attributeList = context.Description.ActionDescriptor.EndpointMetadata
-            .OfType<FromHeaderTenantIdAttribute>()
+            .OfType<FromHeaderCustomAttribute>()
             .ToList();
 
         if (!attributeList.Any())

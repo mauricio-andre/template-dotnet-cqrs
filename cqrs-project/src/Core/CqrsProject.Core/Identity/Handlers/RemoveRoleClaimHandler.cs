@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using CqrsProject.Common.Consts;
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Identity.Commands;
@@ -10,14 +9,14 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Identity.Handlers;
 
-public class RemoveRoleClaimPermissionHandler : IRequestHandler<RemoveRoleClaimPermissionCommand>
+public class RemoveRoleClaimHandler : IRequestHandler<RemoveRoleClaimCommand>
 {
-    private readonly IValidator<RemoveRoleClaimPermissionCommand> _validator;
+    private readonly IValidator<RemoveRoleClaimCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-    public RemoveRoleClaimPermissionHandler(
-        IValidator<RemoveRoleClaimPermissionCommand> validator,
+    public RemoveRoleClaimHandler(
+        IValidator<RemoveRoleClaimCommand> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         RoleManager<IdentityRole<Guid>> roleManager)
     {
@@ -27,17 +26,17 @@ public class RemoveRoleClaimPermissionHandler : IRequestHandler<RemoveRoleClaimP
     }
 
     public async Task Handle(
-        RemoveRoleClaimPermissionCommand request,
+        RemoveRoleClaimCommand request,
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
         var role = await GetRole(request);
-        var claim = new Claim(AuthorizationPermissionClaims.ClaimType, request.Name);
+        var claim = new Claim(request.ClaimType, request.ClaimValue);
 
         await _roleManager.RemoveClaimAsync(role, claim);
     }
 
-    private async Task<IdentityRole<Guid>> GetRole(RemoveRoleClaimPermissionCommand request)
+    private async Task<IdentityRole<Guid>> GetRole(RemoveRoleClaimCommand request)
     {
         var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
 

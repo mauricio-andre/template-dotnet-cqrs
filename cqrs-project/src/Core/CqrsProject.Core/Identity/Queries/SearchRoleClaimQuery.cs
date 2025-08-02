@@ -4,10 +4,10 @@ using MediatR;
 
 namespace CqrsProject.Core.Identity.Queries;
 
-public record SearchRoleClaimPermissionQuery(
+public record SearchRoleClaimQuery(
     Guid RoleId,
-    string? Name,
+    string? ClaimType,
     int? Take,
     int? Skip,
     string? SortBy
-) : IPageableQuery, ISortableQuery, IRequest<CollectionResponse<string>>;
+) : IPageableQuery, ISortableQuery, IRequest<CollectionResponse<KeyValuePair<string, string>>>;

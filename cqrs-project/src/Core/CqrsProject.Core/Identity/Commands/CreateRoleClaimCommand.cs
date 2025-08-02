@@ -2,7 +2,8 @@ using MediatR;
 
 namespace CqrsProject.Core.Identity.Commands;
 
-public record CreateRoleClaimPermissionCommand(
+public record CreateRoleClaimCommand(
     Guid RoleId,
-    string Name
+    string ClaimType,
+    string ClaimValue
 ) : IRequest;

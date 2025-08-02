@@ -15,4 +15,7 @@ appsettings.Development.json
 /node_modules
 /wwwroot/node_modules
 
+# IDE Folders
+.vscode/
+
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore

@@ -3,7 +3,8 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "cqrs-project",
   "workspaceFolder": "/workspace",
-  "forwardPorts": [5234, 5260, 7246, 5432],
+  "runServices": ["app", "aspire", "postgresdb"],
+  "forwardPorts": [5234, 5260, 7246],
   "portsAttributes": {
       "5234": {
         "protocol": "https"
@@ -32,5 +33,6 @@
     }
   },
   "postCreateCommand": "dotnet restore",
+  "shutdownAction": "stopCompose",
   "remoteUser": "vscode"
 }

@@ -10,5 +10,8 @@ RUN apt-get update \
   && apt-get install -y nodejs \
   && rm -rf /var/lib/apt/lists/* \
   # Instalação de ferramentas .NET
-  && dotnet tool install --global dotnet-ef \
-  && dotnet dev-certs https --trust
+  && dotnet tool install --global dotnet-ef
+
+USER vscode
+
+RUN dotnet dev-certs https --trust

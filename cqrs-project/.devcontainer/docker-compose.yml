@@ -8,11 +8,17 @@ services:
     volumes:
       - ..:/workspace:cached
     working_dir: /workspace
-    depends_on:
-      - postgresdb
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
     command: sleep infinity
+
+  aspire:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.1
+    ports:
+      - "18888:18888"     # Dashboard UI
+      - "18889:18889"     # OpenTelemetry data
+    environment:
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
 
   postgresdb:
     image: postgres:alpine

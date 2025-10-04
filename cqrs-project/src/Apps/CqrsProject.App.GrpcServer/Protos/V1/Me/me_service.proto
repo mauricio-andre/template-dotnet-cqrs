@@ -9,14 +9,9 @@ package cqrsproject.app.grpcserver.methods.v1.me;
 service MeService {
   rpc SyncUser(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc ListTenants(google.protobuf.Empty) returns (stream MeTenantReply);
-  rpc ListPermissions(google.protobuf.Empty) returns (stream MePermissionReply);
 }
 
 message MeTenantReply {
   string id = 1;
   string tenant_name = 2;
-}
-
-message MePermissionReply {
-  string permission = 1;
 }

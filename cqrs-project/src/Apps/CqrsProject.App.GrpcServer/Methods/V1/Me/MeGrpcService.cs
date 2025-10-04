@@ -2,7 +2,6 @@ using Grpc.Core;
 using Google.Protobuf.WellKnownTypes;
 using MediatR;
 using CqrsProject.Core.UserTenants.Queries;
-using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Commands;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -51,23 +50,4 @@ public class MeGrpcService : MeService.MeServiceBase
             }
         } while (skip < total);
     }
-
-    public override async Task ListPermissions(
-        Empty request,
-        IServerStreamWriter<MePermissionReply> responseStream,
-        ServerCallContext context)
-    {
-        var list = context.GetHttpContext().User.Identities
-            .SelectMany(identity => identity.Claims)
-            .Where(claim => claim.Type == AuthorizationPermissionClaims.ClaimType)
-            .Select(claim => claim.Value)
-            .Order();
-
-        foreach (var item in list)
-            await responseStream.WriteAsync(new MePermissionReply
-            {
-                Permission = item
-            });
-    }
-
 }

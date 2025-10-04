@@ -9,6 +9,7 @@ namespace CqrsProject.App.RestServer.Filters;
 
 public class ExceptionFilter : IExceptionFilter
 {
+    private const string ExtensionDictionaryKey = "errors";
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     public ExceptionFilter(IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
@@ -29,7 +30,7 @@ public class ExceptionFilter : IExceptionFilter
                 Extensions = new Dictionary<string, object?>()
                 {
                     {
-                        "errors",
+                        ExtensionDictionaryKey,
                         validationException.Errors
                             .GroupBy(error => error.PropertyName)
                             .ToDictionary(
@@ -54,8 +55,32 @@ public class ExceptionFilter : IExceptionFilter
                 Extensions = new Dictionary<string, object?>()
                 {
                     {
-                        "errors",
+                        ExtensionDictionaryKey,
                         duplicatedEntityException.Errors
+                            .ToDictionary(
+                                item => GetNormalizedKey(item.Key),
+                                item => item.Value
+                            )
+                    }
+                }
+            });
+
+            context.ExceptionHandled = true;
+        }
+        else if (context.Exception is EntityNotFoundException entityNotFoundException)
+        {
+            context.Result = new NotFoundObjectResult(new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                Title = _stringLocalizer["message:validation:businessExceptionTitle"].Value,
+                Status = StatusCodes.Status404NotFound,
+                Detail = entityNotFoundException.Message,
+                Instance = context.HttpContext.Request.Path.Value,
+                Extensions = new Dictionary<string, object?>()
+                {
+                    {
+                        ExtensionDictionaryKey,
+                        entityNotFoundException.Errors
                             .ToDictionary(
                                 item => GetNormalizedKey(item.Key),
                                 item => item.Value
@@ -78,7 +103,7 @@ public class ExceptionFilter : IExceptionFilter
                 Extensions = new Dictionary<string, object?>()
                 {
                     {
-                        "errors",
+                        ExtensionDictionaryKey,
                         businessException.Errors
                             .ToDictionary(
                                 item => GetNormalizedKey(item.Key),

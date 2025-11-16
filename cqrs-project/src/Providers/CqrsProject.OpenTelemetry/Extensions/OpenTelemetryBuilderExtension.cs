@@ -32,15 +32,10 @@ public static class OpenTelemetryBuilderExtension
             if (tracingSection.GetValue<bool>("ConsoleExporter"))
                 tracing.AddConsoleExporter();
 
-            var endpoint = tracingSection.GetValue<string>("OtlpExporter:Endpoint");
+            string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+
             if (!string.IsNullOrEmpty(endpoint))
-                tracing.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(endpoint);
-                    options.Protocol = tracingSection.GetValue<string>("OtlpExporter:Protocol")?.ToLower() == "httpprotobuf"
-                        ? OtlpExportProtocol.HttpProtobuf
-                        : OtlpExportProtocol.Grpc;
-                });
+                tracing.AddOtlpExporter();
         });
 
         return openTelemetryBuilder;
@@ -60,20 +55,17 @@ public static class OpenTelemetryBuilderExtension
             metrics
                 .AddAspNetCoreInstrumentation()
                 .AddRuntimeInstrumentation()
-                .AddHttpClientInstrumentation();
+                .AddHttpClientInstrumentation()
+                .AddMeter("Microsoft.AspNetCore.Hosting")
+                .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
 
             if (metricsSection.GetValue<bool>("ConsoleExporter"))
                 metrics.AddConsoleExporter();
 
-            var endpoint = metricsSection.GetValue<string>("OtlpExporter:Endpoint");
+            string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+
             if (!string.IsNullOrEmpty(endpoint))
-                metrics.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(endpoint);
-                    options.Protocol = metricsSection.GetValue<string>("OtlpExporter:Protocol")?.ToLower() == "httpprotobuf"
-                        ? OtlpExportProtocol.HttpProtobuf
-                        : OtlpExportProtocol.Grpc;
-                });
+                metrics.AddOtlpExporter();
         });
 
         return openTelemetryBuilder;

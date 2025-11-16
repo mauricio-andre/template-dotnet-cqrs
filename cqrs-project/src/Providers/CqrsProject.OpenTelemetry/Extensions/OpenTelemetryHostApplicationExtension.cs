@@ -35,12 +35,7 @@ public static class OpenTelemetryHostApplicationExtension
             .ConfigureResource(resource => resource
                 .AddService(serviceName)
                 .AddEnvironmentVariableDetector()
-                .AddTelemetrySdk()
-                .AddAttributes([
-                    new KeyValuePair<string, object>(
-                        "EnvironmentName",
-                        builder.Configuration.GetValue<string>("EnvironmentName")!)
-                ]));
+                .AddTelemetrySdk());
     }
 
     public static IHostApplicationBuilder AddOpenTelemetryLoggingProvider(this IHostApplicationBuilder builder)
@@ -61,15 +56,10 @@ public static class OpenTelemetryHostApplicationExtension
             if (loggingSection.GetValue<bool>("ConsoleExporter"))
                 configure.AddConsoleExporter();
 
-            var endpoint = loggingSection.GetValue<string>("OtlpExporter:Endpoint");
+            string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+
             if (!string.IsNullOrEmpty(endpoint))
-                configure.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(endpoint);
-                    options.Protocol = loggingSection.GetValue<string>("OtlpExporter:Protocol")?.ToLower() == "httpprotobuf"
-                        ? OtlpExportProtocol.HttpProtobuf
-                        : OtlpExportProtocol.Grpc;
-                });
+                configure.AddOtlpExporter();
         });
 
         return builder;

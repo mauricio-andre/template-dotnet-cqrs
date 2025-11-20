@@ -9,7 +9,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "OTEL_EXPORTER_OTLP_ENDPOINT": "http://aspire:18889",
-        "OTEL_EXPORTER_OTLP_INSECURE": "true",
         "OTEL_RESOURCE_ATTRIBUTES": "service.namespace=CqrsProject,deployment.environment=dev"
       }
     },
@@ -21,7 +20,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "OTEL_EXPORTER_OTLP_ENDPOINT": "http://aspire:18889",
-        "OTEL_EXPORTER_OTLP_INSECURE": "true",
         "OTEL_RESOURCE_ATTRIBUTES": "service.namespace=CqrsProject,deployment.environment=dev"
       }
     }

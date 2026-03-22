@@ -84,7 +84,7 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(UserInfoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserInfoResponseDto), StatusCodes.Status200OK)]
     public IActionResult UserInfo()
     {
         var user = HttpContext.User;
@@ -95,7 +95,7 @@ public class MeController : ControllerBase
             .GroupBy(c => c.Type)
             .ToDictionary(group => group.Key, group => group.Select(x => x.Value).Distinct());
 
-        var response = new UserInfoResponse(
+        var response = new UserInfoResponseDto(
             Sub: sub,
             Name: name,
             Email: email,

@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -52,9 +51,6 @@ public static class OpenTelemetryHostApplicationExtension
             configure.ParseStateValues = loggingSection.GetValue<bool>("ParseStateValues");
             configure.IncludeFormattedMessage = loggingSection.GetValue<bool>("IncludeFormattedMessage");
             configure.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName));
-
-            if (loggingSection.GetValue<bool>("ConsoleExporter"))
-                configure.AddConsoleExporter();
 
             string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
 

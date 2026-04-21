@@ -10,7 +10,7 @@ public static class SwaggerServiceCollectionExtension
 {
     public static IServiceCollection AddSwaggerProvider(this IServiceCollection services, IConfiguration configuration)
     {
-        if (!configuration.GetValue<bool?>("Scalar:Enable") ?? true)
+        if (!configuration.GetValue<bool?>("Swagger:Enable") ?? true)
             return services;
 
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();

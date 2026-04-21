@@ -10,6 +10,8 @@ public class CurrentIdentity : ICurrentIdentity
 
     public void SetCurrentIdentity(ClaimsPrincipal? principal) => _principal = principal;
 
+    public ClaimsPrincipal? GetCurrentIdentity() => _principal;
+
     public bool HasLocalIdentity()
     {
         return _principal?.Identities

@@ -13,14 +13,14 @@ public class ShallNotAllowDuplicateTenantRule
     : INotificationHandler<CreateTenantEvent>,
     INotificationHandler<UpdateTenantEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
     public ShallNotAllowDuplicateTenantRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
     }
 
@@ -32,7 +32,8 @@ public class ShallNotAllowDuplicateTenantRule
 
     private async Task HandleRule(Guid? id, string name, CancellationToken cancellationToken)
     {
-        var hasDuplicate = await _administrationDbContext.Tenants
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasDuplicate = await administrationDbContext.Tenants
             .AnyAsync(
                 tenant => tenant.Id != id && tenant.Name.ToLower() == name.ToLower(),
                 cancellationToken);

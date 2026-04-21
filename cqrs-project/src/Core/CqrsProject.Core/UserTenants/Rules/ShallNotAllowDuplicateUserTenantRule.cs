@@ -11,20 +11,21 @@ namespace CqrsProject.Core.UserTenants.Rules;
 
 public class ShallNotAllowDuplicateUserTenantRule : INotificationHandler<CreateUserTenantEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
     public ShallNotAllowDuplicateUserTenantRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
     }
 
     public async Task Handle(CreateUserTenantEvent notification, CancellationToken cancellationToken)
     {
-        var hasDuplicate = await _administrationDbContext.UserTenants
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasDuplicate = await administrationDbContext.UserTenants
             .AnyAsync(
                 userTenant => userTenant.UserId == notification.UserId
                     && userTenant.TenantId == notification.TenantId,

@@ -14,14 +14,14 @@ public class SearchTenantConnectionStringHandler : IRequestHandler<
     SearchTenantConnectionStringQuery,
     CollectionResponse<TenantConnectionStringResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<SearchTenantConnectionStringQuery> _validator;
 
     public SearchTenantConnectionStringHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchTenantConnectionStringQuery> validator)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
     }
 
@@ -30,8 +30,9 @@ public class SearchTenantConnectionStringHandler : IRequestHandler<
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var query = CreateSearchQuery(request).AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var query = CreateSearchQuery(administrationDbContext, request).AsNoTracking();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         query = query
             .ApplySorting(request)
@@ -41,9 +42,11 @@ public class SearchTenantConnectionStringHandler : IRequestHandler<
         return new CollectionResponse<TenantConnectionStringResponse>(items, totalCount);
     }
 
-    private IQueryable<TenantConnectionString> CreateSearchQuery(SearchTenantConnectionStringQuery request)
+    private static IQueryable<TenantConnectionString> CreateSearchQuery(
+        AdministrationDbContext administrationDbContext,
+        SearchTenantConnectionStringQuery request)
     {
-        return _administrationDbContext.TenantConnectionStrings
+        return administrationDbContext.TenantConnectionStrings
             .Where(entity => entity.TenantId == request.TenantId)
             .WhereIf(
                 !string.IsNullOrEmpty(request.ConnectionName),

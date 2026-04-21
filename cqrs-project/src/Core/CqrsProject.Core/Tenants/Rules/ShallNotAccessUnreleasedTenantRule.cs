@@ -13,7 +13,7 @@ namespace CqrsProject.Core.Tenants.Rules;
 
 public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAccessedByUserEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly IChaceService _chaceService;
 
@@ -22,7 +22,7 @@ public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAcc
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         IChaceService chaceService)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
         _chaceService = chaceService;
     }
@@ -31,11 +31,16 @@ public class ShallNotAccessUnreleasedTenantRule : INotificationHandler<TenantAcc
     {
         var hasAccess = await _chaceService.GetOrCreateAsync(
             string.Format(CacheKeys.AccessUserTenantKey, notification.UserId, notification.TenantId),
-            () => _administrationDbContext.UserTenants
-                .AnyAsync(userTenant => userTenant.TenantId == notification.TenantId
-                    && userTenant.UserId == notification.UserId
-                    && !userTenant.Tenant!.IsDeleted
-                    && !userTenant.User!.IsDeleted),
+            async () =>
+            {
+                var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+                return await administrationDbContext.UserTenants
+                    .AnyAsync(userTenant => userTenant.TenantId == notification.TenantId
+                        && userTenant.UserId == notification.UserId
+                        && !userTenant.Tenant!.IsDeleted
+                        && !userTenant.User!.IsDeleted,
+                    cancellationToken);
+            },
             new CacheEntryDto()
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(60),

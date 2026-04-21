@@ -12,14 +12,14 @@ namespace CqrsProject.Core.UserTenants.Handlers;
 
 public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, CollectionResponse<UserTenantResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<SearchUserTenantQuery> _validator;
 
     public SearchUserTenantHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchUserTenantQuery> validator)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
     }
 
@@ -28,8 +28,9 @@ public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, Co
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var query = CreateSearchQuery(request).AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var query = CreateSearchQuery(administrationDbContext, request).AsNoTracking();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         query = query
             .ApplySorting(request)
@@ -39,9 +40,11 @@ public class SearchUserTenantHandler : IRequestHandler<SearchUserTenantQuery, Co
         return new CollectionResponse<UserTenantResponse>(items, totalCount);
     }
 
-    private IQueryable<UserTenant> CreateSearchQuery(SearchUserTenantQuery request)
+    private static IQueryable<UserTenant> CreateSearchQuery(
+        AdministrationDbContext administrationDbContext,
+        SearchUserTenantQuery request)
     {
-        return _administrationDbContext.UserTenants
+        return administrationDbContext.UserTenants
             .Where(tenant => !tenant.Tenant!.IsDeleted)
             .Where(tenant => !tenant.User!.IsDeleted)
             .WhereIf(

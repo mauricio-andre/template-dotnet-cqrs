@@ -13,7 +13,7 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantConnectionStringCommand>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<RemoveTenantConnectionStringCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly ITenantConnectionProvider _tenantConnectionProvider;
@@ -24,7 +24,7 @@ public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantC
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         ITenantConnectionProvider tenantConnectionProvider)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
         _tenantConnectionProvider = tenantConnectionProvider;
@@ -35,7 +35,8 @@ public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantC
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.TenantConnectionStrings.FirstOrDefaultAsync(
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var entity = await administrationDbContext.TenantConnectionStrings.FirstOrDefaultAsync(
             entity => entity.Id == request.Id
                 && entity.TenantId == request.TenantId,
             cancellationToken);
@@ -43,8 +44,8 @@ public class RemoveTenantConnectionStringHandler : IRequestHandler<RemoveTenantC
         if (entity == null)
             throw new EntityNotFoundException(_stringLocalizer, nameof(TenantConnectionString), request.Id.ToString());
 
-        _administrationDbContext.Remove(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        administrationDbContext.Remove(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
         _tenantConnectionProvider.InvalidateConnectionString(entity.TenantId, entity.ConnectionName);
     }
 }

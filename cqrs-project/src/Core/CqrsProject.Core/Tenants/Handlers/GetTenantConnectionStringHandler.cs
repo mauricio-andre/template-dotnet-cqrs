@@ -15,7 +15,7 @@ public class GetTenantConnectionStringHandler : IRequestHandler<
     GetTenantConnectionStringQuery,
     TenantConnectionStringResponse>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<GetTenantConnectionStringQuery> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
@@ -25,7 +25,7 @@ public class GetTenantConnectionStringHandler : IRequestHandler<
         IValidator<GetTenantConnectionStringQuery> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
     }
@@ -35,7 +35,8 @@ public class GetTenantConnectionStringHandler : IRequestHandler<
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.TenantConnectionStrings
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var entity = await administrationDbContext.TenantConnectionStrings
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 entity => entity.Id == request.Id

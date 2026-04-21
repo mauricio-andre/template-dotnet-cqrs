@@ -12,7 +12,7 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<RemoveTenantCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
@@ -21,7 +21,7 @@ public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
         IValidator<RemoveTenantCommand> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
     }
@@ -31,7 +31,8 @@ public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.Tenants.FirstOrDefaultAsync(
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var entity = await administrationDbContext.Tenants.FirstOrDefaultAsync(
             tenant => tenant.Id == request.Id
                 && !tenant.IsDeleted,
             cancellationToken);
@@ -41,7 +42,7 @@ public class RemoveTenantHandler : IRequestHandler<RemoveTenantCommand>
 
         entity.IsDeleted = true;
 
-        _administrationDbContext.Update(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        administrationDbContext.Update(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
     }
 }

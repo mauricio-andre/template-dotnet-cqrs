@@ -14,7 +14,7 @@ public class ShallNotAllowDuplicateUserRule
     : INotificationHandler<CreateUserEvent>,
     INotificationHandler<UpdateUserEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly UserManager<User> _userManager;
 
@@ -23,7 +23,7 @@ public class ShallNotAllowDuplicateUserRule
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         UserManager<User> userManager)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
         _userManager = userManager;
     }
@@ -36,7 +36,8 @@ public class ShallNotAllowDuplicateUserRule
 
     private async Task HandleRule(Guid? id, string userName, string email, CancellationToken cancellationToken)
     {
-        var user = await _administrationDbContext.Users
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var user = await administrationDbContext.Users
             .FirstOrDefaultAsync(
                 entity => entity.Id != id
                     && (entity.NormalizedUserName == _userManager.NormalizeName(userName)

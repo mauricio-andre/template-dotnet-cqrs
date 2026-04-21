@@ -15,7 +15,7 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
     CreateTenantConnectionStringCommand,
     TenantConnectionStringResponse>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<CreateTenantConnectionStringCommand> _validator;
     private readonly IMediator _mediator;
     private readonly ITenantConnectionProvider _tenantConnectionProvider;
@@ -26,7 +26,7 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
         IMediator mediator,
         ITenantConnectionProvider tenantConnectionProvider)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _mediator = mediator;
         _tenantConnectionProvider = tenantConnectionProvider;
@@ -37,12 +37,13 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
         await _mediator.Publish(new CreateTenantConnectionStringEvent(
             request.TenantId,
             request.ConnectionName));
 
         var entity = MapToEntity(request);
-        _administrationDbContext.Add(entity);
+        administrationDbContext.Add(entity);
 
         await _tenantConnectionProvider.IncludeConnectionStringAsync(
             entity.TenantId,
@@ -51,7 +52,7 @@ public class CreateTenantConnectionStringHandler : IRequestHandler<
 
         try
         {
-            await _administrationDbContext.SaveChangesAsync(cancellationToken);
+            await administrationDbContext.SaveChangesAsync(cancellationToken);
             return MapToResponse(entity);
         }
         catch (Exception)

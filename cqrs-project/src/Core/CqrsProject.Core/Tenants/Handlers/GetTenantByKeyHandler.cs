@@ -13,7 +13,7 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class GetTenantByKeyHandler : IRequestHandler<GetTenantByKeyQuery, TenantResponse>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<GetTenantByKeyQuery> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
@@ -22,7 +22,7 @@ public class GetTenantByKeyHandler : IRequestHandler<GetTenantByKeyQuery, Tenant
         IValidator<GetTenantByKeyQuery> validator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
     }
@@ -32,7 +32,8 @@ public class GetTenantByKeyHandler : IRequestHandler<GetTenantByKeyQuery, Tenant
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.Tenants
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var entity = await administrationDbContext.Tenants
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 tenant => tenant.Id == request.Id

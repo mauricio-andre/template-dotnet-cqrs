@@ -12,14 +12,14 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class SearchTenantHandler : IRequestHandler<SearchTenantQuery, CollectionResponse<TenantResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<SearchTenantQuery> _validator;
 
     public SearchTenantHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchTenantQuery> validator)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
     }
 
@@ -28,8 +28,9 @@ public class SearchTenantHandler : IRequestHandler<SearchTenantQuery, Collection
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var query = CreateSearchQuery(request).AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var query = CreateSearchQuery(administrationDbContext, request).AsNoTracking();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         query = query
             .ApplySorting(request)
@@ -39,9 +40,11 @@ public class SearchTenantHandler : IRequestHandler<SearchTenantQuery, Collection
         return new CollectionResponse<TenantResponse>(items, totalCount);
     }
 
-    private IQueryable<Tenant> CreateSearchQuery(SearchTenantQuery request)
+    private static IQueryable<Tenant> CreateSearchQuery(
+        AdministrationDbContext administrationDbContext,
+        SearchTenantQuery request)
     {
-        return _administrationDbContext.Tenants
+        return administrationDbContext.Tenants
             .WhereIf(
                 !string.IsNullOrEmpty(request.Name),
                 tenant => tenant.Name.ToLower().Contains(request.Name!.ToLower()))

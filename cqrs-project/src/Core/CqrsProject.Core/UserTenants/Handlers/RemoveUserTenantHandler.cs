@@ -14,7 +14,7 @@ namespace CqrsProject.Core.UserTenants.Handlers;
 
 public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<RemoveUserTenantCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly IChaceService _chaceService;
@@ -25,7 +25,7 @@ public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         IChaceService chaceService)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
         _chaceService = chaceService;
@@ -36,7 +36,8 @@ public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var entity = await _administrationDbContext.UserTenants.FirstOrDefaultAsync(
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var entity = await administrationDbContext.UserTenants.FirstOrDefaultAsync(
             userTenant => userTenant.UserId == request.UserId
                 && userTenant.TenantId == request.TenantId,
             cancellationToken);
@@ -57,7 +58,7 @@ public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
             request.UserId,
             request.TenantId));
 
-        _administrationDbContext.Remove(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        administrationDbContext.Remove(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -11,7 +11,7 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, TenantResponse>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<CreateTenantCommand> _validator;
     private readonly IMediator _mediator;
 
@@ -20,7 +20,7 @@ public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, TenantRe
         IValidator<CreateTenantCommand> validator,
         IMediator mediator)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _mediator = mediator;
     }
@@ -30,10 +30,11 @@ public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, TenantRe
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
         await _mediator.Publish(new CreateTenantEvent(request.Name));
         var entity = MapToEntity(request);
-        _administrationDbContext.Add(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        administrationDbContext.Add(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
         return MapToResponse(entity);
     }
 

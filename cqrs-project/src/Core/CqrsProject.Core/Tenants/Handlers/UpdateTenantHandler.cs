@@ -14,7 +14,7 @@ namespace CqrsProject.Core.Tenants.Handlers;
 
 public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantResponse>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<UpdateTenantCommand> _validator;
     private readonly IMediator _mediator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
@@ -25,7 +25,7 @@ public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantRe
         IMediator mediator,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _mediator = mediator;
         _stringLocalizer = stringLocalizer;
@@ -36,20 +36,24 @@ public class UpdateTenantHandler : IRequestHandler<UpdateTenantCommand, TenantRe
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
         await _mediator.Publish(new UpdateTenantEvent(request.Id, request.Name));
 
-        var entity = await GetEntity(request, cancellationToken);
+        var entity = await GetEntity(administrationDbContext, request, cancellationToken);
 
         entity.Name = request.Name;
 
-        _administrationDbContext.Update(entity);
-        await _administrationDbContext.SaveChangesAsync(cancellationToken);
+        administrationDbContext.Update(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
         return MapToResponse(entity);
     }
 
-    private async Task<Tenant> GetEntity(UpdateTenantCommand request, CancellationToken cancellationToken)
+    private async Task<Tenant> GetEntity(
+        AdministrationDbContext administrationDbContext,
+        UpdateTenantCommand request,
+        CancellationToken cancellationToken)
     {
-        var entity = await _administrationDbContext.Tenants.FirstOrDefaultAsync(
+        var entity = await administrationDbContext.Tenants.FirstOrDefaultAsync(
             tenant => tenant.Id == request.Id
                 && !tenant.IsDeleted,
             cancellationToken);

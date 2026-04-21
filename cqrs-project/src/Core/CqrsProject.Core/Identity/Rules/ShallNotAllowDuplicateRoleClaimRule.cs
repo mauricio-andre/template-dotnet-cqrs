@@ -13,23 +13,21 @@ namespace CqrsProject.Core.Identity.Rules;
 public class ShallNotAllowDuplicateRoleClaimRule
     : INotificationHandler<CreateRoleClaimEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
     public ShallNotAllowDuplicateRoleClaimRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
-        IStringLocalizer<CqrsProjectResource> stringLocalizer,
-        RoleManager<IdentityRole<Guid>> roleManager)
+        IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
-        _roleManager = roleManager;
     }
 
     public async Task Handle(CreateRoleClaimEvent notification, CancellationToken cancellationToken)
     {
-        var hasRole = await _administrationDbContext.RoleClaims
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasRole = await administrationDbContext.RoleClaims
             .AnyAsync(
                 entity => entity.RoleId == notification.RoleId
                     && entity.ClaimType == notification.ClaimType

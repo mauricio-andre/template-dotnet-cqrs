@@ -11,20 +11,21 @@ namespace CqrsProject.Core.Identity.Rules;
 
 public class ShallNotAllowDuplicateUserRoleRule : INotificationHandler<CreateUserRoleEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
     public ShallNotAllowDuplicateUserRoleRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
     }
 
     public async Task Handle(CreateUserRoleEvent notification, CancellationToken cancellationToken)
     {
-        var hasDuplicate = await _administrationDbContext.UserRoles
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasDuplicate = await administrationDbContext.UserRoles
             .AnyAsync(
                 userRole => userRole.UserId == notification.UserId
                     && userRole.RoleId == notification.RoleId,

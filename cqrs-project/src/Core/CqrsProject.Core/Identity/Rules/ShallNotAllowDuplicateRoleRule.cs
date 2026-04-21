@@ -14,7 +14,7 @@ public class ShallNotAllowDuplicateRoleRule
     : INotificationHandler<CreateRoleEvent>,
     INotificationHandler<UpdateRoleEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
@@ -23,7 +23,7 @@ public class ShallNotAllowDuplicateRoleRule
         IStringLocalizer<CqrsProjectResource> stringLocalizer,
         RoleManager<IdentityRole<Guid>> roleManager)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
         _roleManager = roleManager;
     }
@@ -36,7 +36,8 @@ public class ShallNotAllowDuplicateRoleRule
 
     private async Task HandleRule(Guid? id, string name, CancellationToken cancellationToken)
     {
-        var hasRole = await _administrationDbContext.Roles
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasRole = await administrationDbContext.Roles
             .AnyAsync(
                 entity => entity.Id != id
                     && entity.NormalizedName == _roleManager.NormalizeKey(name),

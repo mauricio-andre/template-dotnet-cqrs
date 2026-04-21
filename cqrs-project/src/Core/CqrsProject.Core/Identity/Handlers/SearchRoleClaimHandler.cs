@@ -13,14 +13,14 @@ public class SearchRoleClaimHandler : IRequestHandler<
     SearchRoleClaimQuery,
     CollectionResponse<KeyValuePair<string, string>>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<SearchRoleClaimQuery> _validator;
 
     public SearchRoleClaimHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<SearchRoleClaimQuery> validator)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
     }
 
@@ -29,21 +29,24 @@ public class SearchRoleClaimHandler : IRequestHandler<
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        var query = CreateSearchQuery(request).AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var query = CreateSearchQuery(administrationDbContext, request).AsNoTracking();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         query = query
             .ApplySorting(request)
             .ApplyPagination(request);
 
-        var items = MapToResponse(query).ToAsyncEnumerable();
+        var items = MapToResponse(query).AsAsyncEnumerable();
         return new CollectionResponse<KeyValuePair<string, string>>(items, totalCount);
     }
 
-    private IQueryable<IdentityRoleClaim<Guid>> CreateSearchQuery(SearchRoleClaimQuery request)
+    private static IQueryable<IdentityRoleClaim<Guid>> CreateSearchQuery(
+        AdministrationDbContext administrationDbContext,
+        SearchRoleClaimQuery request)
     {
-        return _administrationDbContext.RoleClaims
+        return administrationDbContext.RoleClaims
             .Where(roleClaim => roleClaim.RoleId == request.RoleId)
             .WhereIf(
                 !string.IsNullOrEmpty(request.ClaimType),

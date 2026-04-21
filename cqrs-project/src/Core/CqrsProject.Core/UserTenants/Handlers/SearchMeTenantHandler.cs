@@ -13,7 +13,7 @@ namespace CqrsProject.Core.UserTenants.Handlers;
 
 public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, CollectionResponse<MeTenantResponse>>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<SearchMeTenantQuery> _validator;
     private readonly ICurrentIdentity _currentIdentity;
 
@@ -22,7 +22,7 @@ public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, Collec
         IValidator<SearchMeTenantQuery> validator,
         ICurrentIdentity currentIdentity)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _validator = validator;
         _currentIdentity = currentIdentity;
     }
@@ -32,8 +32,9 @@ public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, Collec
         CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(request, cancellationToken);
-        var query = CreateSearchQuery(request).AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var query = CreateSearchQuery(administrationDbContext, request).AsNoTracking();
+        var totalCount = await query.CountAsync(cancellationToken);
 
         query = query
             .ApplySorting(request)
@@ -43,10 +44,12 @@ public class SearchMeTenantHandler : IRequestHandler<SearchMeTenantQuery, Collec
         return new CollectionResponse<MeTenantResponse>(items, totalCount);
     }
 
-    private IQueryable<UserTenant> CreateSearchQuery(SearchMeTenantQuery request)
+    private IQueryable<UserTenant> CreateSearchQuery(
+        AdministrationDbContext administrationDbContext,
+        SearchMeTenantQuery request)
     {
         var userId = _currentIdentity.GetLocalIdentityId();
-        return _administrationDbContext.UserTenants
+        return administrationDbContext.UserTenants
             .Where(tenant => !tenant.Tenant!.IsDeleted)
             .Where(tenant => !tenant.User!.IsDeleted)
             .Where(tenant => tenant.UserId == userId)

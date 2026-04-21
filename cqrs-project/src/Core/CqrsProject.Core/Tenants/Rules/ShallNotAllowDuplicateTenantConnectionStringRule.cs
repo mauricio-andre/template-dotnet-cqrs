@@ -12,20 +12,21 @@ namespace CqrsProject.Core.Tenants.Rules;
 public class ShallNotAllowDuplicateTenantConnectionStringRule
     : INotificationHandler<CreateTenantConnectionStringEvent>
 {
-    private readonly AdministrationDbContext _administrationDbContext;
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
 
     public ShallNotAllowDuplicateTenantConnectionStringRule(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
-        _administrationDbContext = dbContextFactory.CreateDbContext();
+        _dbContextFactory = dbContextFactory;
         _stringLocalizer = stringLocalizer;
     }
 
     public async Task Handle(CreateTenantConnectionStringEvent notification, CancellationToken cancellationToken)
     {
-        var hasDuplicate = await _administrationDbContext.TenantConnectionStrings
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var hasDuplicate = await administrationDbContext.TenantConnectionStrings
             .AnyAsync(
                 entity => entity.TenantId == notification.TenantId
                     && entity.ConnectionName.ToLower() == notification.ConnectionName.ToLower(),

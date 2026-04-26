@@ -3,7 +3,7 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "cqrs-project",
   "workspaceFolder": "/workspace",
-  "runServices": ["app", "aspire", "postgresdb"],
+  "runServices": ["cqrs-project", "aspire", "postgresdb"],
   "forwardPorts": [5234, 5260, 7246],
   "portsAttributes": {
       "5234": {

@@ -1,11 +1,13 @@
 using CqrsProject.App.GrpcServer.Attributes;
 using CqrsProject.App.GrpcServer.Authorization;
-using CqrsProject.Core.Examples.Commands;
-using CqrsProject.Core.Examples.Queries;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using CqrsProject.Core.Examples.UseCases.RemoveExample;
+using CqrsProject.Core.Examples.UseCases.SearchExample;
+using CqrsProject.Core.Examples.UseCases.CreateExample;
+using CqrsProject.Core.Examples.UseCases.GetExampleByKey;
 
 namespace CqrsProject.App.GrpcServer.Methods.V1.Examples;
 

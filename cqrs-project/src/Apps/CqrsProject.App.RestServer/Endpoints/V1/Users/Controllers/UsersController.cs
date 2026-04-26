@@ -2,15 +2,22 @@ using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.Endpoints.V1.Users.Dtos;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.Identity.Queries;
 using CqrsProject.Core.Identity.Responses;
-using CqrsProject.Core.UserTenants.Commands;
-using CqrsProject.Core.UserTenants.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
+using CqrsProject.Core.Identity.UseCases.CreateUser;
+using CqrsProject.Core.Identity.UseCases.SearchUserRole;
+using CqrsProject.Core.UserTenants.UseCases.SearchUserTenant;
+using CqrsProject.Core.Identity.UseCases.RemoveUser;
+using CqrsProject.Core.UserTenants.UseCases.RemoveUserTenant;
+using CqrsProject.Core.Identity.UseCases.UpdateUser;
+using CqrsProject.Core.Identity.UseCases.CreateUserRole;
+using CqrsProject.Core.Identity.UseCases.GetUser;
+using CqrsProject.Core.Identity.UseCases.SearchUser;
+using CqrsProject.Core.Identity.UseCases.RemoveUserRole;
+using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 
 namespace CqrsProject.App.RestServer.Endpoints.V1.Users.Controllers;
 

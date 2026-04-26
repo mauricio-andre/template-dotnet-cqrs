@@ -1,0 +1,23 @@
+using FluentValidation;
+
+namespace CqrsProject.Core.Identity.UseCases.CreateUser;
+
+public class CreateUserValidator : AbstractValidator<CreateUserCommand>
+{
+    public CreateUserValidator()
+    {
+        RuleFor(prop => prop.UserName)
+            .NotEmpty()
+            .NotNull()
+            .MaximumLength(256);
+
+        RuleFor(prop => prop.Email)
+            .NotEmpty()
+            .NotNull()
+            .EmailAddress()
+            .MaximumLength(256);
+
+        RuleFor(prop => prop.PhoneNumber)
+            .MaximumLength(20);
+    }
+}

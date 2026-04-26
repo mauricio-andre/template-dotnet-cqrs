@@ -2,12 +2,11 @@ using System.Security.Claims;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Endpoints.V1.Me.Dtos;
 using CqrsProject.App.RestServer.Extensions;
-using CqrsProject.Core.Identity.Commands;
-using CqrsProject.Core.UserTenants.Queries;
-using CqrsProject.Core.UserTenants.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CqrsProject.Core.Identity.UseCases.IdentitySync;
+using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 
 namespace CqrsProject.App.RestServer.Endpoints.V1.Me.Controllers;
 
@@ -37,8 +36,8 @@ public class MeController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<IList<MeTenantResponse>>(StatusCodes.Status206PartialContent)]
+    [ProducesResponseType<IList<SearchMeTenantResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IList<SearchMeTenantResponse>>(StatusCodes.Status206PartialContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Tenants([FromQuery] SearchMeTenantQuery request)
     {

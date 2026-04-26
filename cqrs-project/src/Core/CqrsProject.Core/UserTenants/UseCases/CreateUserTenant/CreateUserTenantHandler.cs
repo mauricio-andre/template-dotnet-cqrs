@@ -1,0 +1,89 @@
+using CqrsProject.Common.Exceptions;
+using CqrsProject.Common.Localization;
+using CqrsProject.Core.Data;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.UserTenants.Entities;
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+
+namespace CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
+
+public class CreateUserTenantHandler : IRequestHandler<CreateUserTenantCommand>
+{
+    private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
+    private readonly IValidator<CreateUserTenantCommand> _validator;
+    private readonly IMediator _mediator;
+    private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
+    private readonly ICurrentIdentity _currentIdentity;
+
+    public CreateUserTenantHandler(
+        IDbContextFactory<AdministrationDbContext> dbContextFactory,
+        IValidator<CreateUserTenantCommand> validator,
+        IMediator mediator,
+        IStringLocalizer<CqrsProjectResource> stringLocalizer,
+        ICurrentIdentity currentIdentity)
+    {
+        _dbContextFactory = dbContextFactory;
+        _validator = validator;
+        _mediator = mediator;
+        _stringLocalizer = stringLocalizer;
+        _currentIdentity = currentIdentity;
+    }
+
+    public async Task Handle(
+        CreateUserTenantCommand request,
+        CancellationToken cancellationToken)
+    {
+        await _validator.ValidateAndThrowAsync(request, cancellationToken);
+        var administrationDbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        await _mediator.Publish(new CreateUserTenantEvent(request.UserId, request.TenantId));
+
+        await CheckUserExistsAsync(administrationDbContext, request, cancellationToken);
+        await CheckTenantExistsAsync(administrationDbContext, request, cancellationToken);
+        var entity = MapToEntity(request);
+
+        administrationDbContext.Add(entity);
+        await administrationDbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task CheckUserExistsAsync(
+        AdministrationDbContext administrationDbContext,
+        CreateUserTenantCommand request,
+        CancellationToken cancellationToken)
+    {
+        var userExists = await administrationDbContext.Users
+            .Where(user => user.Id == request.UserId
+                && !user.IsDeleted)
+            .AnyAsync(cancellationToken);
+
+        if (!userExists)
+            throw new EntityNotFoundException(_stringLocalizer, nameof(User), request.UserId.ToString());
+    }
+
+    private async Task CheckTenantExistsAsync(
+        AdministrationDbContext administrationDbContext,
+        CreateUserTenantCommand request,
+        CancellationToken cancellationToken)
+    {
+        var tenantExists = await administrationDbContext.Tenants
+            .Where(tenant => tenant.Id == request.TenantId
+                && !tenant.IsDeleted)
+            .AnyAsync(cancellationToken);
+
+        if (!tenantExists)
+            throw new EntityNotFoundException(_stringLocalizer, nameof(Tenant), request.TenantId.ToString());
+    }
+
+    private UserTenant MapToEntity(CreateUserTenantCommand request)
+        => new UserTenant
+        {
+            UserId = request.UserId,
+            TenantId = request.TenantId,
+            CreationTime = DateTimeOffset.UtcNow,
+            CreatorId = _currentIdentity.GetLocalIdentityId()
+        };
+}

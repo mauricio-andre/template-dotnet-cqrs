@@ -1,11 +1,11 @@
 using CqrsProject.App.GrpcServer.Extensions;
 using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Tenants.Events;
 using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using MediatR;
+using CqrsProject.Core.Tenants.UseCases.TenantAccessedByUser;
 
 namespace CqrsProject.App.GrpcServer.Interceptors;
 

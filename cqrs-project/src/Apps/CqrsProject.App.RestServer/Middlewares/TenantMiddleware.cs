@@ -1,8 +1,8 @@
 using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Tenants.Events;
 using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
 using MediatR;
+using CqrsProject.Core.Tenants.UseCases.TenantAccessedByUser;
 
 namespace CqrsProject.App.RestServer.Middlewares;
 

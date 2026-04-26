@@ -2,10 +2,10 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Examples.Entities;
-using CqrsProject.Core.Examples.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using CqrsProject.Core.Examples.UseCases.CreateExample;
 
 namespace CqrsProject.Core.Examples.Rules;
 

@@ -6,10 +6,10 @@ using CqrsProject.Commons.Test.Services;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.UserTenants.Entities;
-using CqrsProject.Core.UserTenants.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 
 namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 
@@ -100,7 +100,7 @@ public class MeTenantsTest
 
             Assert.Equal(HttpStatusCode.PartialContent, response.StatusCode);
 
-            var content = await response.Content.ReadFromJsonAsync<IList<MeTenantResponse>>();
+            var content = await response.Content.ReadFromJsonAsync<IList<SearchMeTenantResponse>>();
             response.Content.Headers.TryGetValues("Content-Range", out var ContentRange);
 
             Assert.NotNull(content);
@@ -163,7 +163,7 @@ public class MeTenantsTest
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var content = await response.Content.ReadFromJsonAsync<IList<MeTenantResponse>>();
+            var content = await response.Content.ReadFromJsonAsync<IList<SearchMeTenantResponse>>();
             response.Content.Headers.TryGetValues("Content-Range", out var ContentRange);
 
             Assert.NotNull(content);

@@ -2,10 +2,10 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.UserTenants.Entities;
-using CqrsProject.Core.UserTenants.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 
 namespace CqrsProject.Core.UserTenants.Rules;
 

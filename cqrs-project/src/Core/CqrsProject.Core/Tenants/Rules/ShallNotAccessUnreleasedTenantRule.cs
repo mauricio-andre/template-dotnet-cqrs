@@ -3,11 +3,11 @@ using CqrsProject.Common.Localization;
 using CqrsProject.Common.Providers.Cache.Dtos;
 using CqrsProject.Common.Providers.Cache.Interfaces;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Tenants.Events;
 using CqrsProject.Core.Tenants.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using CqrsProject.Core.Tenants.UseCases.TenantAccessedByUser;
 
 namespace CqrsProject.Core.Tenants.Rules;
 

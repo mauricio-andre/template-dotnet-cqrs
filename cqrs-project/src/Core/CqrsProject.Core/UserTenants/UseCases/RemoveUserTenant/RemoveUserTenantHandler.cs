@@ -16,18 +16,15 @@ public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
     private readonly IDbContextFactory<AdministrationDbContext> _dbContextFactory;
     private readonly IValidator<RemoveUserTenantCommand> _validator;
     private readonly IStringLocalizer<CqrsProjectResource> _stringLocalizer;
-    private readonly IChaceService _chaceService;
 
     public RemoveUserTenantHandler(
         IDbContextFactory<AdministrationDbContext> dbContextFactory,
         IValidator<RemoveUserTenantCommand> validator,
-        IStringLocalizer<CqrsProjectResource> stringLocalizer,
-        IChaceService chaceService)
+        IStringLocalizer<CqrsProjectResource> stringLocalizer)
     {
         _dbContextFactory = dbContextFactory;
         _validator = validator;
         _stringLocalizer = stringLocalizer;
-        _chaceService = chaceService;
     }
 
     public async Task Handle(
@@ -51,11 +48,6 @@ public class RemoveUserTenantHandler : IRequestHandler<RemoveUserTenantCommand>
                     " tenantId: ",
                     request.TenantId
                 ));
-
-        _chaceService.TryRemove(string.Format(
-            CacheKeys.AccessUserTenantKey,
-            request.UserId,
-            request.TenantId));
 
         administrationDbContext.Remove(entity);
         await administrationDbContext.SaveChangesAsync(cancellationToken);

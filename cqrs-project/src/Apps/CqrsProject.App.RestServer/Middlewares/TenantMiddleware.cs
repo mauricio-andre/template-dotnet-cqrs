@@ -1,8 +1,5 @@
 using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
-using MediatR;
-using CqrsProject.Core.Tenants.UseCases.TenantAccessedByUser;
 
 namespace CqrsProject.App.RestServer.Middlewares;
 
@@ -18,8 +15,7 @@ public class TenantMiddleware
     public async Task InvokeAsync(
         HttpContext context,
         ICurrentTenant currentTenant,
-        ICurrentIdentity currentIdentity,
-        IMediator mediator)
+        ICurrentIdentity currentIdentity)
     {
         if (!context.Request.Headers.TryGetValue("Tenant-Id", out var tenantIdHeader)
             || string.IsNullOrEmpty(tenantIdHeader))
@@ -34,19 +30,7 @@ public class TenantMiddleware
             return;
         }
 
-        try
-        {
-            await mediator.Publish(new TenantAccessedByUserEvent(
-                UserId: currentIdentity.GetLocalIdentityId(),
-                TenantId: tenantId
-            ));
-        }
-        catch (TenantUnreleasedException)
-        {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            return;
-        }
-        catch (UnauthorizedAccessException)
+        if (!currentIdentity.GetTenants().Contains(tenantId))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;

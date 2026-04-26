@@ -41,11 +41,21 @@ public class CurrentIdentity : ICurrentIdentity
             ?? false;
     }
 
-    public IEnumerable<string>? GetRoles()
+    public IEnumerable<string> GetRoles()
     {
         return _principal?.Identities
             .SelectMany(identity => identity.Claims)
             .Where(claim => claim.Type == ClaimTypes.Role)
-            .Select(claim => claim.Value);
+            .Select(claim => claim.Value)
+            ?? [];
+    }
+
+    public IEnumerable<Guid> GetTenants()
+    {
+        return _principal?.Identities
+            .SelectMany(identity => identity.Claims)
+            .Where(claim => claim.Type == "tenants")
+            .Select(claim => Guid.Parse(claim.Value))
+            ?? [];
     }
 }

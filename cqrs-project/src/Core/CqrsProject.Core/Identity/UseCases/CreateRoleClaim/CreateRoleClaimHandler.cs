@@ -62,8 +62,8 @@ public class CreateRoleClaimHandler : IRequestHandler<CreateRoleClaimCommand>
 
     private async Task IsUserInRole(IdentityRole<Guid> role)
     {
-        var roles = _currentIdentity.GetRoles()?.Select(role => _roleManager.NormalizeKey(role));
-        if (roles != null && roles.Contains(role.NormalizedName))
+        var roles = _currentIdentity.GetRoles().Select(role => _roleManager.NormalizeKey(role));
+        if (roles.Contains(role.NormalizedName))
             await _mediator.Publish(new CreateRoleClaimForYourselfEvent(_currentIdentity.GetLocalIdentityId()));
     }
 

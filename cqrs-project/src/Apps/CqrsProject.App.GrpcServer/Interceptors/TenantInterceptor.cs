@@ -1,11 +1,8 @@
 using CqrsProject.App.GrpcServer.Extensions;
 using CqrsProject.Core.Identity.Interfaces;
-using CqrsProject.Core.Tenants.Exceptions;
 using CqrsProject.Core.Tenants.Interfaces;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
-using MediatR;
-using CqrsProject.Core.Tenants.UseCases.TenantAccessedByUser;
 
 namespace CqrsProject.App.GrpcServer.Interceptors;
 
@@ -13,16 +10,13 @@ public class TenantInterceptor : Interceptor
 {
     private readonly ICurrentTenant _currentTenant;
     private readonly ICurrentIdentity _currentIdentity;
-    private readonly IMediator _mediator;
 
     public TenantInterceptor(
         ICurrentTenant currentTenant,
-        ICurrentIdentity currentIdentity,
-        IMediator mediator)
+        ICurrentIdentity currentIdentity)
     {
         _currentTenant = currentTenant;
         _currentIdentity = currentIdentity;
-        _mediator = mediator;
     }
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(
@@ -90,21 +84,8 @@ public class TenantInterceptor : Interceptor
         if (!Guid.TryParse(tenantIdHeader, out Guid tenantId))
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Tenant-Id not in expected format"));
 
-        try
-        {
-            await _mediator.Publish(new TenantAccessedByUserEvent(
-                UserId: _currentIdentity.GetLocalIdentityId(),
-                TenantId: tenantId
-            ));
-        }
-        catch (TenantUnreleasedException)
-        {
-            throw new RpcException(new Status(StatusCode.PermissionDenied, "tenant not released to user"));
-        }
-        catch (UnauthorizedAccessException)
-        {
-            throw new RpcException(new Status(StatusCode.PermissionDenied, "unrecognized internal user"));
-        }
+        if (!_currentIdentity.GetTenants().Contains(tenantId))
+            throw new RpcException(new Status(StatusCode.PermissionDenied, "Tenant not released to user"));
 
         using (_currentTenant.BeginTenantScope(tenantId))
             return await continuation();

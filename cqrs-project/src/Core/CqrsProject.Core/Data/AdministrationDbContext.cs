@@ -34,6 +34,8 @@ public abstract class AdministrationDbContext : IdentityDbContext<User, Identity
         base.OnModelCreating(builder);
 
         AdministrationSeedDataConfiguration.Configure(builder);
+
+        builder.Entity<User>(entity => entity.Navigation(user => user.UserTenantList).AutoInclude());
     }
 
     public DbSet<UserTenant> UserTenants => Set<UserTenant>();

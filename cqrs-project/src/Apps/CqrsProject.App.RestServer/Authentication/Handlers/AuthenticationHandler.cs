@@ -97,11 +97,16 @@ public class AuthenticationHandler : AuthenticationHandler<AuthenticationOptions
     {
         var localIdentity = await _userClaimsPrincipalFactory.CreateAsync(localUser);
 
-        localIdentity.Identities.First().AddClaims(new List<Claim>()
+        var claims = new List<Claim>()
         {
             new Claim("creation_time", localUser.CreationTime.ToUnixTimeSeconds().ToString()),
             new Claim("last_modification_time", localUser.LastModificationTime?.ToUnixTimeSeconds().ToString() ?? string.Empty)
-        });
+        };
+
+        claims.AddRange(localUser.UserTenantList.Select(userTenant =>
+            new Claim("tenants", userTenant.TenantId.ToString())));
+
+        localIdentity.Identities.First().AddClaims(claims);
 
         return new ClaimsIdentity(
             localIdentity.Claims,

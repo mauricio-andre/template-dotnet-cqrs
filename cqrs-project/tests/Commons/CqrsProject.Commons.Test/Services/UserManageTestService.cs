@@ -4,6 +4,7 @@ using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.Commons.Test.Services;
 
@@ -36,20 +37,20 @@ public class UserManageTestService
         await userManager.AddToRoleAsync(user, role.Name!);
 
         await roleManager.AddClaimAsync(role, new Claim(
-            AuthorizationPermissionClaims.ClaimType,
-            AuthorizationPermissionClaims.ManageAdministration));
+            IdentityPermissionClaimDefaults.ClaimType,
+            IdentityPermissionClaimDefaults.ManageAdministration));
 
         await roleManager.AddClaimAsync(role, new Claim(
-            AuthorizationPermissionClaims.ClaimType,
-            AuthorizationPermissionClaims.ManageExamples));
+            IdentityPermissionClaimDefaults.ClaimType,
+            IdentityPermissionClaimDefaults.ManageExamples));
 
         await roleManager.AddClaimAsync(role, new Claim(
-            AuthorizationPermissionClaims.ClaimType,
-            AuthorizationPermissionClaims.ManageSelf));
+            IdentityPermissionClaimDefaults.ClaimType,
+            IdentityPermissionClaimDefaults.ManageSelf));
 
         await roleManager.AddClaimAsync(role, new Claim(
-            AuthorizationPermissionClaims.ClaimType,
-            AuthorizationPermissionClaims.ReadExamples));
+            IdentityPermissionClaimDefaults.ClaimType,
+            IdentityPermissionClaimDefaults.ReadExamples));
 
         return user;
     }
@@ -73,7 +74,7 @@ public class UserManageTestService
             await userManager.AddClaimsAsync(
                 user,
                 permissionClaimList?.Select(permission => new Claim(
-                    AuthorizationPermissionClaims.ClaimType,
+                    IdentityPermissionClaimDefaults.ClaimType,
                     permission))!);
 
         return user;

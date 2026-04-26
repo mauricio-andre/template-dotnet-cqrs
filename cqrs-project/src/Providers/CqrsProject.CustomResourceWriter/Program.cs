@@ -1,4 +1,4 @@
-﻿using CqrsProject.CustomResourceWriter.Services;
+using CqrsProject.CustomResourceWriter.Services;
 
 namespace CqrsProject.CustomResourceWriter;
 

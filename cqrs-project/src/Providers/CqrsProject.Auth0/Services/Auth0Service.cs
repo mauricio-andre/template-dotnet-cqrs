@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using CqrsProject.Auth0.Dtos;
 using CqrsProject.Auth0.Options;

@@ -6,6 +6,7 @@ using CqrsProject.Commons.Test.Helpers;
 using CqrsProject.Commons.Test.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 
@@ -16,7 +17,7 @@ public class MeClaimPermissionsTest
     private readonly HttpClient _client;
     private readonly RestServerWebApplicationFactory _factory;
     private readonly UserManageTestService _userManageTestService;
-    private const string Route = $"/v1/me/claims/{AuthorizationPermissionClaims.ClaimType}";
+    private const string Route = $"/v1/me/claims/{IdentityPermissionClaimDefaults.ClaimType}";
 
     public MeClaimPermissionsTest(RestServerWebApplicationFactory factory, UserManageTestService userManageTestService)
     {
@@ -83,27 +84,27 @@ public class MeClaimPermissionsTest
         };
 
         yield return new object[] {
-            new List<string> { AuthorizationPermissionClaims.ManageExamples },
-            new List<string> { AuthorizationPermissionClaims.ManageExamples }
+            new List<string> { IdentityPermissionClaimDefaults.ManageExamples },
+            new List<string> { IdentityPermissionClaimDefaults.ManageExamples }
         };
 
         yield return new object[] {
-            new List<string> { AuthorizationPermissionClaims.ManageExamples, AuthorizationPermissionClaims.ManageAdministration },
-            new List<string> { AuthorizationPermissionClaims.ManageExamples, AuthorizationPermissionClaims.ManageAdministration }
+            new List<string> { IdentityPermissionClaimDefaults.ManageExamples, IdentityPermissionClaimDefaults.ManageAdministration },
+            new List<string> { IdentityPermissionClaimDefaults.ManageExamples, IdentityPermissionClaimDefaults.ManageAdministration }
         };
 
         yield return new object[] {
             new List<string>
             {
-                AuthorizationPermissionClaims.ManageExamples,
-                AuthorizationPermissionClaims.ManageAdministration,
-                AuthorizationPermissionClaims.ManageSelf
+                IdentityPermissionClaimDefaults.ManageExamples,
+                IdentityPermissionClaimDefaults.ManageAdministration,
+                IdentityPermissionClaimDefaults.ManageSelf
             },
             new List<string>
             {
-                AuthorizationPermissionClaims.ManageExamples,
-                AuthorizationPermissionClaims.ManageAdministration,
-                AuthorizationPermissionClaims.ManageSelf
+                IdentityPermissionClaimDefaults.ManageExamples,
+                IdentityPermissionClaimDefaults.ManageAdministration,
+                IdentityPermissionClaimDefaults.ManageSelf
             },
         };
     }

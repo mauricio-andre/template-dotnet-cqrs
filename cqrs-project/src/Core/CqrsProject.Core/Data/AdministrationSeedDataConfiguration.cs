@@ -1,4 +1,3 @@
-using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Consts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +22,8 @@ public static class AdministrationSeedDataConfiguration
             {
                 Id = -1,
                 RoleId = roleHostAdminId,
-                ClaimType = AuthorizationPermissionClaims.ClaimType,
-                ClaimValue = AuthorizationPermissionClaims.ManageSelf
+                ClaimType = IdentityPermissionClaimDefaults.ClaimType,
+                ClaimValue = IdentityPermissionClaimDefaults.ManageSelf
             });
 
         builder.Entity<IdentityRoleClaim<Guid>>().HasData(
@@ -32,8 +31,8 @@ public static class AdministrationSeedDataConfiguration
             {
                 Id = -2,
                 RoleId = roleHostAdminId,
-                ClaimType = AuthorizationPermissionClaims.ClaimType,
-                ClaimValue = AuthorizationPermissionClaims.ManageAdministration
+                ClaimType = IdentityPermissionClaimDefaults.ClaimType,
+                ClaimValue = IdentityPermissionClaimDefaults.ManageAdministration
             });
     }
 }

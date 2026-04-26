@@ -1,6 +1,6 @@
-namespace CqrsProject.Common.Consts;
+namespace CqrsProject.Core.Identity.Consts;
 
-public static class AuthorizationPermissionClaims
+public static class IdentityPermissionClaimDefaults
 {
     public const string ClaimType = "permissions";
     public const string ManageSelf = "manage_self";

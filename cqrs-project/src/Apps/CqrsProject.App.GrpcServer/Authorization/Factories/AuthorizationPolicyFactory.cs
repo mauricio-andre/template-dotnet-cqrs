@@ -1,5 +1,5 @@
-using CqrsProject.Common.Consts;
 using Microsoft.AspNetCore.Authorization;
+using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.App.GrpcServer.Authorization;
 
@@ -12,14 +12,14 @@ public static class AuthorizationPolicyFactory
             options.AddPolicy(
                 AuthorizationPolicyNames.CanReadExamples,
                 policy => policy.RequireClaim(
-                    AuthorizationPermissionClaims.ClaimType,
-                    AuthorizationPermissionClaims.ReadExamples));
+                    IdentityPermissionClaimDefaults.ClaimType,
+                    IdentityPermissionClaimDefaults.ReadExamples));
 
             options.AddPolicy(
                 AuthorizationPolicyNames.CanManageExamples,
                 policy => policy.RequireClaim(
-                    AuthorizationPermissionClaims.ClaimType,
-                    AuthorizationPermissionClaims.ManageExamples));
+                    IdentityPermissionClaimDefaults.ClaimType,
+                    IdentityPermissionClaimDefaults.ManageExamples));
         };
     }
 }

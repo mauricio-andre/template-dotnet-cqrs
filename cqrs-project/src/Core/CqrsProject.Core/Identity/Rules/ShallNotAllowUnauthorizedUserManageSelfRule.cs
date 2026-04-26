@@ -1,9 +1,9 @@
-using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Interfaces;
 using MediatR;
 using CqrsProject.Core.Identity.UseCases.CreateUserRole;
 using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 using CqrsProject.Core.Identity.UseCases.CreateRoleClaim;
+using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.Core.Identity.Rules;
 
@@ -37,7 +37,7 @@ public class ShallNotAllowUnauthorizedUserManageSelfRule
     public Task HandleRule(Guid userId)
     {
         if (userId == _currentIdentity.GetLocalIdentityId()
-            && !_currentIdentity.HasLocalPermission(AuthorizationPermissionClaims.ManageSelf))
+            && !_currentIdentity.HasLocalPermission(IdentityPermissionClaimDefaults.ManageSelf))
         {
             throw new UnauthorizedAccessException();
         }

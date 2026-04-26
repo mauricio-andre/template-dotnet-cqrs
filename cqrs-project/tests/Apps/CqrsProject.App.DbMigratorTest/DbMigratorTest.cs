@@ -1,4 +1,4 @@
-﻿using CqrsProject.App.DbMigrator.Interfaces;
+using CqrsProject.App.DbMigrator.Interfaces;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Examples.Entities;
 using CqrsProject.Core.Tenants.Entities;

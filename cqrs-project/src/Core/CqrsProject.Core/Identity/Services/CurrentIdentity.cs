@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using CqrsProject.Common.Consts;
 using CqrsProject.Core.Identity.Interfaces;
+using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.Core.Identity.Services;
 
@@ -36,7 +37,7 @@ public class CurrentIdentity : ICurrentIdentity
     {
         return _principal?.Identities
             .FirstOrDefault(identity => identity.AuthenticationType == AuthenticationDefaults.LocalIdentityType)
-            ?.Claims.Any(claim => claim.Type == AuthorizationPermissionClaims.ClaimType
+            ?.Claims.Any(claim => claim.Type == IdentityPermissionClaimDefaults.ClaimType
                 && claim.Value == permissionName)
             ?? false;
     }

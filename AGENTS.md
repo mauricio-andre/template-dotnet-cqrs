@@ -36,6 +36,7 @@ Keep domain behavior organized by use case. Under each domain folder, place comm
 ## Testing Guidelines
 
 Tests use xUnit with `Microsoft.NET.Test.Sdk`; REST tests also use `Microsoft.AspNetCore.Mvc.Testing`, `NSubstitute`, and shared helpers from `tests/Commons`. Name test classes with the `Test` suffix, matching existing examples like `TenantMiddlewareTest` and `DbMigratorTest`. Add or update tests for handler, middleware, endpoint, and migration behavior changes.
+Every test must declare a clear `DisplayName` that describes the expected behavior, especially for `Fact` and `Theory` cases.
 
 ## Commit & Pull Request Guidelines
 

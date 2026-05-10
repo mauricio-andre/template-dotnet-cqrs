@@ -14,10 +14,11 @@ public class SearchExampleTest
     [Fact(DisplayName = "Should return examples filtered by term")]
     public async Task GivenExamples_WhenSearchingByTerm_ThenReturnFilteredItems()
     {
-        using var context = new CoreSqliteTestContext();
-        await AddExamplesAsync(context.DbContext, "Alpha", "Beta", "Alpine");
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        await AddExamplesAsync(dbContext, "Alpha", "Beta", "Alpine");
         var handler = new SearchExampleHandler(
-            context.DbContext,
+            dbContext,
             new SearchExampleValidator());
 
         var response = await handler.Handle(
@@ -33,10 +34,11 @@ public class SearchExampleTest
     [Fact(DisplayName = "Should apply sorting and pagination to the result set")]
     public async Task GivenExamples_WhenSortingAndPaging_ThenReturnRequestedPage()
     {
-        using var context = new CoreSqliteTestContext();
-        await AddExamplesAsync(context.DbContext, "Gamma", "Alpha", "Beta");
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        await AddExamplesAsync(dbContext, "Gamma", "Alpha", "Beta");
         var handler = new SearchExampleHandler(
-            context.DbContext,
+            dbContext,
             new SearchExampleValidator());
 
         var response = await handler.Handle(
@@ -55,9 +57,10 @@ public class SearchExampleTest
     [InlineData(1, -1)]
     public async Task GivenInvalidPaging_WhenHandled_ThenThrowValidationException(int take, int skip)
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new SearchExampleHandler(
-            context.DbContext,
+            dbContext,
             new SearchExampleValidator());
 
         await Assert.ThrowsAsync<ValidationException>(

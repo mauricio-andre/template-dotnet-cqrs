@@ -14,9 +14,10 @@ public class CreateExampleTest
     [Fact(DisplayName = "Should create an example and publish the creation event")]
     public async Task GivenValidCommand_WhenHandled_ThenPersistExampleAndPublishEvent()
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new CreateExampleHandler(
-            context.DbContext,
+            dbContext,
             new CreateExampleValidator(),
             context.Mediator);
 
@@ -24,8 +25,8 @@ public class CreateExampleTest
 
         Assert.Equal("Example One", response.Name);
         Assert.True(response.Id > 0);
-        Assert.Equal(1, await context.DbContext.Examples.CountAsync());
-        Assert.Equal("Example One", await context.DbContext.Examples.Select(example => example.Name).SingleAsync());
+        Assert.Equal(1, await dbContext.Examples.CountAsync());
+        Assert.Equal("Example One", await dbContext.Examples.Select(example => example.Name).SingleAsync());
 
         await context.Mediator.Received(1).Publish(
             Arg.Is<CreateExampleEvent>(notification => notification.Name == "Example One"),
@@ -37,24 +38,26 @@ public class CreateExampleTest
     [InlineData("   ")]
     public async Task GivenInvalidName_WhenHandled_ThenThrowValidationException(string name)
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new CreateExampleHandler(
-            context.DbContext,
+            dbContext,
             new CreateExampleValidator(),
             context.Mediator);
 
         await Assert.ThrowsAsync<ValidationException>(
             () => handler.Handle(new CreateExampleCommand(name), CancellationToken.None));
 
-        Assert.Equal(0, await context.DbContext.Examples.CountAsync());
+        Assert.Equal(0, await dbContext.Examples.CountAsync());
     }
 
     [Fact(DisplayName = "Should reject names above the maximum length")]
     public async Task GivenNameAboveMaxLength_WhenHandled_ThenThrowValidationException()
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new CreateExampleHandler(
-            context.DbContext,
+            dbContext,
             new CreateExampleValidator(),
             context.Mediator);
 
@@ -63,6 +66,6 @@ public class CreateExampleTest
         await Assert.ThrowsAsync<ValidationException>(
             () => handler.Handle(new CreateExampleCommand(name), CancellationToken.None));
 
-        Assert.Equal(0, await context.DbContext.Examples.CountAsync());
+        Assert.Equal(0, await dbContext.Examples.CountAsync());
     }
 }

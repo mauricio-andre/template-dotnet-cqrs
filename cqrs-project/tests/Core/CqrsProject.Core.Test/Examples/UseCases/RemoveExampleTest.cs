@@ -13,24 +13,26 @@ public class RemoveExampleTest
     [Fact(DisplayName = "Should remove the example when the key exists")]
     public async Task GivenExistingExample_WhenHandled_ThenRemoveExample()
     {
-        using var context = new CoreSqliteTestContext();
-        var example = await AddExampleAsync(context.DbContext, "Example One");
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        var example = await AddExampleAsync(dbContext, "Example One");
         var handler = new RemoveExampleHandler(
-            context.DbContext,
+            dbContext,
             new RemoveExampleValidator(),
             context.Localizer);
 
         await handler.Handle(new RemoveExampleCommand(example.Id), CancellationToken.None);
 
-        Assert.Equal(0, await context.DbContext.Examples.CountAsync());
+        Assert.Equal(0, await dbContext.Examples.CountAsync());
     }
 
     [Fact(DisplayName = "Should fail when removing a missing example")]
     public async Task GivenMissingExample_WhenHandled_ThenThrowEntityNotFoundException()
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new RemoveExampleHandler(
-            context.DbContext,
+            dbContext,
             new RemoveExampleValidator(),
             context.Localizer);
 

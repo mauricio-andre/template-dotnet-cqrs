@@ -13,10 +13,11 @@ public class GetExampleByKeyTest
     [Fact(DisplayName = "Should return the example when the key exists")]
     public async Task GivenExistingExample_WhenHandled_ThenReturnExample()
     {
-        using var context = new CoreSqliteTestContext();
-        var example = await AddExampleAsync(context.DbContext, "Example One");
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        var example = await AddExampleAsync(dbContext, "Example One");
         var handler = new GetExampleByKeyHandler(
-            context.DbContext,
+            dbContext,
             new GetExampleByKeyValidator(),
             context.Localizer);
 
@@ -29,9 +30,10 @@ public class GetExampleByKeyTest
     [Fact(DisplayName = "Should fail when the example key does not exist")]
     public async Task GivenMissingExample_WhenHandled_ThenThrowEntityNotFoundException()
     {
-        using var context = new CoreSqliteTestContext();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
         var handler = new GetExampleByKeyHandler(
-            context.DbContext,
+            dbContext,
             new GetExampleByKeyValidator(),
             context.Localizer);
 

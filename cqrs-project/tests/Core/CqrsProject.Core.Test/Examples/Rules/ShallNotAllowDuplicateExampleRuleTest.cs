@@ -11,8 +11,9 @@ public class ShallNotAllowDuplicateExampleRuleTest
     [Fact(DisplayName = "Should allow creating an example when no duplicate exists")]
     public async Task GivenUniqueExampleName_WhenHandled_ThenCompleteWithoutException()
     {
-        using var context = new CoreSqliteTestContext();
-        var rule = new ShallNotAllowDuplicateExampleRule(context.DbContext, context.Localizer);
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        var rule = new ShallNotAllowDuplicateExampleRule(dbContext, context.Localizer);
 
         await rule.Handle(new CreateExampleEvent("Example One"), CancellationToken.None);
         Assert.True(true);
@@ -21,14 +22,15 @@ public class ShallNotAllowDuplicateExampleRuleTest
     [Fact(DisplayName = "Should reject duplicated example names regardless of casing")]
     public async Task GivenDuplicatedExampleName_WhenHandled_ThenThrowDuplicatedEntityException()
     {
-        using var context = new CoreSqliteTestContext();
-        await context.DbContext.Examples.AddAsync(new Example { Name = "Example One" });
-        await context.DbContext.SaveChangesAsync();
+        using var context = new CoreTestContext();
+        using var dbContext = context.CreateCoreDbContext();
+        await dbContext.Examples.AddAsync(new Example { Name = "Example One" });
+        await dbContext.SaveChangesAsync();
 
         context.Localizer.Set("message:validation:duplicatedEntity", "Duplicated {0}");
         context.Localizer.Set("message:validation:valueAlreadyUse", "The value {0} is already in use");
 
-        var rule = new ShallNotAllowDuplicateExampleRule(context.DbContext, context.Localizer);
+        var rule = new ShallNotAllowDuplicateExampleRule(dbContext, context.Localizer);
 
         var exception = await Assert.ThrowsAsync<DuplicatedEntityException>(
             () => rule.Handle(new CreateExampleEvent("example one"), CancellationToken.None));

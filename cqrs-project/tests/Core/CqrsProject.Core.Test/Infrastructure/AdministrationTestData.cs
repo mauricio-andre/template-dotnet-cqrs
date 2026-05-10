@@ -71,4 +71,23 @@ internal static class AdministrationTestData
 
         return userTenant;
     }
+
+    public static async Task<TenantConnectionString> AddTenantConnectionStringAsync(
+        AdministrationDbContext dbContext,
+        Guid tenantId,
+        string connectionName,
+        string keyName)
+    {
+        TenantConnectionString tenantConnectionString = new TenantConnectionString
+        {
+            TenantId = tenantId,
+            ConnectionName = connectionName,
+            KeyName = keyName
+        };
+
+        await dbContext.TenantConnectionStrings.AddAsync(tenantConnectionString);
+        await dbContext.SaveChangesAsync();
+
+        return tenantConnectionString;
+    }
 }

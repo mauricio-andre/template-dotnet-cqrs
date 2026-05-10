@@ -4,6 +4,7 @@ using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Rules;
 using CqrsProject.Core.Tenants.UseCases.CreateTenantConnectionString;
+using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Test.Tenants.Rules;
 
@@ -13,13 +14,16 @@ public class ShallNotAllowDuplicateTenantConnectionStringRuleTest
     public async Task GivenUniqueConnectionString_WhenHandled_ThenCompleteWithoutException()
     {
         using CoreTestContext context = new CoreTestContext();
+        using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
+        Guid tenantId = Guid.NewGuid();
+        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
         ShallNotAllowDuplicateTenantConnectionStringRule rule = new ShallNotAllowDuplicateTenantConnectionStringRule(
             context.AdministrationDbContextFactory,
             context.Localizer);
 
-        await rule.Handle(new CreateTenantConnectionStringEvent(Guid.NewGuid(), "Default"), CancellationToken.None);
+        await rule.Handle(new CreateTenantConnectionStringEvent(tenantId, "Backup"), CancellationToken.None);
 
-        Assert.True(true);
+        Assert.Empty(await dbContext.TenantConnectionStrings.ToListAsync());
     }
 
     [Fact(DisplayName = "Should reject duplicated tenant connection strings")]

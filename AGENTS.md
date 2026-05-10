@@ -38,6 +38,8 @@ Keep domain behavior organized by use case. Under each domain folder, place comm
 Tests use xUnit with `Microsoft.NET.Test.Sdk`; REST tests also use `Microsoft.AspNetCore.Mvc.Testing`, `NSubstitute`, and shared helpers from `tests/Commons`. Name test classes with the `Test` suffix, matching existing examples like `TenantMiddlewareTest` and `DbMigratorTest`. Add or update tests for handler, middleware, endpoint, and migration behavior changes.
 Every test must declare a clear `DisplayName` that describes the expected behavior, especially for `Fact` and `Theory` cases.
 In `tests/Core`, mirror the `Core` layout by domain. Keep use case tests in `UseCases/<UseCaseName>/` and rule tests in `Rules/` under the same domain folder.
+For rule tests, always cover both the success path and the failure path. For use cases that can throw in more than one branch, add a test for each exception path and keep the scenario focused on the behavior that fails.
+When a rule handles more than one event and the logic is the same, prefer a `Theory` with one row per event so each supported notification stays visible in the test output.
 
 ## Commit & Pull Request Guidelines
 

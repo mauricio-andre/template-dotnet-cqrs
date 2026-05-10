@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 
 namespace CqrsProject.Core.Test.Infrastructure;
 
-internal sealed class TestStringLocalizer<TResource> : IStringLocalizer<TResource>
+public sealed class TestStringLocalizer<TResource> : IStringLocalizer<TResource>
 {
     private readonly ConcurrentDictionary<string, string> _values = new();
 

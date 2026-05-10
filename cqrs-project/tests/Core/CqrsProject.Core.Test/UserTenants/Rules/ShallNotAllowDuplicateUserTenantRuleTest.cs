@@ -24,7 +24,7 @@ public class ShallNotAllowDuplicateUserTenantRuleTest
 
         await rule.Handle(new CreateUserTenantEvent(Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None);
 
-        Assert.True(true);
+        Assert.Equal(0, await dbContext.UserTenants.CountAsync());
     }
 
     [Fact(DisplayName = "Should reject duplicated user tenants")]

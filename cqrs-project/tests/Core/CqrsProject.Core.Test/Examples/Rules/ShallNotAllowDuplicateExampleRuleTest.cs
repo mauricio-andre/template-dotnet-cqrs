@@ -3,6 +3,7 @@ using CqrsProject.Core.Examples.Entities;
 using CqrsProject.Core.Examples.Rules;
 using CqrsProject.Core.Examples.UseCases.CreateExample;
 using CqrsProject.Core.Test.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Test.Examples.Rules;
 
@@ -13,10 +14,13 @@ public class ShallNotAllowDuplicateExampleRuleTest
     {
         using var context = new CoreTestContext();
         using var dbContext = context.CreateCoreDbContext();
+        await dbContext.Examples.AddAsync(new Example { Name = "Example One" });
+        await dbContext.SaveChangesAsync();
         var rule = new ShallNotAllowDuplicateExampleRule(dbContext, context.Localizer);
 
-        await rule.Handle(new CreateExampleEvent("Example One"), CancellationToken.None);
-        Assert.True(true);
+        await rule.Handle(new CreateExampleEvent("Example Two"), CancellationToken.None);
+
+        Assert.Equal(1, await dbContext.Examples.CountAsync());
     }
 
     [Fact(DisplayName = "Should reject duplicated example names regardless of casing")]

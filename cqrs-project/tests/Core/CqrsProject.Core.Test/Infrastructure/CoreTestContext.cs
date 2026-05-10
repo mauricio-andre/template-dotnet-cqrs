@@ -1,8 +1,10 @@
 using CqrsProject.Commons.Test.Database;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
+using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,7 @@ using NSubstitute;
 
 namespace CqrsProject.Core.Test.Infrastructure;
 
-internal sealed class CoreTestContext : IDisposable
+public sealed class CoreTestContext : IDisposable
 {
     private readonly ServiceProvider _serviceProvider;
 
@@ -51,6 +53,12 @@ internal sealed class CoreTestContext : IDisposable
         serviceCollection.AddSingleton(Localizer);
         serviceCollection.AddSingleton(new DbContextOptionsBuilder<CoreDbContext>().Options);
         serviceCollection.AddSingleton(new DbContextOptionsBuilder<AdministrationDbContext>().Options);
+        serviceCollection.AddScoped<CoreDbContext>(sp => ActivatorUtilities.CreateInstance<SqliteCoreDbContext>(sp));
+        serviceCollection.AddScoped<AdministrationDbContext>(sp => ActivatorUtilities.CreateInstance<SqliteAdministrationDbContext>(sp));
+        serviceCollection
+            .AddIdentityCore<User>()
+            .AddRoles<IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<AdministrationDbContext>();
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
         CoreDbContextFactory = new SqliteCoreDbContextFactory(_serviceProvider);
@@ -72,6 +80,10 @@ internal sealed class CoreTestContext : IDisposable
     public IMediator Mediator { get; }
 
     public TestStringLocalizer<CqrsProjectResource> Localizer { get; }
+
+    public UserManager<User> UserManager => _serviceProvider.GetRequiredService<UserManager<User>>();
+
+    public RoleManager<IdentityRole<Guid>> RoleManager => _serviceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
     public IDbContextFactory<CoreDbContext> CoreDbContextFactory { get; }
 

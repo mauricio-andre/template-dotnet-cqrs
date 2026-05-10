@@ -46,7 +46,7 @@ public class AttributesInterceptor : Interceptor
         return pipeline(request, responseStream, context);
     }
 
-    public override Task<TResponse> ClientStreamingServerHandler <TRequest, TResponse>(
+    public override Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(
         IAsyncStreamReader<TRequest> requestStream,
         ServerCallContext context,
         ClientStreamingServerMethod<TRequest, TResponse> continuation)

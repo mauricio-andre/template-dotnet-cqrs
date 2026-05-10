@@ -1,8 +1,9 @@
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.CreateTenant;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -65,3 +66,4 @@ public class CreateTenantTest
             () => handler.Handle(new CreateTenantCommand(name), CancellationToken.None));
     }
 }
+

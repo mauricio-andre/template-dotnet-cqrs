@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.UseCases.CreateUserRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -68,3 +69,4 @@ public class CreateUserRoleTest
             () => handler.Handle(new CreateUserRoleCommand(user.Id, Guid.NewGuid()), CancellationToken.None));
     }
 }
+

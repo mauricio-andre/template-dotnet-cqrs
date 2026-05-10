@@ -3,6 +3,7 @@ using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Rules;
 using CqrsProject.Core.Identity.UseCases.CreateRole;
 using CqrsProject.Core.Identity.UseCases.UpdateRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -83,3 +84,4 @@ public class ShallNotAllowDuplicateRoleRuleTest
         }
     };
 }
+

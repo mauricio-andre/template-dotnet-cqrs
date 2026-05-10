@@ -4,6 +4,7 @@ using CqrsProject.Common.Providers.OAuth.Interfaces;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.UseCases.IdentitySync;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -70,3 +71,4 @@ public class IdentitySyncTest
         Assert.NotNull(user.LastModificationTime);
     }
 }
+

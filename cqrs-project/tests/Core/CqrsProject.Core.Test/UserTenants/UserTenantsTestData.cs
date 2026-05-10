@@ -2,11 +2,10 @@ using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.UserTenants.Entities;
-using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Test.Infrastructure;
+namespace CqrsProject.Core.Test.UserTenants;
 
-internal static class AdministrationTestData
+internal static class UserTenantsTestData
 {
     public static async Task<User> AddUserAsync(
         AdministrationDbContext dbContext,
@@ -70,24 +69,5 @@ internal static class AdministrationTestData
         await dbContext.SaveChangesAsync();
 
         return userTenant;
-    }
-
-    public static async Task<TenantConnectionString> AddTenantConnectionStringAsync(
-        AdministrationDbContext dbContext,
-        Guid tenantId,
-        string connectionName,
-        string keyName)
-    {
-        TenantConnectionString tenantConnectionString = new TenantConnectionString
-        {
-            TenantId = tenantId,
-            ConnectionName = connectionName,
-            KeyName = keyName
-        };
-
-        await dbContext.TenantConnectionStrings.AddAsync(tenantConnectionString);
-        await dbContext.SaveChangesAsync();
-
-        return tenantConnectionString;
     }
 }

@@ -2,6 +2,7 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.UseCases.CreateRoleClaim;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -90,3 +91,4 @@ public class CreateRoleClaimTest
     }
 
 }
+

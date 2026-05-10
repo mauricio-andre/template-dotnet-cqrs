@@ -1,12 +1,13 @@
-using CqrsProject.Core.Identity.Entities;
-using CqrsProject.Core.Data;
-using CqrsProject.Core.Identity.UseCases.RemoveUser;
-using CqrsProject.Core.Test.Infrastructure;
-using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Common.Exceptions;
+using CqrsProject.Core.Data;
+using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Identity.UseCases.RemoveUser;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Test.Identity;
+using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Test.Identity.UseCases;
 
@@ -22,8 +23,8 @@ public class RemoveUserTest
         IdentityRole<Guid> role = await IdentityTestData.AddRoleAsync(context, "Admin");
         await IdentityTestData.AddUserToRoleAsync(context, user, role);
         await context.UserManager.AddClaimAsync(user, new System.Security.Claims.Claim("claim", "value"));
-        Tenant tenant = await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
-        await AdministrationTestData.AddUserTenantAsync(dbContext, user.Id, tenant.Id);
+        Tenant tenant = await IdentityTestData.AddTenantAsync(dbContext, name: "Tenant One");
+        await IdentityTestData.AddUserTenantAsync(dbContext, user.Id, tenant.Id);
 
         RemoveUserHandler handler = new RemoveUserHandler(
             context.AdministrationDbContextFactory,
@@ -54,3 +55,4 @@ public class RemoveUserTest
             () => handler.Handle(new RemoveUserCommand(Guid.NewGuid()), CancellationToken.None));
     }
 }
+

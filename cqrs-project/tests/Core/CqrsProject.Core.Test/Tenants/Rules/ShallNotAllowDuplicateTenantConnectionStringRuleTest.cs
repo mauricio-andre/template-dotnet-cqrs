@@ -1,9 +1,10 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Rules;
 using CqrsProject.Core.Tenants.UseCases.CreateTenantConnectionString;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Test.Tenants.Rules;
@@ -16,7 +17,7 @@ public class ShallNotAllowDuplicateTenantConnectionStringRuleTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
         Guid tenantId = Guid.NewGuid();
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await TenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
         ShallNotAllowDuplicateTenantConnectionStringRule rule = new ShallNotAllowDuplicateTenantConnectionStringRule(
             context.AdministrationDbContextFactory,
             context.Localizer);
@@ -32,8 +33,8 @@ public class ShallNotAllowDuplicateTenantConnectionStringRuleTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
         Guid tenantId = Guid.NewGuid();
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Default", "Host=localhost;");
+        await TenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Default", "Host=localhost;");
         context.Localizer.Set("message:validation:duplicatedEntity", "Duplicated {0}");
         context.Localizer.Set("message:validation:valueAlreadyUse", "The value {0} is already in use");
 
@@ -49,3 +50,4 @@ public class ShallNotAllowDuplicateTenantConnectionStringRuleTest
         Assert.Equal("The value default is already in use", exception.Errors[nameof(TenantConnectionString.ConnectionName)].Single());
     }
 }
+

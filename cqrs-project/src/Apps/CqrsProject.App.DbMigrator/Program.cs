@@ -9,9 +9,9 @@ using CqrsProject.Core.Tenants.Extensions;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
 using CqrsProject.CustomConsoleFormatter.Extensions;
+using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postgres.Extensions;
-using CqrsProject.CustomStringLocalizer.Extensions;
 
 var builder = Host.CreateApplicationBuilder(args);
 

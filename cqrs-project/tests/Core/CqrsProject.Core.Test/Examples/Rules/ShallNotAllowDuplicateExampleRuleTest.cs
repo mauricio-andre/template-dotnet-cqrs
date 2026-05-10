@@ -44,3 +44,4 @@ public class ShallNotAllowDuplicateExampleRuleTest
         Assert.Equal("The value example one is already in use", exception.Errors[nameof(Example.Name)].Single());
     }
 }
+

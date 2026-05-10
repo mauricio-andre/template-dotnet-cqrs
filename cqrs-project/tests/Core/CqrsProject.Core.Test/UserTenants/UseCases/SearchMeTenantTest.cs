@@ -1,5 +1,6 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.UserTenants;
 using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -21,14 +22,14 @@ public class SearchMeTenantTest
         Guid betaTenantId = Guid.NewGuid();
         Guid foreignTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, currentUserId, "alice");
-        await AdministrationTestData.AddUserAsync(dbContext, otherUserId, "bob");
-        await AdministrationTestData.AddTenantAsync(dbContext, alphaTenantId, "Alpha Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, betaTenantId, "Beta Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, foreignTenantId, "Foreign Tenant");
-        await AdministrationTestData.AddUserTenantAsync(dbContext, currentUserId, alphaTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, currentUserId, betaTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, otherUserId, foreignTenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, currentUserId, "alice");
+        await UserTenantsTestData.AddUserAsync(dbContext, otherUserId, "bob");
+        await UserTenantsTestData.AddTenantAsync(dbContext, alphaTenantId, "Alpha Tenant");
+        await UserTenantsTestData.AddTenantAsync(dbContext, betaTenantId, "Beta Tenant");
+        await UserTenantsTestData.AddTenantAsync(dbContext, foreignTenantId, "Foreign Tenant");
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, currentUserId, alphaTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, currentUserId, betaTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, otherUserId, foreignTenantId);
 
         context.CurrentIdentity.GetLocalIdentityId().Returns(currentUserId);
 
@@ -63,11 +64,11 @@ public class SearchMeTenantTest
         Guid activeTenantId = Guid.NewGuid();
         Guid deletedTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, currentUserId, "alice");
-        await AdministrationTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, currentUserId, activeTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, currentUserId, deletedTenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, currentUserId, "alice");
+        await UserTenantsTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
+        await UserTenantsTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, currentUserId, activeTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, currentUserId, deletedTenantId);
 
         context.CurrentIdentity.GetLocalIdentityId().Returns(currentUserId);
 
@@ -122,3 +123,4 @@ public class SearchMeTenantTest
         return result;
     }
 }
+

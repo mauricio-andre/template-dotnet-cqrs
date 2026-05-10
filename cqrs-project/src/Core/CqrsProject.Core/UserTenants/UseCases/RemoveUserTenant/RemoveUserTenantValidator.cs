@@ -1,5 +1,5 @@
-using FluentValidation;
 using CqrsProject.Core.Tenants.UseCases.RemoveTenant;
+using FluentValidation;
 
 namespace CqrsProject.Core.UserTenants.UseCases.RemoveUserTenant;
 

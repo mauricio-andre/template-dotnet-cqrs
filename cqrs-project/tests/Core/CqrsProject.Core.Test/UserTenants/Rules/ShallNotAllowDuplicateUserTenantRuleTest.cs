@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.UserTenants;
 using CqrsProject.Core.UserTenants.Rules;
 using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,8 @@ public class ShallNotAllowDuplicateUserTenantRuleTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
 
-        await AdministrationTestData.AddUserAsync(dbContext, Guid.NewGuid(), "alice");
-        await AdministrationTestData.AddTenantAsync(dbContext, Guid.NewGuid(), "Tenant One");
+        await UserTenantsTestData.AddUserAsync(dbContext, Guid.NewGuid(), "alice");
+        await UserTenantsTestData.AddTenantAsync(dbContext, Guid.NewGuid(), "Tenant One");
 
         ShallNotAllowDuplicateUserTenantRule rule = new ShallNotAllowDuplicateUserTenantRule(
             context.AdministrationDbContextFactory,
@@ -36,9 +37,9 @@ public class ShallNotAllowDuplicateUserTenantRuleTest
         Guid userId = Guid.NewGuid();
         Guid tenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, userId, "alice");
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
-        await AdministrationTestData.AddUserTenantAsync(dbContext, userId, tenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, userId, "alice");
+        await UserTenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, userId, tenantId);
 
         context.Localizer.Set("message:validation:duplicatedEntity", "Duplicated {0}");
 
@@ -52,3 +53,4 @@ public class ShallNotAllowDuplicateUserTenantRuleTest
         Assert.Equal("Duplicated UserTenant", exception.Message);
     }
 }
+

@@ -1,6 +1,7 @@
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Identity.Responses;
 using CqrsProject.Core.Identity.UseCases.SearchUser;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -55,3 +56,4 @@ public class SearchUserTest
         return result;
     }
 }
+

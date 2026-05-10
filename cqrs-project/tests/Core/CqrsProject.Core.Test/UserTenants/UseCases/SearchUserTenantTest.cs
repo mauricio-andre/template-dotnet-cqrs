@@ -1,5 +1,6 @@
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.UserTenants;
 using CqrsProject.Core.UserTenants.UseCases.SearchUserTenant;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,13 @@ public class SearchUserTenantTest
         Guid alphaTenantId = Guid.NewGuid();
         Guid betaTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, aliceId, "alice");
-        await AdministrationTestData.AddUserAsync(dbContext, bobId, "bob");
-        await AdministrationTestData.AddTenantAsync(dbContext, alphaTenantId, "Alpha Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, betaTenantId, "Beta Tenant");
-        await AdministrationTestData.AddUserTenantAsync(dbContext, aliceId, betaTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, bobId, betaTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, aliceId, alphaTenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, aliceId, "alice");
+        await UserTenantsTestData.AddUserAsync(dbContext, bobId, "bob");
+        await UserTenantsTestData.AddTenantAsync(dbContext, alphaTenantId, "Alpha Tenant");
+        await UserTenantsTestData.AddTenantAsync(dbContext, betaTenantId, "Beta Tenant");
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, aliceId, betaTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, bobId, betaTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, aliceId, alphaTenantId);
 
         SearchUserTenantHandler handler = new SearchUserTenantHandler(
             context.AdministrationDbContextFactory,
@@ -62,13 +63,13 @@ public class SearchUserTenantTest
         Guid activeTenantId = Guid.NewGuid();
         Guid deletedTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, activeUserId, "alice");
-        await AdministrationTestData.AddUserAsync(dbContext, deletedUserId, "ghost", true);
-        await AdministrationTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, activeUserId, activeTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, deletedUserId, activeTenantId);
-        await AdministrationTestData.AddUserTenantAsync(dbContext, activeUserId, deletedTenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, activeUserId, "alice");
+        await UserTenantsTestData.AddUserAsync(dbContext, deletedUserId, "ghost", true);
+        await UserTenantsTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
+        await UserTenantsTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, activeUserId, activeTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, deletedUserId, activeTenantId);
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, activeUserId, deletedTenantId);
 
         SearchUserTenantHandler handler = new SearchUserTenantHandler(
             context.AdministrationDbContextFactory,
@@ -118,3 +119,4 @@ public class SearchUserTenantTest
         return result;
     }
 }
+

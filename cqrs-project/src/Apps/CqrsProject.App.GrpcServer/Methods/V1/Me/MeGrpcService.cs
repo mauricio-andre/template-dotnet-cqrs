@@ -1,10 +1,10 @@
-using Grpc.Core;
-using Google.Protobuf.WellKnownTypes;
-using MediatR;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using CqrsProject.Core.Identity.UseCases.IdentitySync;
 using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CqrsProject.App.GrpcServer.Methods.V1.Me;
 

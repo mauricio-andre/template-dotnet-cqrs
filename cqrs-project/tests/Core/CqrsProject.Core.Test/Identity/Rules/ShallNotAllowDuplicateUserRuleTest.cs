@@ -4,6 +4,7 @@ using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Rules;
 using CqrsProject.Core.Identity.UseCases.CreateUser;
 using CqrsProject.Core.Identity.UseCases.UpdateUser;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -101,3 +102,4 @@ public class ShallNotAllowDuplicateUserRuleTest
         }
     };
 }
+

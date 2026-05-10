@@ -40,6 +40,7 @@ Every test must declare a clear `DisplayName` that describes the expected behavi
 In `tests/Core`, mirror the `Core` layout by domain. Keep use case tests in `UseCases/<UseCaseName>/` and rule tests in `Rules/` under the same domain folder.
 For rule tests, always cover both the success path and the failure path. For use cases that can throw in more than one branch, add a test for each exception path and keep the scenario focused on the behavior that fails.
 When a rule handles more than one event and the logic is the same, prefer a `Theory` with one row per event so each supported notification stays visible in the test output.
+Keep test data helpers inside the domain folder they serve, such as `Identity/IdentityTestData.cs` or `Tenants/TenantsTestData.cs`, instead of sharing a single global fixture across unrelated domains.
 
 ## Commit & Pull Request Guidelines
 

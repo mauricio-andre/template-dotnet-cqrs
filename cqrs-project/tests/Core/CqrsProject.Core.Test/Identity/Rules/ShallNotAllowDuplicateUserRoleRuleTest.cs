@@ -2,6 +2,7 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Rules;
 using CqrsProject.Core.Identity.UseCases.CreateUserRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,3 +44,4 @@ public class ShallNotAllowDuplicateUserRoleRuleTest
             () => rule.Handle(new CreateUserRoleEvent(user.Id, role.Id), CancellationToken.None));
     }
 }
+

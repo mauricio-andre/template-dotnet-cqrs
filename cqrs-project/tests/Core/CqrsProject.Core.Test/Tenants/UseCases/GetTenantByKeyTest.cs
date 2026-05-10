@@ -1,8 +1,9 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.GetTenantByKey;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 
 namespace CqrsProject.Core.Test.Tenants.UseCases;
@@ -14,7 +15,7 @@ public class GetTenantByKeyTest
     {
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-        var tenant = await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+        var tenant = await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
 
         GetTenantByKeyHandler handler = new GetTenantByKeyHandler(
             context.AdministrationDbContextFactory,
@@ -41,3 +42,4 @@ public class GetTenantByKeyTest
             () => handler.Handle(new GetTenantByKeyQuery(Guid.NewGuid()), CancellationToken.None));
     }
 }
+

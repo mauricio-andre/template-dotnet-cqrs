@@ -2,12 +2,12 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Identity.UseCases.CreateRole;
+using CqrsProject.Core.Identity.UseCases.UpdateRole;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using CqrsProject.Core.Identity.UseCases.UpdateRole;
-using CqrsProject.Core.Identity.UseCases.CreateRole;
 
 namespace CqrsProject.Core.Identity.Rules;
 

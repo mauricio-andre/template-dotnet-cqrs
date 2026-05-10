@@ -1,8 +1,9 @@
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.UseCases.RemoveRoleClaim;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using CqrsProject.Common.Exceptions;
 
 namespace CqrsProject.Core.Test.Identity.UseCases;
 
@@ -39,3 +40,4 @@ public class RemoveRoleClaimTest
             () => handler.Handle(new RemoveRoleClaimCommand(Guid.NewGuid(), "permission", "read"), CancellationToken.None));
     }
 }
+

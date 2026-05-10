@@ -58,3 +58,4 @@ public class CurrentTenantTest
         Assert.Null(currentTenant.GetCurrentTenantId());
     }
 }
+

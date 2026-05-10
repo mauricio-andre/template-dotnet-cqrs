@@ -4,9 +4,9 @@ using System.Net.Http.Json;
 using CqrsProject.Common.Consts;
 using CqrsProject.Commons.Test.Helpers;
 using CqrsProject.Commons.Test.Services;
+using CqrsProject.Core.Identity.Consts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 

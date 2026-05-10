@@ -1,28 +1,28 @@
+using CqrsProject.App.GrpcServer.Authentication;
+using CqrsProject.App.GrpcServer.Authorization;
+using CqrsProject.App.GrpcServer.GrpcMetadata;
+using CqrsProject.App.GrpcServer.Interceptors;
 using CqrsProject.App.GrpcServer.Loggers;
+using CqrsProject.App.GrpcServer.Methods.V1.Examples;
+using CqrsProject.App.GrpcServer.Methods.V1.Me;
+using CqrsProject.Auth0.Extensions;
+using CqrsProject.Common.Consts;
 using CqrsProject.Common.Diagnostics;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Identity.Services;
+using CqrsProject.Core.Tenants.Extensions;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
-using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.CustomCacheService.Extensions;
 using CqrsProject.CustomConsoleFormatter.Extensions;
 using CqrsProject.CustomStringLocalizer.Extensions;
+using CqrsProject.OpenTelemetry.Extensions;
 using CqrsProject.Postgres.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using CqrsProject.Core.Tenants.Extensions;
-using CqrsProject.Auth0.Extensions;
-using CqrsProject.Common.Consts;
-using CqrsProject.App.GrpcServer.Authentication;
-using CqrsProject.App.GrpcServer.Interceptors;
-using CqrsProject.App.GrpcServer.Methods.V1.Me;
-using CqrsProject.App.GrpcServer.Methods.V1.Examples;
-using CqrsProject.App.GrpcServer.Authorization;
-using CqrsProject.App.GrpcServer.GrpcMetadata;
 
 var builder = WebApplication.CreateBuilder(args);
 

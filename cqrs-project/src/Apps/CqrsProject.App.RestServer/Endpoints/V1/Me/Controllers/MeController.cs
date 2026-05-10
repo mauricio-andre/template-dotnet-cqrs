@@ -2,11 +2,11 @@ using System.Security.Claims;
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Endpoints.V1.Me.Dtos;
 using CqrsProject.App.RestServer.Extensions;
+using CqrsProject.Core.Identity.UseCases.IdentitySync;
+using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using CqrsProject.Core.Identity.UseCases.IdentitySync;
-using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 
 namespace CqrsProject.App.RestServer.Endpoints.V1.Me.Controllers;
 

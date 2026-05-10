@@ -1,8 +1,9 @@
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.SearchTenantConnectionString;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,11 +19,11 @@ public class SearchTenantConnectionStringTest
         Guid tenantId = Guid.NewGuid();
         Guid otherTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
-        await AdministrationTestData.AddTenantAsync(dbContext, otherTenantId, "Tenant Two");
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Alpha", "Host=alpha;");
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Beta", "Host=beta;");
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, otherTenantId, "Ignored", "Host=ignored;");
+        await TenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await TenantsTestData.AddTenantAsync(dbContext, otherTenantId, "Tenant Two");
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Alpha", "Host=alpha;");
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, tenantId, "Beta", "Host=beta;");
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, otherTenantId, "Ignored", "Host=ignored;");
 
         SearchTenantConnectionStringHandler handler = new SearchTenantConnectionStringHandler(
             context.AdministrationDbContextFactory,
@@ -76,3 +77,4 @@ public class SearchTenantConnectionStringTest
         return result;
     }
 }
+

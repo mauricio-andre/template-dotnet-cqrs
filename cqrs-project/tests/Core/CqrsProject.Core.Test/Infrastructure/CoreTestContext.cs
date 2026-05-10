@@ -1,11 +1,11 @@
-using CqrsProject.Commons.Test.Database;
 using CqrsProject.Common.Localization;
+using CqrsProject.Commons.Test.Database;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Tenants.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

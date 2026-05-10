@@ -2,10 +2,11 @@ using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using CqrsProject.Common.Providers.KeyVaults.Interfaces;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
-using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Caches;
+using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
@@ -56,10 +57,10 @@ public class TenantConnectionProviderTest
         Guid activeTenantId = Guid.NewGuid();
         Guid deletedTenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, activeTenantId, "Default", "ACTIVE_KEY");
-        await AdministrationTestData.AddTenantConnectionStringAsync(dbContext, deletedTenantId, "Default", "DELETED_KEY");
+        await TenantsTestData.AddTenantAsync(dbContext, activeTenantId, "Active Tenant");
+        await TenantsTestData.AddTenantAsync(dbContext, deletedTenantId, "Deleted Tenant", true);
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, activeTenantId, "Default", "ACTIVE_KEY");
+        await TenantsTestData.AddTenantConnectionStringAsync(dbContext, deletedTenantId, "Default", "DELETED_KEY");
 
         IKeyVaultService keyVaultService = Substitute.For<IKeyVaultService>();
         keyVaultService.GetKeyValueAsync("ACTIVE_KEY").Returns("Server=active;");
@@ -150,3 +151,4 @@ public class TenantConnectionProviderTest
         return configuration;
     }
 }
+

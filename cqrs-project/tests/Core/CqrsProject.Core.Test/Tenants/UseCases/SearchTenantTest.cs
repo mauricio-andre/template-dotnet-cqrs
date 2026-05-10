@@ -1,9 +1,10 @@
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.SearchTenant;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +18,9 @@ public class SearchTenantTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
 
-        Tenant alpha = await AdministrationTestData.AddTenantAsync(dbContext, name: "Alpha Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, name: "Beta Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, name: "Deleted Tenant", isDeleted: true);
+        Tenant alpha = await TenantsTestData.AddTenantAsync(dbContext, name: "Alpha Tenant");
+        await TenantsTestData.AddTenantAsync(dbContext, name: "Beta Tenant");
+        await TenantsTestData.AddTenantAsync(dbContext, name: "Deleted Tenant", isDeleted: true);
 
         SearchTenantHandler handler = new SearchTenantHandler(
             context.AdministrationDbContextFactory,
@@ -43,9 +44,9 @@ public class SearchTenantTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
 
-        await AdministrationTestData.AddTenantAsync(dbContext, name: "Alpha Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, name: "Beta Tenant");
-        await AdministrationTestData.AddTenantAsync(dbContext, name: "Deleted Tenant", isDeleted: true);
+        await TenantsTestData.AddTenantAsync(dbContext, name: "Alpha Tenant");
+        await TenantsTestData.AddTenantAsync(dbContext, name: "Beta Tenant");
+        await TenantsTestData.AddTenantAsync(dbContext, name: "Deleted Tenant", isDeleted: true);
 
         SearchTenantHandler handler = new SearchTenantHandler(
             context.AdministrationDbContextFactory,
@@ -90,3 +91,4 @@ public class SearchTenantTest
         return result;
     }
 }
+

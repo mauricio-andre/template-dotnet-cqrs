@@ -1,10 +1,13 @@
 using System.Security.Claims;
 using CqrsProject.Common.Consts;
+using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
+using CqrsProject.Core.Tenants.Entities;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.UserTenants.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace CqrsProject.Core.Test.Infrastructure;
+namespace CqrsProject.Core.Test.Identity;
 
 internal static class IdentityTestData
 {
@@ -76,5 +79,44 @@ internal static class IdentityTestData
 
         if (!result.Succeeded)
             throw new InvalidOperationException(string.Join("; ", result.Errors.Select(error => error.Description)));
+    }
+
+    public static async Task<Tenant> AddTenantAsync(
+        AdministrationDbContext dbContext,
+        Guid? id = null,
+        string? name = null,
+        bool isDeleted = false)
+    {
+        Tenant tenant = new Tenant
+        {
+            Id = id ?? Guid.NewGuid(),
+            Name = name ?? $"Tenant-{Guid.NewGuid():N}",
+            IsDeleted = isDeleted
+        };
+
+        await dbContext.Tenants.AddAsync(tenant);
+        await dbContext.SaveChangesAsync();
+
+        return tenant;
+    }
+
+    public static async Task<UserTenant> AddUserTenantAsync(
+        AdministrationDbContext dbContext,
+        Guid userId,
+        Guid tenantId,
+        Guid? creatorId = null)
+    {
+        UserTenant userTenant = new UserTenant
+        {
+            UserId = userId,
+            TenantId = tenantId,
+            CreationTime = DateTimeOffset.UtcNow,
+            CreatorId = creatorId
+        };
+
+        await dbContext.UserTenants.AddAsync(userTenant);
+        await dbContext.SaveChangesAsync();
+
+        return userTenant;
     }
 }

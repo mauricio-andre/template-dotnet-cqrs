@@ -1,5 +1,6 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.UseCases.GetRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 
@@ -36,3 +37,4 @@ public class GetRoleTest
             () => handler.Handle(new GetRoleQuery(Guid.NewGuid()), CancellationToken.None));
     }
 }
+

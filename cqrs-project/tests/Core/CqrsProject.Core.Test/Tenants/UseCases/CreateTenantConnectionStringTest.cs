@@ -1,7 +1,8 @@
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.CreateTenantConnectionString;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -17,7 +18,7 @@ public class CreateTenantConnectionStringTest
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
         Guid tenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await TenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
 
         CreateTenantConnectionStringHandler handler = new CreateTenantConnectionStringHandler(
             context.AdministrationDbContextFactory,
@@ -72,3 +73,4 @@ public class CreateTenantConnectionStringTest
         yield return new object[] { Guid.NewGuid(), "Default", string.Empty };
     }
 }
+

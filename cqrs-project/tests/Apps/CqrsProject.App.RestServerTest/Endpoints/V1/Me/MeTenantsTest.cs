@@ -6,10 +6,10 @@ using CqrsProject.Commons.Test.Services;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.UserTenants.Entities;
+using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using CqrsProject.Core.UserTenants.UseCases.SearchMeTenant;
 
 namespace CqrsProject.App.RestServerTest.Endpoints.V1.Me;
 

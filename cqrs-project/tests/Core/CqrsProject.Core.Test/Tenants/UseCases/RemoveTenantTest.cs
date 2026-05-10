@@ -1,7 +1,8 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.UseCases.RemoveTenant;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ public class RemoveTenantTest
     {
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-        var tenant = await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+        var tenant = await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
 
         RemoveTenantHandler handler = new RemoveTenantHandler(
             context.AdministrationDbContextFactory,
@@ -52,3 +53,4 @@ public class RemoveTenantTest
             () => handler.Handle(new RemoveTenantCommand(Guid.Empty), CancellationToken.None));
     }
 }
+

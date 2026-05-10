@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.UseCases.RemoveUserRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -78,3 +79,4 @@ public class RemoveUserRoleTest
             () => handler.Handle(new RemoveUserRoleCommand(user.Id, role.Id), CancellationToken.None));
     }
 }
+

@@ -1,5 +1,6 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.UseCases.GetUser;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 
@@ -37,3 +38,4 @@ public class GetUserTest
             () => handler.Handle(new GetUserQuery(Guid.NewGuid()), CancellationToken.None));
     }
 }
+

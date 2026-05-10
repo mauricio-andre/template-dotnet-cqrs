@@ -1,5 +1,6 @@
 using CqrsProject.Common.Responses;
 using CqrsProject.Core.Identity.UseCases.SearchRoleClaim;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -44,3 +45,4 @@ public class SearchRoleClaimTest
         return result;
     }
 }
+

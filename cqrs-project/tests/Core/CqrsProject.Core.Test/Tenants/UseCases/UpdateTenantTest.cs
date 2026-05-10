@@ -1,9 +1,10 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.UpdateTenant;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -17,7 +18,7 @@ public class UpdateTenantTest
     {
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-        Tenant tenant = await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+        Tenant tenant = await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
 
         UpdateTenantHandler handler = new UpdateTenantHandler(
             context.AdministrationDbContextFactory,
@@ -78,3 +79,4 @@ public class UpdateTenantTest
         yield return new object[] { Guid.NewGuid(), string.Empty };
     }
 }
+

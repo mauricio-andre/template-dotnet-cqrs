@@ -2,6 +2,7 @@ using CqrsProject.Common.Responses;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Identity.Responses;
 using CqrsProject.Core.Identity.UseCases.SearchUserRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -46,3 +47,4 @@ public class SearchUserRoleTest
         return result;
     }
 }
+

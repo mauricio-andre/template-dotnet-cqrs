@@ -9,12 +9,12 @@ using CqrsProject.Core.Data;
 using CqrsProject.Core.Identity.Entities;
 using CqrsProject.Core.Tenants.Interfaces;
 using CqrsProject.Core.Tenants.Services;
+using CqrsProject.CustomStringLocalizer.Extensions;
 using CqrsProject.Postgres.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CqrsProject.CustomStringLocalizer.Extensions;
 
 namespace CqrsProject.App.DbMigratorTest;
 

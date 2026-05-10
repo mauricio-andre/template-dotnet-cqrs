@@ -42,3 +42,4 @@ public class CurrentIdentityTest
         Assert.Throws<UnauthorizedAccessException>(() => currentIdentity.GetLocalIdentityId());
     }
 }
+

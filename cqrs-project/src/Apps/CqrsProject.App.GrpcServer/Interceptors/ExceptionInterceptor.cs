@@ -1,15 +1,15 @@
 using CqrsProject.App.GrpcServer.Extensions;
+using CqrsProject.Common.Exceptions;
 using CqrsProject.Common.Localization;
 using FluentValidation;
 using Google.Protobuf.WellKnownTypes;
+using Google.Rpc;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Localization;
-using GrpcStatus = Google.Rpc.Status;
 using BadRequest = Google.Rpc.BadRequest;
+using GrpcStatus = Google.Rpc.Status;
 using Status = Grpc.Core.Status;
-using Google.Rpc;
-using CqrsProject.Common.Exceptions;
 
 namespace CqrsProject.App.GrpcServer.Interceptors;
 

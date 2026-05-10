@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.UserTenants;
 using CqrsProject.Core.UserTenants.Entities;
 using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 using FluentValidation;
@@ -21,8 +22,8 @@ public class CreateUserTenantTest
         Guid tenantId = Guid.NewGuid();
         Guid creatorId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, userId, "alice");
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await UserTenantsTestData.AddUserAsync(dbContext, userId, "alice");
+        await UserTenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
         context.CurrentIdentity.GetLocalIdentityId().Returns(creatorId);
 
         CreateUserTenantHandler handler = new CreateUserTenantHandler(
@@ -58,7 +59,7 @@ public class CreateUserTenantTest
         Guid userId = Guid.NewGuid();
         Guid tenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await UserTenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
 
         CreateUserTenantHandler handler = new CreateUserTenantHandler(
             context.AdministrationDbContextFactory,
@@ -80,7 +81,7 @@ public class CreateUserTenantTest
         Guid userId = Guid.NewGuid();
         Guid tenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, userId, "alice");
+        await UserTenantsTestData.AddUserAsync(dbContext, userId, "alice");
 
         CreateUserTenantHandler handler = new CreateUserTenantHandler(
             context.AdministrationDbContextFactory,
@@ -117,3 +118,4 @@ public class CreateUserTenantTest
         yield return new object[] { Guid.NewGuid(), Guid.Empty };
     }
 }
+

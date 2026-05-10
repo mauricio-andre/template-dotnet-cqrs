@@ -1,6 +1,6 @@
 using CqrsProject.Common.Consts;
-using Microsoft.AspNetCore.Authorization;
 using CqrsProject.Core.Identity.Consts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CqrsProject.App.RestServer.Authorization;
 

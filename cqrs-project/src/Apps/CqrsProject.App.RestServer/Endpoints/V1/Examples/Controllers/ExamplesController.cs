@@ -3,15 +3,15 @@ using CqrsProject.App.RestServer.Attributes;
 using CqrsProject.App.RestServer.Authorization;
 using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.Core.Examples.Responses;
+using CqrsProject.Core.Examples.UseCases.CreateExample;
+using CqrsProject.Core.Examples.UseCases.GetExampleByKey;
+using CqrsProject.Core.Examples.UseCases.RemoveExample;
+using CqrsProject.Core.Examples.UseCases.SearchExample;
 using CqrsProject.Swagger.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
-using CqrsProject.Core.Examples.UseCases.RemoveExample;
-using CqrsProject.Core.Examples.UseCases.SearchExample;
-using CqrsProject.Core.Examples.UseCases.CreateExample;
-using CqrsProject.Core.Examples.UseCases.GetExampleByKey;
 
 namespace CqrsProject.App.RestServer.Endpoints.V1.Examples.Controllers;
 

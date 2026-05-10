@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using Bogus;
 using CqrsProject.Common.Consts;
+using CqrsProject.Core.Identity.Consts;
 using CqrsProject.Core.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using CqrsProject.Core.Identity.Consts;
 
 namespace CqrsProject.Commons.Test.Services;
 

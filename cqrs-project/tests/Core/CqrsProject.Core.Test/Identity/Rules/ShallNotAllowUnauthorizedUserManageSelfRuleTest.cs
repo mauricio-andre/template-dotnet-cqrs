@@ -2,6 +2,7 @@ using CqrsProject.Core.Identity.Consts;
 using CqrsProject.Core.Identity.Rules;
 using CqrsProject.Core.Identity.UseCases.CreateRoleClaim;
 using CqrsProject.Core.Identity.UseCases.CreateUserRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
 using NSubstitute;
@@ -150,3 +151,4 @@ public class ShallNotAllowUnauthorizedUserManageSelfRuleTest
         return data;
     }
 }
+

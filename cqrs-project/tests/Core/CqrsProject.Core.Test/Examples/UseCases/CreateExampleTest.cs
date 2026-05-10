@@ -69,3 +69,4 @@ public class CreateExampleTest
         Assert.Equal(0, await dbContext.Examples.CountAsync());
     }
 }
+

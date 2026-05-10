@@ -1,9 +1,9 @@
+using CqrsProject.Core.Identity.Consts;
 using CqrsProject.Core.Identity.Interfaces;
-using MediatR;
+using CqrsProject.Core.Identity.UseCases.CreateRoleClaim;
 using CqrsProject.Core.Identity.UseCases.CreateUserRole;
 using CqrsProject.Core.UserTenants.UseCases.CreateUserTenant;
-using CqrsProject.Core.Identity.UseCases.CreateRoleClaim;
-using CqrsProject.Core.Identity.Consts;
+using MediatR;
 
 namespace CqrsProject.Core.Identity.Rules;
 

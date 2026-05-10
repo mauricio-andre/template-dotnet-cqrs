@@ -1,9 +1,10 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Responses;
 using CqrsProject.Core.Tenants.UseCases.GetTenantConnectionString;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using FluentValidation;
 
 namespace CqrsProject.Core.Test.Tenants.UseCases;
@@ -16,8 +17,8 @@ public class GetTenantConnectionStringTest
         using CoreTestContext context = new CoreTestContext();
         using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
         Guid tenantId = Guid.NewGuid();
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
-        TenantConnectionString connectionString = await AdministrationTestData.AddTenantConnectionStringAsync(
+        await TenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        TenantConnectionString connectionString = await TenantsTestData.AddTenantConnectionStringAsync(
             dbContext,
             tenantId,
             "Default",
@@ -52,3 +53,4 @@ public class GetTenantConnectionStringTest
             () => handler.Handle(new GetTenantConnectionStringQuery(Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None));
     }
 }
+

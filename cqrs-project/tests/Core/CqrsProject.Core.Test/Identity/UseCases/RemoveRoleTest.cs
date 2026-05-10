@@ -1,5 +1,6 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.UseCases.RemoveRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 
@@ -36,3 +37,4 @@ public class RemoveRoleTest
             () => handler.Handle(new RemoveRoleCommand(Guid.NewGuid()), CancellationToken.None));
     }
 }
+

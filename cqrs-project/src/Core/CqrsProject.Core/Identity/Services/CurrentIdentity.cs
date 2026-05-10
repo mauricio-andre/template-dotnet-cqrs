@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using CqrsProject.Common.Consts;
-using CqrsProject.Core.Identity.Interfaces;
 using CqrsProject.Core.Identity.Consts;
+using CqrsProject.Core.Identity.Interfaces;
 
 namespace CqrsProject.Core.Identity.Services;
 

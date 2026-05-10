@@ -1,10 +1,11 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
-using CqrsProject.Core.Test.Infrastructure;
 using CqrsProject.Core.Tenants.Entities;
 using CqrsProject.Core.Tenants.Rules;
 using CqrsProject.Core.Tenants.UseCases.CreateTenant;
 using CqrsProject.Core.Tenants.UseCases.UpdateTenant;
+using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.Tenants;
 using Microsoft.EntityFrameworkCore;
 
 namespace CqrsProject.Core.Test.Tenants.Rules;
@@ -59,7 +60,7 @@ public class ShallNotAllowDuplicateTenantRuleTest
             async context =>
             {
                 using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-                await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+                await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
             },
             rule => rule.Handle(new CreateTenantEvent("Tenant Two"), CancellationToken.None)
         },
@@ -67,7 +68,7 @@ public class ShallNotAllowDuplicateTenantRuleTest
             async context =>
             {
                 using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-                await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+                await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
             },
             rule => rule.Handle(new UpdateTenantEvent(Guid.NewGuid(), "Tenant Two"), CancellationToken.None)
         }
@@ -79,7 +80,7 @@ public class ShallNotAllowDuplicateTenantRuleTest
             async context =>
             {
                 using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-                await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
+                await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
             },
             rule => rule.Handle(new CreateTenantEvent("tenant one"), CancellationToken.None)
         },
@@ -87,10 +88,11 @@ public class ShallNotAllowDuplicateTenantRuleTest
             async context =>
             {
                 using AdministrationDbContext dbContext = context.CreateAdministrationDbContext();
-                await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant One");
-                await AdministrationTestData.AddTenantAsync(dbContext, name: "Tenant Two");
+                await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant One");
+                await TenantsTestData.AddTenantAsync(dbContext, name: "Tenant Two");
             },
             rule => rule.Handle(new UpdateTenantEvent(Guid.NewGuid(), "Tenant Two"), CancellationToken.None)
         }
     };
 }
+

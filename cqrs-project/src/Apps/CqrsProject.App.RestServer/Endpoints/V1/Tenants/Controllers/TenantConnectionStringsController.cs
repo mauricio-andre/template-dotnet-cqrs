@@ -1,16 +1,16 @@
 using Asp.Versioning;
 using CqrsProject.App.RestServer.Authorization;
-using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.App.RestServer.Endpoints.V1.Tenants.Dtos;
+using CqrsProject.App.RestServer.Extensions;
 using CqrsProject.Core.Tenants.Responses;
+using CqrsProject.Core.Tenants.UseCases.CreateTenantConnectionString;
+using CqrsProject.Core.Tenants.UseCases.GetTenantConnectionString;
+using CqrsProject.Core.Tenants.UseCases.RemoveTenantConnectionString;
+using CqrsProject.Core.Tenants.UseCases.SearchTenantConnectionString;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
-using CqrsProject.Core.Tenants.UseCases.GetTenantConnectionString;
-using CqrsProject.Core.Tenants.UseCases.RemoveTenantConnectionString;
-using CqrsProject.Core.Tenants.UseCases.CreateTenantConnectionString;
-using CqrsProject.Core.Tenants.UseCases.SearchTenantConnectionString;
 
 namespace CqrsProject.App.RestServer.Endpoints.V1.Tenants.Controllers;
 

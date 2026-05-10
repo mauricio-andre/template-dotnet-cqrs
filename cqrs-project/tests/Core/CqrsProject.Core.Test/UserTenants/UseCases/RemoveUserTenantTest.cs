@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Data;
 using CqrsProject.Core.Test.Infrastructure;
+using CqrsProject.Core.Test.UserTenants;
 using CqrsProject.Core.UserTenants.UseCases.RemoveUserTenant;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,9 @@ public class RemoveUserTenantTest
         Guid userId = Guid.NewGuid();
         Guid tenantId = Guid.NewGuid();
 
-        await AdministrationTestData.AddUserAsync(dbContext, userId, "alice");
-        await AdministrationTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
-        await AdministrationTestData.AddUserTenantAsync(dbContext, userId, tenantId);
+        await UserTenantsTestData.AddUserAsync(dbContext, userId, "alice");
+        await UserTenantsTestData.AddTenantAsync(dbContext, tenantId, "Tenant One");
+        await UserTenantsTestData.AddUserTenantAsync(dbContext, userId, tenantId);
 
         RemoveUserTenantHandler handler = new RemoveUserTenantHandler(
             context.AdministrationDbContextFactory,
@@ -69,3 +70,4 @@ public class RemoveUserTenantTest
         yield return new object[] { Guid.NewGuid(), Guid.Empty };
     }
 }
+

@@ -1,6 +1,7 @@
 using CqrsProject.Common.Exceptions;
 using CqrsProject.Core.Identity.Responses;
 using CqrsProject.Core.Identity.UseCases.UpdateRole;
+using CqrsProject.Core.Test.Identity;
 using CqrsProject.Core.Test.Infrastructure;
 using FluentValidation;
 using NSubstitute;
@@ -43,3 +44,4 @@ public class UpdateRoleTest
             () => handler.Handle(new UpdateRoleCommand(Guid.NewGuid(), "AdminTwo"), CancellationToken.None));
     }
 }
+

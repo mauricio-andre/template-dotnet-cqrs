@@ -105,3 +105,5 @@ app.MapGrpcService<MeGrpcService>();
 app.MapGrpcService<ExamplesGrpcService>();
 
 await app.RunAsync();
+
+public partial class Program { }

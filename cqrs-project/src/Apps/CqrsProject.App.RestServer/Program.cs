@@ -32,173 +32,163 @@ using Microsoft.OpenApi.Extensions;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
-namespace CqrsProject.App.RestServer;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.Services
+    .AddPostgresAdministrationDbContext()
+    .AddPostgresCoreDbContext()
+    .AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CoreDbContext>())
+    .Scan(scan => scan.FromAssembliesOf(typeof(CoreDbContext))
+        .AddClasses(classes => classes.AssignableTo(typeof(AbstractValidator<>)))
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime()
+        .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+        .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime())
+    .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
+    .AddScoped<ICurrentTenant, CurrentTenant>()
+    .AddScoped<ICurrentIdentity, CurrentIdentity>()
+    .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
+
+// Configuration string location
+builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    protected Program()
+    var supportCultures = builder
+        .Configuration
+        .GetValue<string>("SupportedCultures")!
+        .Split(",")
+        .Select(culture => culture.Trim())
+        .ToArray();
+
+    options
+        .SetDefaultCulture(supportCultures[0])
+        .AddSupportedCultures(supportCultures)
+        .AddSupportedUICultures(supportCultures);
+});
+
+// configuration controllers
+builder.Services
+    .AddControllers(options =>
     {
-    }
+        options.Conventions.Add(
+            new RouteTokenTransformerConvention(
+                new KebabCaseParameterTransformer()));
 
-    public static async Task Main(string[] args)
+        options.Filters.Add<ExceptionFilter>();
+    });
+
+// configuration API Explorer
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddApiVersioning(options =>
     {
-        var builder = WebApplication.CreateBuilder(args);
+        options.DefaultApiVersion = new ApiVersion(1);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+    })
+    .AddMvc()
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'V";
+        options.SubstituteApiVersionInUrl = true;
+    })
+    .AddOpenApiVersions(builder.Services);
 
-        builder.Services
-            .AddPostgresAdministrationDbContext()
-            .AddPostgresCoreDbContext()
-            .AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CoreDbContext>())
-            .Scan(scan => scan.FromAssembliesOf(typeof(CoreDbContext))
-                .AddClasses(classes => classes.AssignableTo(typeof(AbstractValidator<>)))
-                    .AsImplementedInterfaces()
-                    .WithSingletonLifetime()
-                .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<>)))
-                    .AsImplementedInterfaces()
-                    .WithScopedLifetime()
-                .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
-                    .AsImplementedInterfaces()
-                    .WithScopedLifetime())
-            .AddScoped<ITenantConnectionProvider, TenantConnectionProvider>()
-            .AddScoped<ICurrentTenant, CurrentTenant>()
-            .AddScoped<ICurrentIdentity, CurrentIdentity>()
-            .AddSingleton(_ => new CqrsProjectActivitySource(builder.Configuration.GetValue<string>("ServiceName")!));
+// configuration cors
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        var origins = builder
+            .Configuration
+            .GetValue<string>("Cors:AllowedOrigins")!
+            .Split(",")
+            .Select(origin => origin.Trim())
+            .ToArray();
 
-        // Configuration string location
-        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        policy
+            .WithOrigins(origins)
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .WithHeaders("Tenant-Id")
+            .WithExposedHeaders("Content-Range");
+    });
+});
+
+// configuration identity
+builder.Services
+    .AddIdentity<User, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AdministrationDbContext>();
+
+// configuration authentication
+builder.Services
+    .AddAuthentication(schemes =>
+    {
+        schemes.DefaultAuthenticateScheme = AuthenticationDefaults.AuthenticationScheme;
+        schemes.DefaultChallengeScheme = AuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration.GetValue<string>("Authentication:Bearer:Authority");
+        options.Audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience");
+        options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
+    })
+    .AddScheme<AuthenticationOptions, AuthenticationHandler>(
+        AuthenticationDefaults.AuthenticationScheme,
+        AuthenticationDefaults.DisplayName,
+        null);
+
+// configure authorization policies
+builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
+
+// Configure providers
+builder.Services.AddAuth0Provider(builder.Configuration);
+builder.Services.AddCustomCacheProvider();
+builder.Services.AddCustomStringLocalizerProvider();
+builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
+builder.Services.AddSwaggerProvider(builder.Configuration);
+builder.AddOpenTelemetryProvider();
+
+var app = builder.Build();
+
+// configuration app
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors();
+app.MapControllers();
+app.UseStaticFiles();
+app.UseRequestLocalization();
+app.LoadMultiTenantConnections();
+app.MapOpenApi();
+
+// configuration swagger app
+app.UseSwaggerProvider();
+
+// configure Scalar
+app.UseScalarProvider(options =>
+{
+    var clientId = app.Environment.IsDevelopment()
+        ? app.Configuration.GetValue<string>("OpenApi:ClientId")
+        : string.Empty;
+
+    options
+        .WithPreferredScheme(SecuritySchemeType.OAuth2.GetDisplayName())
+        .WithOAuth2Authentication(oauth =>
         {
-            var supportCultures = builder
-                .Configuration
-                .GetValue<string>("SupportedCultures")!
-                .Split(",")
-                .Select(culture => culture.Trim())
-                .ToArray();
+            oauth.ClientId = clientId;
+            oauth.Scopes = app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ");
+        })
+        .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
+});
 
-            options
-                .SetDefaultCulture(supportCultures[0])
-                .AddSupportedCultures(supportCultures)
-                .AddSupportedUICultures(supportCultures);
-        });
+app.UseMiddleware<IdentityMiddleware>();
+app.UseMiddleware<TenantMiddleware>();
 
-        // configuration controllers
-        builder.Services
-            .AddControllers(options =>
-            {
-                options.Conventions.Add(
-                    new RouteTokenTransformerConvention(
-                        new KebabCaseParameterTransformer()));
+await app.RunAsync();
 
-                options.Filters.Add<ExceptionFilter>();
-            });
-
-        // configuration API Explorer
-        builder.Services
-            .AddEndpointsApiExplorer()
-            .AddApiVersioning(options =>
-            {
-                options.DefaultApiVersion = new ApiVersion(1);
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.ReportApiVersions = true;
-            })
-            .AddMvc()
-            .AddApiExplorer(options =>
-            {
-                options.GroupNameFormat = "'v'V";
-                options.SubstituteApiVersionInUrl = true;
-            })
-            .AddOpenApiVersions(builder.Services);
-
-        // configuration cors
-        builder.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(policy =>
-            {
-                var origins = builder
-                    .Configuration
-                    .GetValue<string>("Cors:AllowedOrigins")!
-                    .Split(",")
-                    .Select(origin => origin.Trim())
-                    .ToArray();
-
-                policy
-                    .WithOrigins(origins)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowCredentials()
-                    .AllowAnyMethod()
-                    .WithHeaders("Tenant-Id")
-                    .WithExposedHeaders("Content-Range");
-            });
-        });
-
-        // configuration identity
-        builder.Services
-            .AddIdentity<User, IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<AdministrationDbContext>();
-
-        // configuration authentication
-        builder.Services
-            .AddAuthentication(schemes =>
-            {
-                schemes.DefaultAuthenticateScheme = AuthenticationDefaults.AuthenticationScheme;
-                schemes.DefaultChallengeScheme = AuthenticationDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Authority = builder.Configuration.GetValue<string>("Authentication:Bearer:Authority");
-                options.Audience = builder.Configuration.GetValue<string>("Authentication:Bearer:Audience");
-                options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-            })
-            .AddScheme<AuthenticationOptions, AuthenticationHandler>(
-                AuthenticationDefaults.AuthenticationScheme,
-                AuthenticationDefaults.DisplayName,
-                null);
-
-        // configure authorization policies
-        builder.Services.AddAuthorization(AuthorizationPolicyFactory.CreateDefaultPolicies());
-
-        // Configure providers
-        builder.Services.AddAuth0Provider(builder.Configuration);
-        builder.Services.AddCustomCacheProvider();
-        builder.Services.AddCustomStringLocalizerProvider();
-        builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
-        builder.Services.AddSwaggerProvider(builder.Configuration);
-        builder.AddOpenTelemetryProvider();
-
-        var app = builder.Build();
-
-        // configuration app
-        app.UseHttpsRedirection();
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseCors();
-        app.MapControllers();
-        app.UseStaticFiles();
-        app.UseRequestLocalization();
-        app.LoadMultiTenantConnections();
-        app.MapOpenApi();
-
-        // configuration swagger app
-        app.UseSwaggerProvider();
-
-        // configure Scalar
-        app.UseScalarProvider(options =>
-        {
-            var clientId = app.Environment.IsDevelopment()
-                ? app.Configuration.GetValue<string>("OpenApi:ClientId")
-                : string.Empty;
-
-            options
-                .WithPreferredScheme(SecuritySchemeType.OAuth2.GetDisplayName())
-                .WithOAuth2Authentication(oauth =>
-                {
-                    oauth.ClientId = clientId;
-                    oauth.Scopes = app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ");
-                })
-                .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
-        });
-
-        app.UseMiddleware<IdentityMiddleware>();
-        app.UseMiddleware<TenantMiddleware>();
-
-        await app.RunAsync();
-    }
-}
+public partial class Program { }

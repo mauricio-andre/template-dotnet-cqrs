@@ -1,10 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CqrsProject.App.RestServer.OpenApi;
 
 internal sealed class MarkObsoleteOperationTransformer : IOpenApiOperationTransformer
 {
+    [SuppressMessage("Code Smell", "S2325", Justification = "N/A")]
     public Task TransformAsync(
         OpenApiOperation operation,
         OpenApiOperationTransformerContext context,

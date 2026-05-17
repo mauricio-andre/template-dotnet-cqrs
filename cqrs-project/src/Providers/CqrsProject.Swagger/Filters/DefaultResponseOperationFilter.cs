@@ -1,7 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -9,13 +10,17 @@ namespace CqrsProject.Swagger.Filters;
 
 public class DefaultResponseOperationFilter : IOperationFilter
 {
+    [SuppressMessage("Code Smell", "S2325", Justification = "N/A")]
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
+        operation.Responses ??= new OpenApiResponses();
         foreach (var item in operation.Responses.Select(x => x.Value.Content))
         {
+            if (item == null) continue;
+
             var problemDetailsResponse = item
                 .Where(x =>
-                    x.Value.Schema.Reference?.Id == nameof(ProblemDetails))
+                    (x.Value.Schema as OpenApiSchemaReference)?.Reference?.Id == nameof(ProblemDetails))
                 .ToList();
 
             for (int index = 0; index < problemDetailsResponse.Count; index++)

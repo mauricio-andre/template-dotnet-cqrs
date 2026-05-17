@@ -1,9 +1,7 @@
 using System.Net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CqrsProject.App.RestServer.OpenApi;
 
@@ -23,18 +21,16 @@ internal sealed class SecurityRequirementOperationTransformer(IConfiguration con
         if (!authorizeAttributes.Any())
             return Task.CompletedTask;
 
+        operation.Security ??= new List<OpenApiSecurityRequirement>();
+        operation.Responses ??= new OpenApiResponses();
+
         operation.Security.Add(new OpenApiSecurityRequirement
         {
             [
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = SecuritySchemeType.OAuth2.GetDisplayName()
-                    }
-                }
-            ] = configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ")
+                new OpenApiSecuritySchemeReference(
+                    SecuritySchemeType.OAuth2.GetDisplayName(),
+                    context.Document)
+            ] = configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ").ToList()
         });
 
         if (!operation.Responses.ContainsKey(StatusCodes.Status401Unauthorized.ToString()))

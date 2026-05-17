@@ -1,15 +1,17 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using CqrsProject.Swagger.Attributes;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CqrsProject.Swagger.Filters;
 
 public class AttributeHeaderOperationFilter : IOperationFilter
 {
+    [SuppressMessage("Code Smell", "S2325", Justification = "N/A")]
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        operation.Parameters ??= new List<OpenApiParameter>();
+        operation.Parameters ??= new List<IOpenApiParameter>();
 
         var attributeList = context.MethodInfo.GetCustomAttributes<HeaderFilterSwaggerAttribute>();
 
@@ -34,7 +36,7 @@ public class AttributeHeaderOperationFilter : IOperationFilter
                     Description = attribute.Description,
                     Required = attribute.IsRequired,
                     AllowEmptyValue = attribute.AllowEmptyValue,
-                    Schema = string.IsNullOrEmpty(attribute.SchemaType)
+                    Schema = attribute.SchemaType == null
                         ? null
                         : new OpenApiSchema
                         {

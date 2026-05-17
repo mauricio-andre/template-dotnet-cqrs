@@ -1,11 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
 using CqrsProject.App.RestServer.Attributes;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CqrsProject.App.RestServer.OpenApi;
 
 internal sealed class HeaderParametersOperationTransformer : IOpenApiOperationTransformer
 {
+    [SuppressMessage("Code Smell", "S2325", Justification = "N/A")]
     public Task TransformAsync(
         OpenApiOperation operation,
         OpenApiOperationTransformerContext context,
@@ -18,7 +20,7 @@ internal sealed class HeaderParametersOperationTransformer : IOpenApiOperationTr
         if (!attributeList.Any())
             return Task.CompletedTask;
 
-        operation.Parameters ??= new List<OpenApiParameter>();
+        operation.Parameters ??= new List<IOpenApiParameter>();
 
         foreach (var attribute in attributeList)
         {
@@ -36,7 +38,7 @@ internal sealed class HeaderParametersOperationTransformer : IOpenApiOperationTr
                 Description = attribute.Description,
                 Required = attribute.IsRequired,
                 AllowEmptyValue = attribute.AllowEmptyValue,
-                Schema = string.IsNullOrEmpty(attribute.SchemaType)
+                Schema = attribute.SchemaType == null
                     ? null
                     : new OpenApiSchema
                     {

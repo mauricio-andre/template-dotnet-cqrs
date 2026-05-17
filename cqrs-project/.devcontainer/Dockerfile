@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/dotnet:9.0
+FROM mcr.microsoft.com/devcontainers/dotnet:10.0
 
 RUN apt-get update \
   && apt-get install -y \
@@ -13,5 +13,7 @@ RUN apt-get update \
   && dotnet tool install --global dotnet-ef
 
 USER vscode
+
+ENV SSL_CERT_DIR="${SSL_CERT_DIR:+$SSL_CERT_DIR:}/home/vscode/.aspnet/dev-certs/trust"
 
 RUN dotnet dev-certs https --trust

@@ -1,3 +1,5 @@
+using Microsoft.OpenApi;
+
 namespace CqrsProject.Swagger.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -5,7 +7,7 @@ public class HeaderFilterSwaggerAttribute : Attribute
 {
     public string HeaderName { get; }
     public string? Description { get; }
-    public string? SchemaType { get; }
+    public JsonSchemaType? SchemaType { get; }
     public string? SchemaFormat { get; }
     public bool IsRequired { get; }
     public bool AllowEmptyValue { get; }
@@ -13,7 +15,7 @@ public class HeaderFilterSwaggerAttribute : Attribute
     public HeaderFilterSwaggerAttribute(
         string headerName,
         string? description = null,
-        string? schemaType = null,
+        JsonSchemaType? schemaType = null,
         string? schemaFormat = null,
         bool isRequired = false,
         bool allowEmptyValue = false)

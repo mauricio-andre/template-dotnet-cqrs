@@ -26,7 +26,7 @@ public static class OpenTelemetryBuilderExtension
                 .AddSource(serviceName)
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation(options => options.RecordException = true)
-                .AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true);
+                .AddEntityFrameworkCoreInstrumentation();
 
             string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
 

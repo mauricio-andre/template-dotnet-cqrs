@@ -28,8 +28,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -177,11 +176,11 @@ app.UseScalarProvider(options =>
         : string.Empty;
 
     options
-        .WithPreferredScheme(SecuritySchemeType.OAuth2.GetDisplayName())
-        .WithOAuth2Authentication(oauth =>
+        .AddPreferredSecuritySchemes(SecuritySchemeType.OAuth2.GetDisplayName())
+        .AddOAuth2Authentication(SecuritySchemeType.OAuth2.GetDisplayName(), oauth =>
         {
-            oauth.ClientId = clientId;
-            oauth.Scopes = app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ");
+            oauth.Flows?.ClientCredentials?.ClientId = clientId;
+            oauth.DefaultScopes = app.Configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ");
         })
         .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch);
 });

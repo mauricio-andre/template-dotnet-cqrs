@@ -42,7 +42,6 @@ public static class SwaggerWebApplicationExtension
                 {"audience", audience}
             });
 
-            options.InjectStylesheet("/swagger-ui/SwaggerDark.css");
             options.InjectJavascript("/swagger-ui/SwaggerRefreshToken.js");
         });
 

@@ -1,8 +1,6 @@
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CqrsProject.App.RestServer.OpenApi;
 
@@ -14,6 +12,7 @@ internal sealed class SecuritySchemeDocumentTransformer(IConfiguration configura
         CancellationToken cancellationToken)
     {
         document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
         document.Components.SecuritySchemes.Add(
             SecuritySchemeType.OAuth2.GetDisplayName(),
@@ -30,7 +29,7 @@ internal sealed class SecuritySchemeDocumentTransformer(IConfiguration configura
                         Scopes = configuration.GetValue<string>("OpenApi:Scopes")!.Split(" ").ToDictionary(x => x),
                         Extensions = new Dictionary<string, IOpenApiExtension>
                         {
-                            { "x-usePkce", new OpenApiString("SHA-256") }
+                            { "x-usePkce", new JsonNodeExtension(JsonValue.Create("SHA-256")) }
                         }
                     }
                 }

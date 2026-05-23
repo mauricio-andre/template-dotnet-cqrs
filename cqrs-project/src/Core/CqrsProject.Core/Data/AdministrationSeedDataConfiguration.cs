@@ -15,6 +15,7 @@ public static class AdministrationSeedDataConfiguration
             {
                 Id = roleHostAdminId,
                 NormalizedName = IdentityRoleDefaults.HostAdmin.ToUpperInvariant(),
+                ConcurrencyStamp = "41f243ef-5fb9-4a2d-ac2d-e0a3c9ed1ed0"
             });
 
         builder.Entity<IdentityRoleClaim<Guid>>().HasData(

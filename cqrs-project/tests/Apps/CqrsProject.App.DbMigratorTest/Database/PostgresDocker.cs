@@ -10,8 +10,7 @@ public class PostgresDocker : IDatabaseDocker
 
     public PostgresDocker()
     {
-        _postgresContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:latest")
+        _postgresContainer = new PostgreSqlBuilder("postgres:latest")
             .WithUsername("admin")
             .WithPassword("admin")
             .Build();

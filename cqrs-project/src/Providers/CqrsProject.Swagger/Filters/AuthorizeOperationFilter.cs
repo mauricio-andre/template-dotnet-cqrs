@@ -30,7 +30,7 @@ public class AuthorizeOperationFilter : IOperationFilter
             {
                 [
                     new OpenApiSecuritySchemeReference(
-                        SecuritySchemeType.OAuth2.GetDisplayName(),
+                        JwtBearerDefaults.AuthenticationScheme,
                         context.Document)
                 ] = [ "openid", "email", "offline_access" ]
             }

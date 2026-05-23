@@ -149,7 +149,6 @@ builder.Services.AddAuth0Provider(builder.Configuration);
 builder.Services.AddCustomCacheProvider();
 builder.Services.AddCustomStringLocalizerProvider();
 builder.Services.AddCustomConsoleFormatterProvider<LoggerPropertiesService>();
-builder.Services.AddSwaggerProvider(builder.Configuration);
 builder.AddOpenTelemetryProvider();
 
 var app = builder.Build();

@@ -19,13 +19,12 @@ public static class SwaggerWebApplicationExtension
             FileProvider = new ManifestEmbeddedFileProvider(assembly, "wwwroot"),
         });
 
-        app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
             var descriptionList = app.DescribeApiVersions();
             foreach (var groupName in descriptionList.Select(desc => desc.GroupName))
             {
-                var url = $"/swagger/{groupName}/swagger.json";
+                var url = $"/openapi/{groupName}.json";
                 var name = groupName.ToUpperInvariant();
                 options.SwaggerEndpoint(url, name);
             }

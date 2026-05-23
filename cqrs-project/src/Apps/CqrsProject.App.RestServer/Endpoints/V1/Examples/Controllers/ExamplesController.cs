@@ -7,7 +7,6 @@ using CqrsProject.Core.Examples.UseCases.CreateExample;
 using CqrsProject.Core.Examples.UseCases.GetExampleByKey;
 using CqrsProject.Core.Examples.UseCases.RemoveExample;
 using CqrsProject.Core.Examples.UseCases.SearchExample;
-using CqrsProject.Swagger.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,6 @@ namespace CqrsProject.App.RestServer.Endpoints.V1.Examples.Controllers;
 [Route("v{version:apiVersion}/[controller]")]
 [Authorize(Policy = AuthorizationPolicyNames.CanReadExamples)]
 [FromHeaderTenantId]
-[HeaderFilterSwaggerTenantId]
 public class ExamplesController : ControllerBase
 {
     private readonly IMediator _mediator;

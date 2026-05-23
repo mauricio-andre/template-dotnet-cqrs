@@ -5,6 +5,7 @@ using OpenTelemetry;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using OpenTelemetry.Instrumentation.Runtime;
 
 namespace CqrsProject.OpenTelemetry.Extensions;
 
@@ -53,7 +54,8 @@ public static class OpenTelemetryBuilderExtension
                 .AddRuntimeInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddMeter("Microsoft.AspNetCore.Hosting")
-                .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+                .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+                .AddMeter("CqrsProject.App");
 
             string? endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
 
